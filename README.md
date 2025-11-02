@@ -1,0 +1,2 @@
+# Trashbox
+nothing
