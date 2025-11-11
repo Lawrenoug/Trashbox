@@ -1,0 +1,34 @@
+[gd_scene load_steps=6 format=3 uid="uid://diioyhmevc7oj"]
+
+[ext_resource type="Script" uid="uid://08knfvnynesi" path="res://Characters/Player/PlayerManager.cs" id="1_37kl0"]
+[ext_resource type="Texture2D" uid="uid://ljfpby33my2w" path="res://icon.svg" id="2_8uh7m"]
+[ext_resource type="Script" uid="uid://c06tyl1ob30rv" path="res://Attack/Skills/Prefab/PixelBullet.cs" id="3_6uqi0"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6uqi0"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_8uh7m"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Player" type="RigidBody2D" parent="."]
+position = Vector2(170, 297)
+gravity_scale = 0.0
+script = ExtResource("1_37kl0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("CircleShape2D_6uqi0")
+
+[node name="Sprite2D" type="Sprite2D" parent="Player"]
+texture = ExtResource("2_8uh7m")
+
+[node name="投射物" type="RigidBody2D" parent="."]
+gravity_scale = 0.0
+script = ExtResource("3_6uqi0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="投射物"]
+shape = SubResource("CircleShape2D_8uh7m")
+
+[node name="Sprite2D" type="Sprite2D" parent="投射物"]
+position = Vector2(91.99999, 109.99999)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("2_8uh7m")
