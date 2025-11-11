@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3 uid="uid://cty56ew0kcqbu"]
+
+[ext_resource type="Script" uid="uid://18rs6rqfppop" path="res://level_base.gd" id="1_p7gxy"]
+
+[node name="LevelBase" type="Node2D"]
+script = ExtResource("1_p7gxy")
+
+[node name="Platforms" type="TileMapLayer" parent="."]
+
+[node name="PlayerSpawnPosition" type="Marker2D" parent="."]
+
+[node name="EnemySpawnPositions" type="Node2D" parent="."]
+
+[node name="SpawnPoint1" type="Marker2D" parent="EnemySpawnPositions"]
+
+[node name="SpawnPoint2" type="Marker2D" parent="EnemySpawnPositions"]
+
+[node name="Obstacles" type="Node2D" parent="."]
+
+[node name="FixedCamera" type="Camera2D" parent="."]
