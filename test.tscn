@@ -1,19 +1,21 @@
-[gd_scene load_steps=6 format=3 uid="uid://diioyhmevc7oj"]
+[gd_scene load_steps=5 format=3 uid="uid://diioyhmevc7oj"]
 
 [ext_resource type="Script" uid="uid://08knfvnynesi" path="res://Characters/Player/PlayerManager.cs" id="1_37kl0"]
 [ext_resource type="Texture2D" uid="uid://ljfpby33my2w" path="res://icon.svg" id="2_8uh7m"]
-[ext_resource type="Script" uid="uid://c06tyl1ob30rv" path="res://Attack/Skills/Prefab/PixelBullet.cs" id="3_6uqi0"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6uqi0"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_8uh7m"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8uh7m"]
+radius = 68.0
+height = 136.0
 
 [node name="Node2D" type="Node2D"]
 
-[node name="Player" type="RigidBody2D" parent="."]
-position = Vector2(170, 297)
+[node name="Player" type="RigidBody2D" parent="." node_paths=PackedStringArray("startShootPosition")]
+position = Vector2(167, 315)
 gravity_scale = 0.0
 script = ExtResource("1_37kl0")
+startShootPosition = NodePath("发射点")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
 shape = SubResource("CircleShape2D_6uqi0")
@@ -21,14 +23,33 @@ shape = SubResource("CircleShape2D_6uqi0")
 [node name="Sprite2D" type="Sprite2D" parent="Player"]
 texture = ExtResource("2_8uh7m")
 
-[node name="投射物" type="RigidBody2D" parent="."]
+[node name="发射点" type="Node2D" parent="Player"]
+position = Vector2(100, 0)
+
+[node name="玩家子弹" type="Node2D" parent="."]
+
+[node name="敌人" type="RigidBody2D" parent="." groups=["enemy"]]
+position = Vector2(819, 189)
+collision_layer = 4
+collision_mask = 4
 gravity_scale = 0.0
-script = ExtResource("3_6uqi0")
+can_sleep = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="投射物"]
-shape = SubResource("CircleShape2D_8uh7m")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="敌人"]
+shape = SubResource("CapsuleShape2D_8uh7m")
 
-[node name="Sprite2D" type="Sprite2D" parent="投射物"]
-position = Vector2(91.99999, 109.99999)
-scale = Vector2(0.2, 0.2)
+[node name="Sprite2D" type="Sprite2D" parent="敌人"]
+texture = ExtResource("2_8uh7m")
+
+[node name="敌人" type="RigidBody2D" parent="敌人" groups=["enemy"]]
+position = Vector2(-34, 292)
+collision_layer = 4
+collision_mask = 4
+gravity_scale = 0.0
+can_sleep = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="敌人/敌人"]
+shape = SubResource("CapsuleShape2D_8uh7m")
+
+[node name="Sprite2D" type="Sprite2D" parent="敌人/敌人"]
 texture = ExtResource("2_8uh7m")

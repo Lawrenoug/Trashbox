@@ -40,7 +40,7 @@ namespace Attack
             return skillDataForNext;
         }
 
-        public virtual void Projectile(SkillData skillData)
+        public virtual void Projectile(SkillData skillData,Godot.Vector2 startPosotion,Node BulletNode)
         {
             
         }
@@ -53,5 +53,22 @@ namespace Attack
         public float RNG;
         public int AttackCount;
         public bool enableTarcking;
+    }
+
+    public static class NormalData
+    {
+        public static float AttackLength = 150;
+        public static float ATS = 300;
+
+        public static SkillData AddData(SkillData skillData_1,SkillData skillData_2)
+        {
+            SkillData newData = new SkillData();
+            newData.ATK = skillData_1.ATK * (1 + skillData_2.ATK);
+            newData.ATS = skillData_1.ATS * (1 + skillData_2.ATS);
+            newData.RNG = skillData_1.RNG * (1 + skillData_2.RNG);
+            newData.AttackCount = skillData_1.AttackCount + skillData_2.AttackCount;
+            newData.enableTarcking = skillData_1.enableTarcking || skillData_2.enableTarcking;
+            return newData;
+        }
     }
 }

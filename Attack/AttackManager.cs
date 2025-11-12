@@ -7,8 +7,9 @@ namespace Attack
 {
 	public partial class AttackManager : Node
 	{
+		public Node BulletNode;
 		private int skillCount = 8;
-		private float _attackDelay = 1.0f;//间隔时间
+		private float _attackDelay = 0.5f;//间隔时间
 		private float _timeDelay = 0;//记录间隔时间
 		private Skill[] skills;
 
@@ -16,12 +17,15 @@ namespace Attack
 
 		private SkillData skillData;
 
-		public AttackManager()
+		public AttackManager(Node _BulletNode)
 		{
+			BulletNode = _BulletNode;
 			List<Skill> _test = new List<Skill>();
 			_test.Add(new Pixel());
 			InsertSkill(_test);
 			skillData = new SkillData();
+			ClearSkillData();
+
 		}
 
 		// 插入技能组
@@ -29,27 +33,35 @@ namespace Attack
 		{
 			skills = _skills.ToArray();
 			skillCount = _skills.Count;
+			GD.Print(skillCount);
 		}
 
-		public void AttackLoop(float delta)
+		public void AttackLoop(float delta,Godot.Vector2 startPosiition)
 		{
 			_timeDelay += delta;
 			if (_attackDelay <= _timeDelay)
 			{
+				if(BulletNode==null)
+                {
+					return;
+                }
 				if (skillsIndex < skillCount)
 				{
-					while(skillsIndex<skillCount&&skills[skillsIndex].skillType != "projectile")
-                    {
-						AddSkillData(skills[skillsIndex++].GetSkillData());
-                    }
-					if (skillsIndex<skillCount&&skills[skillsIndex].skillType == "projectile")
+					while (skillsIndex < skillCount && skills[skillsIndex].skillType != "projectile")
 					{
-						skills[skillsIndex].Projectile(skillData);
-						ClearSkillData();
-						skillsIndex++;
-						_timeDelay = 0;
-						GD.Print("攻击");
+						AddSkillData(skills[skillsIndex++].GetSkillData());
 					}
+					
+						if (skillsIndex < skillCount && skills[skillsIndex].skillType == "projectile")
+						{
+							//GD.Print("发射点："+startPosiition);
+							skills[skillsIndex].Projectile(skillData, startPosiition,BulletNode);
+							ClearSkillData();
+							skillsIndex++;
+							_timeDelay = 0;
+							//GD.Print("攻击");
+						}
+					
 				}
 				else
 				{
