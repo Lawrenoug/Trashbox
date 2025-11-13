@@ -23,6 +23,14 @@ namespace Attack
 
         public void Initialize(SkillData _skillData)
         {
+            //Scale = new Godot.Vector2(_skillData.RNG,_skillData.RNG);
+            //ApplyScale(new Godot.Vector2(_skillData.RNG, _skillData.RNG));
+            //GetChild()
+            var sprite2D = GetNode<Sprite2D>("Sprite2D");
+            sprite2D.Scale = new Godot.Vector2(_skillData.RNG, _skillData.RNG);
+            var collisionShape2D = GetNode<CollisionShape2D>("CollisionShape2D");
+            collisionShape2D.Scale = new Godot.Vector2(_skillData.RNG, _skillData.RNG);
+            GD.Print(_skillData.RNG);
             ATK += _skillData.ATK;
             ATS += _skillData.ATS;
             enableTarcking = _skillData.enableTarcking;

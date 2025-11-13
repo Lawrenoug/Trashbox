@@ -25,7 +25,7 @@ namespace Attack
 			skillData = NormalData.AddData(GetSkillData(), skillData);
 
 			int count = skillData.AttackCount;
-			GD.Print(count);
+			//GD.Print(count);
 			if (count % 2 == 0)
 			{
 				float size = NormalData.AttackLength / (count + 1);

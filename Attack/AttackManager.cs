@@ -74,7 +74,7 @@ namespace Attack
 		{
 			skillData.ATK = 0;
 			skillData.ATS = 0;
-			skillData.RNG = 0;
+			skillData.RNG =0;
 			skillData.AttackCount = 0;
 			skillData.enableTarcking = false;
 		}

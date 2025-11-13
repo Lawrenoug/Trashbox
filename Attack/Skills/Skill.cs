@@ -3,7 +3,7 @@ using System;
 
 namespace Attack
 {
-    public abstract partial class Skill : Node
+    public abstract partial class Skill:Resource
     {
         public virtual string skillType { get; set; } = "";
         public virtual string skillName { get; set; } = "";
