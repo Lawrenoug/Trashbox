@@ -35,9 +35,11 @@ namespace Attack
 		// 插入技能组
 		public void InsertSkill(List<Skill> _skills)
 		{
+			enableAttack = false;
 			skills = _skills.ToArray();
 			skillCount = _skills.Count;
-			GD.Print(skillCount);
+			GD.Print("技能组："+skillCount);
+			enableAttack = true;
 		}
 
 		public void AttackLoop(float delta,Godot.Vector2 startPosiition)
@@ -59,7 +61,7 @@ namespace Attack
                 }
 				if (skillsIndex < skillCount)
 				{
-					while (skillsIndex < skillCount && skills[skillsIndex].skillType != "projectile")
+					while (skillsIndex < skillCount && skills[skillsIndex].skillType == "amendment")
 					{
 						AddSkillData(skills[skillsIndex++].GetSkillData());
 					}
@@ -78,6 +80,7 @@ namespace Attack
 				else
 				{
 					skillsIndex = 0;
+					ClearSkillData();
                 }
 			}
 		}

@@ -1,11 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://bj20pol0nbg0o"]
+[gd_scene load_steps=6 format=3 uid="uid://bj20pol0nbg0o"]
 
 [ext_resource type="Texture2D" uid="uid://da461y6f1ohh3" path="res://UI/kenney_ui-pack-pixel-adventure/Tiles/Large tiles/Thick outline/tile_0000.png" id="1_rcf4k"]
 [ext_resource type="Script" uid="uid://d2svyilukyext" path="res://Drapskill.cs" id="2_hbsjy"]
 [ext_resource type="PackedScene" uid="uid://cqi1dsw3q6bie" path="res://skill.tscn" id="3_rlsnk"]
-
-[sub_resource type="Resource" id="Resource_1btgg"]
-metadata/_custom_type_script = "uid://b2faaygpi11vt"
+[ext_resource type="PackedScene" uid="uid://d0rskfesmaymj" path="res://Attack/Skills/Amendment/线程增加.tscn" id="4_hbsjy"]
+[ext_resource type="PackedScene" uid="uid://dmp3sqf3dnwj4" path="res://Attack/Skills/Amendment/动态绑定.tscn" id="5_rlsnk"]
 
 [node name="技能组背包" type="Control"]
 layout_mode = 3
@@ -30,7 +29,6 @@ texture = ExtResource("1_rcf4k")
 script = ExtResource("2_hbsjy")
 
 [node name="skill" parent="GridContainer/TextureRect" instance=ExtResource("3_rlsnk")]
-skillDataUI = SubResource("Resource_1btgg")
 
 [node name="TextureRect2" type="TextureRect" parent="GridContainer"]
 texture_filter = 1
@@ -39,7 +37,6 @@ texture = ExtResource("1_rcf4k")
 script = ExtResource("2_hbsjy")
 
 [node name="skill" parent="GridContainer/TextureRect2" instance=ExtResource("3_rlsnk")]
-skillDataUI = SubResource("Resource_1btgg")
 
 [node name="TextureRect3" type="TextureRect" parent="GridContainer"]
 texture_filter = 1
@@ -48,7 +45,6 @@ texture = ExtResource("1_rcf4k")
 script = ExtResource("2_hbsjy")
 
 [node name="skill" parent="GridContainer/TextureRect3" instance=ExtResource("3_rlsnk")]
-skillDataUI = SubResource("Resource_1btgg")
 
 [node name="TextureRect4" type="TextureRect" parent="GridContainer"]
 texture_filter = 1
@@ -57,7 +53,6 @@ texture = ExtResource("1_rcf4k")
 script = ExtResource("2_hbsjy")
 
 [node name="skill" parent="GridContainer/TextureRect4" instance=ExtResource("3_rlsnk")]
-skillDataUI = SubResource("Resource_1btgg")
 
 [node name="TextureRect5" type="TextureRect" parent="GridContainer"]
 texture_filter = 1
@@ -65,11 +60,15 @@ layout_mode = 2
 texture = ExtResource("1_rcf4k")
 script = ExtResource("2_hbsjy")
 
+[node name="线程增加" parent="GridContainer/TextureRect5" instance=ExtResource("4_hbsjy")]
+
 [node name="TextureRect6" type="TextureRect" parent="GridContainer"]
 texture_filter = 1
 layout_mode = 2
 texture = ExtResource("1_rcf4k")
 script = ExtResource("2_hbsjy")
+
+[node name="线程增加" parent="GridContainer/TextureRect6" instance=ExtResource("4_hbsjy")]
 
 [node name="TextureRect7" type="TextureRect" parent="GridContainer"]
 texture_filter = 1
@@ -77,11 +76,15 @@ layout_mode = 2
 texture = ExtResource("1_rcf4k")
 script = ExtResource("2_hbsjy")
 
+[node name="线程增加" parent="GridContainer/TextureRect7" instance=ExtResource("4_hbsjy")]
+
 [node name="TextureRect8" type="TextureRect" parent="GridContainer"]
 texture_filter = 1
 layout_mode = 2
 texture = ExtResource("1_rcf4k")
 script = ExtResource("2_hbsjy")
+
+[node name="动态绑定" parent="GridContainer/TextureRect8" instance=ExtResource("5_rlsnk")]
 
 [node name="TextureRect9" type="TextureRect" parent="GridContainer"]
 texture_filter = 1

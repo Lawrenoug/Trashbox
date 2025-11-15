@@ -6,8 +6,13 @@ namespace Attack
 	//[GlobalClass]
 	public partial class Pixel : Skill
 	{
+
 		public override string skillType { get; set; } = "projectile";
 		public override string skillName { get; set; } = "像素点";
+
+		public override string skillDescription { get; set; } = "";
+
+        public override string skillQuote { get; set; } = "";
 
 		public override float ATK { get; set; } = 1;//攻击力
 
@@ -17,7 +22,7 @@ namespace Attack
 
 		public override int AttackCount { get; set; } = 1;//弹道
 
-		public override bool enableTarcking { get; set; } = true;//是否跟踪
+		public override bool enableTarcking { get; set; } = false;//是否跟踪
 
 
 

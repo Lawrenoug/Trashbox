@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://dmp3sqf3dnwj4"]
+
+[ext_resource type="Texture2D" uid="uid://bwybu0goc0vvo" path="res://UI/kenney_tiny-dungeon/Tiles/tile_0115.png" id="1_kkp6k"]
+[ext_resource type="Script" uid="uid://bi07qv6efu6x2" path="res://Attack/Skills/Amendment/DynamicBinding.cs" id="2_82scu"]
+
+[node name="动态绑定" type="Sprite2D"]
+position = Vector2(16, 16)
+texture = ExtResource("1_kkp6k")
+script = ExtResource("2_82scu")

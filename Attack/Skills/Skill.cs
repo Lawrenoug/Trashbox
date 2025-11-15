@@ -6,8 +6,13 @@ namespace Attack
     //[GlobalClass]
     public abstract partial class Skill: Sprite2D
     {
+        //[Export] public virtual Texture2D skillIcon { get; set; }
         public virtual string skillType { get; set; } = "";
         public virtual string skillName { get; set; } = "";
+
+        public virtual string skillDescription { get; set; } = "";
+
+        public virtual string skillQuote { get; set; } = "";
 
         public virtual float ATK { get; set; } = 0;//攻击力
 
@@ -61,7 +66,7 @@ namespace Attack
         public static float AttackLength = 150;
         public static float ATS = 300;
 
-        public static SkillData AddData(SkillData skillData_1,SkillData skillData_2)
+        public static SkillData AddData(SkillData skillData_1, SkillData skillData_2)
         {
             SkillData newData = new SkillData();
             newData.ATK = skillData_1.ATK * (1 + skillData_2.ATK);
@@ -72,4 +77,5 @@ namespace Attack
             return newData;
         }
     }
+
 }

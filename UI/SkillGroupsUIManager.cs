@@ -47,7 +47,7 @@ namespace Attack
 				}
 			}
 
-			GD.Print("元素数量" + skillUIDatas.Count);
+			//GD.Print("元素数量" + skillUIDatas.Count);
 		}
 		
 		public void RequestUpdate()
