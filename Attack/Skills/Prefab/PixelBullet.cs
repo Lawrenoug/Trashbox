@@ -30,7 +30,7 @@ namespace Attack
             sprite2D.Scale = new Godot.Vector2(_skillData.RNG, _skillData.RNG);
             var collisionShape2D = GetNode<CollisionShape2D>("CollisionShape2D");
             collisionShape2D.Scale = new Godot.Vector2(_skillData.RNG, _skillData.RNG);
-            GD.Print(_skillData.RNG);
+            //GD.Print(_skillData.RNG);
             ATK += _skillData.ATK;
             ATS += _skillData.ATS;
             enableTarcking = _skillData.enableTarcking;
@@ -74,11 +74,11 @@ namespace Attack
         // 碰撞检测处理
         public void OnBodyEntered(Node body)
 		{
-			GD.Print("子弹碰到障碍物");
+			//GD.Print("子弹碰到障碍物");
             // 检查碰撞到的物体是否是敌人
             if (body.IsInGroup("enemy"))
             {
-                GD.Print("子弹击中敌人，造成伤害: " + ATK);
+                //GD.Print("子弹击中敌人，造成伤害: " + ATK);
                 
                 // 销毁子弹
                 QueueFree();

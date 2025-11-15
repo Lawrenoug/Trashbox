@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://cqi1dsw3q6bie"]
+
+[ext_resource type="Texture2D" uid="uid://2fuiedpx0kac" path="res://UI/kenney_tiny-dungeon/Tiles/tile_0104.png" id="1_ajp3h"]
+[ext_resource type="Script" uid="uid://c6ucx4gp4x3p3" path="res://Attack/Skills/Pixel.cs" id="4_0f5mi"]
+
+[node name="skill" type="Sprite2D"]
+texture_filter = 1
+position = Vector2(16, 16)
+texture = ExtResource("1_ajp3h")
+script = ExtResource("4_0f5mi")

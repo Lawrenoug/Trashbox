@@ -3,6 +3,7 @@ using System;
 
 namespace Attack
 {
+	//[GlobalClass]
 	public partial class Pixel : Skill
 	{
 		public override string skillType { get; set; } = "projectile";

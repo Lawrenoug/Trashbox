@@ -1,0 +1,75 @@
+[gd_scene load_steps=5 format=3 uid="uid://dk1ae2t3e6fi7"]
+
+[ext_resource type="Script" uid="uid://dp1vnwnfo2dbb" path="res://UI/SkillGroupsUIManager.cs" id="1_sgevi"]
+[ext_resource type="Texture2D" uid="uid://da461y6f1ohh3" path="res://UI/kenney_ui-pack-pixel-adventure/Tiles/Large tiles/Thick outline/tile_0000.png" id="2_oedc3"]
+[ext_resource type="Script" uid="uid://d2svyilukyext" path="res://Drapskill.cs" id="3_0h65p"]
+[ext_resource type="PackedScene" uid="uid://dt0ir7tqiqine" path="res://代码块.tscn" id="4_45dv2"]
+
+[node name="技能战斗列表" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GridContainer" type="GridContainer" parent="."]
+layout_mode = 0
+offset_right = 256.0
+offset_bottom = 32.0
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 8
+script = ExtResource("1_sgevi")
+
+[node name="TextureRect" type="TextureRect" parent="GridContainer"]
+texture_filter = 1
+layout_mode = 2
+texture = ExtResource("2_oedc3")
+script = ExtResource("3_0h65p")
+
+[node name="代码块" parent="GridContainer/TextureRect" instance=ExtResource("4_45dv2")]
+
+[node name="TextureRect2" type="TextureRect" parent="GridContainer"]
+texture_filter = 1
+layout_mode = 2
+texture = ExtResource("2_oedc3")
+script = ExtResource("3_0h65p")
+
+[node name="代码块" parent="GridContainer/TextureRect2" instance=ExtResource("4_45dv2")]
+
+[node name="TextureRect3" type="TextureRect" parent="GridContainer"]
+texture_filter = 1
+layout_mode = 2
+texture = ExtResource("2_oedc3")
+script = ExtResource("3_0h65p")
+
+[node name="TextureRect4" type="TextureRect" parent="GridContainer"]
+texture_filter = 1
+layout_mode = 2
+texture = ExtResource("2_oedc3")
+script = ExtResource("3_0h65p")
+
+[node name="TextureRect5" type="TextureRect" parent="GridContainer"]
+texture_filter = 1
+layout_mode = 2
+texture = ExtResource("2_oedc3")
+script = ExtResource("3_0h65p")
+
+[node name="TextureRect6" type="TextureRect" parent="GridContainer"]
+texture_filter = 1
+layout_mode = 2
+texture = ExtResource("2_oedc3")
+script = ExtResource("3_0h65p")
+
+[node name="TextureRect7" type="TextureRect" parent="GridContainer"]
+texture_filter = 1
+layout_mode = 2
+texture = ExtResource("2_oedc3")
+script = ExtResource("3_0h65p")
+
+[node name="TextureRect8" type="TextureRect" parent="GridContainer"]
+texture_filter = 1
+layout_mode = 2
+texture = ExtResource("2_oedc3")
+script = ExtResource("3_0h65p")

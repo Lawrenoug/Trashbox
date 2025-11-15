@@ -3,7 +3,8 @@ using System;
 
 namespace Attack
 {
-    public abstract partial class Skill:Resource
+    //[GlobalClass]
+    public abstract partial class Skill: Sprite2D
     {
         public virtual string skillType { get; set; } = "";
         public virtual string skillName { get; set; } = "";

@@ -8,21 +8,25 @@ namespace Attack
 	public partial class AttackManager : Node
 	{
 		public Node BulletNode;
+
+		public bool enableAttack = true;//是否开启攻击
 		private int skillCount = 8;
 		private float _attackDelay = 0.5f;//间隔时间
 		private float _timeDelay = 0;//记录间隔时间
-		private Skill[] skills;
+		private Skill[] skills=new Skill[]{};
 
 		private int skillsIndex = 0;
 
 		private SkillData skillData;
 
+		
+
 		public AttackManager(Node _BulletNode)
 		{
 			BulletNode = _BulletNode;
-			List<Skill> _test = new List<Skill>();
-			_test.Add(new Pixel());
-			InsertSkill(_test);
+			// List<Skill> _test = new List<Skill>();
+			// _test.Add(new Pixel());
+			// InsertSkill(_test);
 			skillData = new SkillData();
 			ClearSkillData();
 
@@ -41,7 +45,15 @@ namespace Attack
 			_timeDelay += delta;
 			if (_attackDelay <= _timeDelay)
 			{
-				if(BulletNode==null)
+				if(!enableAttack)
+                {
+					return;
+                }
+				if (BulletNode == null)
+				{
+					return;
+				}
+				if(skills.Length<=0)
                 {
 					return;
                 }
