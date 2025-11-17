@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3 uid="uid://c5o72qxb332l4"]
+
+[ext_resource type="Script" uid="uid://dyv4r2a0nv68" path="res://trashbox/scenes/enemies/enemy_bug.gd" id="1_ee3ng"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_6o1av"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ee3ng"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_k2nfr"]
+
+[node name="EnemyBug" type="CharacterBody2D"]
+script = ExtResource("1_ee3ng")
+
+[node name="Visuals" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_6o1av")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_ee3ng")
+
+[node name="DetectionZone" type="Area2D" parent="."]
+
+[node name="CollisionShape2D(侦测范围)" type="CollisionShape2D" parent="DetectionZone"]
+shape = SubResource("CircleShape2D_k2nfr")

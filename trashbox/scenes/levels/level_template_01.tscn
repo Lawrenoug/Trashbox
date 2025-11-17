@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://7w8ojgnhqh7m"]
+
+[ext_resource type="PackedScene" uid="uid://cty56ew0kcqbu" path="res://trashbox/scenes/levels/level_base.tscn" id="1_rat3t"]
+[ext_resource type="PackedScene" uid="uid://c61dyid4xthan" path="res://trashbox/scenes/obstacles/breakable_wall.tscn" id="2_cxajl"]
+
+[node name="LevelBase" instance=ExtResource("1_rat3t")]
+
+[node name="BreakableWall" parent="Obstacles" index="0" instance=ExtResource("2_cxajl")]
