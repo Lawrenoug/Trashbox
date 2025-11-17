@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c1skrmjnmb1o8"
-path="res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex"
+uid="uid://ljfpby33my2w"
+path="res://.godot/imported/icon.svg-69eb62cae4eaba5f166ee8af01a451e3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://icon.svg"
-dest_files=["res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex"]
+source_file="res://trashbox/战斗系统/icon.svg"
+dest_files=["res://.godot/imported/icon.svg-69eb62cae4eaba5f166ee8af01a451e3.ctex"]
 
 [params]
 
