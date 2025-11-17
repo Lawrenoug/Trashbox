@@ -13,7 +13,7 @@ config_version=5
 config/name="Trashbox"
 run/main_scene="uid://diioyhmevc7oj"
 config/features=PackedStringArray("4.5", "C#", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="res://战斗系统/icon.svg"
 
 [dotnet]
 

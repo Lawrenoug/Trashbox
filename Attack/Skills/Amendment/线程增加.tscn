@@ -1,9 +1,0 @@
-[gd_scene load_steps=3 format=3 uid="uid://d0rskfesmaymj"]
-
-[ext_resource type="Texture2D" uid="uid://bukvi822a0xmi" path="res://UI/kenney_tiny-dungeon/Tiles/tile_0113.png" id="1_0tyj8"]
-[ext_resource type="Script" uid="uid://hl1xsuyb4h0s" path="res://Attack/Skills/Amendment/ThreadIncrement.cs" id="2_cdgmm"]
-
-[node name="线程增加" type="Sprite2D"]
-position = Vector2(16, 16)
-texture = ExtResource("1_0tyj8")
-script = ExtResource("2_cdgmm")
