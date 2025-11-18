@@ -1,0 +1,37 @@
+[gd_scene load_steps=4 format=3 uid="uid://brp4myx3kn2vf"]
+
+[ext_resource type="Script" uid="uid://brtfhnehdq4ew" path="res://trashbox/战斗系统/Attack/Skills/Projectile/SymbolBullet.cs" id="1_jqb4c"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_n4l1h"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_t8y1n"]
+line_spacing = 0.0
+font_size = 200
+
+[node name="字符投射物" type="RigidBody2D"]
+collision_layer = 0
+collision_mask = 4
+contact_monitor = true
+max_contacts_reported = 1
+script = ExtResource("1_jqb4c")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_n4l1h")
+
+[node name="Label" type="Label" parent="."]
+texture_filter = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -10.0
+offset_top = -14.000001
+offset_right = 189.99998
+offset_bottom = 259.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.1, 0.1)
+label_settings = SubResource("LabelSettings_t8y1n")
+horizontal_alignment = 1
+vertical_alignment = 1

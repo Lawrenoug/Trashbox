@@ -1,12 +1,11 @@
 using Godot;
 using System;
-using System.Numerics;
 
 namespace Attack
 {
-    public partial class PixelBullet : RigidBody2D
-    {
-        public float ATK = 0;
+	public partial class SymbolBullet : RigidBody2D
+	{
+		public float ATK = 0;
         public float ATS = 1;
         public bool enableTarcking = false;
 
@@ -21,12 +20,13 @@ namespace Attack
             Connect("body_entered", new Callable(this, nameof(OnBodyEntered)));
         }
 
-        public void Initialize(SkillData _skillData)
+        public void Initialize(SkillData _skillData,string _char)
         {
-            var sprite2D = GetNode<Sprite2D>("Sprite2D");
-            sprite2D.Scale = new Godot.Vector2(_skillData.RNG, _skillData.RNG);
+            var label = GetNode<Label>("Label");
+            label.Scale = new Godot.Vector2(_skillData.RNG*0.1f, _skillData.RNG*0.1f);
             var collisionShape2D = GetNode<CollisionShape2D>("CollisionShape2D");
             collisionShape2D.Scale = new Godot.Vector2(_skillData.RNG, _skillData.RNG);
+			label.Text=_char;
             ATK += _skillData.ATK;
             ATS += _skillData.ATS;
             enableTarcking = _skillData.enableTarcking;
@@ -137,5 +137,5 @@ namespace Attack
                 }
             }
         }
-    }
+	}
 }
