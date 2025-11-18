@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bj20pol0nbg0o"]
+[gd_scene load_steps=8 format=3 uid="uid://bj20pol0nbg0o"]
 
 [ext_resource type="Texture2D" uid="uid://da461y6f1ohh3" path="res://trashbox/战斗系统/UI/kenney_ui-pack-pixel-adventure/Tiles/Large tiles/Thick outline/tile_0000.png" id="1_rcf4k"]
 [ext_resource type="Script" uid="uid://d2svyilukyext" path="res://trashbox/战斗系统/Drapskill.cs" id="2_hbsjy"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://d0rskfesmaymj" path="res://trashbox/战斗系统/Attack/Skills/Amendment/线程增加.tscn" id="4_hbsjy"]
 [ext_resource type="PackedScene" uid="uid://dmp3sqf3dnwj4" path="res://trashbox/战斗系统/Attack/Skills/Amendment/动态绑定.tscn" id="5_rlsnk"]
 [ext_resource type="PackedScene" uid="uid://dse68heddfkid" path="res://trashbox/战斗系统/Attack/Skills/Projectile/字符代码块.tscn" id="6_vxo8i"]
+[ext_resource type="PackedScene" uid="uid://brmlidkc2i1mv" path="res://trashbox/战斗系统/Attack/Skills/Projectile/指针代码块.tscn" id="7_ec3xn"]
 
 [node name="技能组背包" type="Control"]
 layout_mode = 3
@@ -100,6 +101,8 @@ texture_filter = 1
 layout_mode = 2
 texture = ExtResource("1_rcf4k")
 script = ExtResource("2_hbsjy")
+
+[node name="指针代码块" parent="GridContainer/TextureRect10" instance=ExtResource("7_ec3xn")]
 
 [node name="TextureRect11" type="TextureRect" parent="GridContainer"]
 texture_filter = 1
