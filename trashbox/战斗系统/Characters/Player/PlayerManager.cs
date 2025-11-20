@@ -18,9 +18,6 @@ namespace CharacterManager
 		public override void _Ready()
 		{
 			skillGroupsUIManager=UIControl.GetChildOrNull<SkillGroupsUIManager>(0);
-			//skillGroupsUIManager = UIControl.GetChildOrNull<GridContainer>(0).GetChildOrNull<SkillGroupsUIManager>(0);
-			//GD.Print(startShootPosition.GlobalPosition);
-			//var node = GetTree().Root.FindChild("玩家子弹", true);
 			var node = GetNode<Node>("/root/Node2D/玩家子弹");
 			if (node != null)
 			{
@@ -45,6 +42,22 @@ namespace CharacterManager
 
 		private void Move(double delta)
 		{
+			if(GlobalPosition.X<=0)
+            {
+				GlobalPosition=new Vector2(0,GlobalPosition.Y);
+            }
+			if(GlobalPosition.X>=GetViewportRect().Size.X)
+			{
+				GlobalPosition=new Vector2(GetViewportRect().Size.X,GlobalPosition.Y);
+			}
+			if(GlobalPosition.Y<=0)
+			{
+				GlobalPosition=new Vector2(GlobalPosition.X,0);
+			}
+			if(GlobalPosition.Y>=GetViewportRect().Size.Y)
+			{
+				GlobalPosition=new Vector2(GlobalPosition.X,GetViewportRect().Size.Y);
+			}
 			Vector2 inputDirection = Input.GetVector("左", "右", "上", "下");
 			var Velocity = inputDirection * speed;
 			Position += Velocity * (float)delta;

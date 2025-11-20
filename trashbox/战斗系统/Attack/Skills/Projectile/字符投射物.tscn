@@ -8,8 +8,8 @@
 line_spacing = 0.0
 font_size = 200
 
-[node name="字符投射物" type="RigidBody2D"]
-collision_layer = 0
+[node name="字符投射物" type="RigidBody2D" groups=["Bullet"]]
+collision_layer = 4
 collision_mask = 4
 contact_monitor = true
 max_contacts_reported = 1
