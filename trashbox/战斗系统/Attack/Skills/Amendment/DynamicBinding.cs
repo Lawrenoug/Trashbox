@@ -8,9 +8,9 @@ namespace Attack
 		public override string skillType { get; set; } = "amendment";
 		public override string skillName { get; set; } = "动态绑定";
 
-		public override string skillDescription { get; set; } = "";
+		public override string skillDescription { get; set; } = "使你所有的投射物获得追踪效果，自动攻击距离最近的敌方单位";
 
-        public override string skillQuote { get; set; } = "";
+        public override string skillQuote { get; set; } = "只要绑得够多，就没有打不中的敌人！";
 
 		public override float ATK { get; set; } = 0;//攻击力
 

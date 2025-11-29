@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://cwo6yqdcgxoin"]
+
+[ext_resource type="Texture2D" uid="uid://do8v1ybfqpci3" path="res://trashbox/战斗系统/UI/kenney_tiny-dungeon/Tiles/tile_0126.png" id="1_keimp"]
+[ext_resource type="Script" uid="uid://cgbrmasw5k5kf" path="res://trashbox/战斗系统/Attack/Skills/Amendment/AddATS.cs" id="2_3dslr"]
+
+[node name="算法优化 - 时间复杂度降低代码块" type="Sprite2D"]
+texture_filter = 1
+position = Vector2(16, 16)
+texture = ExtResource("1_keimp")
+script = ExtResource("2_3dslr")

@@ -11,7 +11,7 @@ namespace CharacterManager
 		[Export]
 		public Control UIControl;
 		private float blood = 100;
-		private float speed = 150;
+		private float speed = 300;
 		public AttackManager attackManager;
 		private SkillGroupsUIManager skillGroupsUIManager;
 

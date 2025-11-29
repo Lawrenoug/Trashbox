@@ -1,12 +1,14 @@
-[gd_scene load_steps=8 format=3 uid="uid://bj20pol0nbg0o"]
+[gd_scene load_steps=10 format=3 uid="uid://bj20pol0nbg0o"]
 
 [ext_resource type="Texture2D" uid="uid://da461y6f1ohh3" path="res://trashbox/战斗系统/UI/kenney_ui-pack-pixel-adventure/Tiles/Large tiles/Thick outline/tile_0000.png" id="1_rcf4k"]
 [ext_resource type="Script" uid="uid://d2svyilukyext" path="res://trashbox/战斗系统/Drapskill.cs" id="2_hbsjy"]
 [ext_resource type="PackedScene" uid="uid://cqi1dsw3q6bie" path="res://trashbox/战斗系统/skill.tscn" id="3_rlsnk"]
-[ext_resource type="PackedScene" uid="uid://d0rskfesmaymj" path="res://trashbox/战斗系统/Attack/Skills/Amendment/线程增加.tscn" id="4_hbsjy"]
+[ext_resource type="PackedScene" uid="uid://d0rskfesmaymj" path="res://trashbox/战斗系统/Attack/Skills/Amendment/多线程开发.tscn" id="4_hbsjy"]
 [ext_resource type="PackedScene" uid="uid://dmp3sqf3dnwj4" path="res://trashbox/战斗系统/Attack/Skills/Amendment/动态绑定.tscn" id="5_rlsnk"]
 [ext_resource type="PackedScene" uid="uid://dse68heddfkid" path="res://trashbox/战斗系统/Attack/Skills/Projectile/字符代码块.tscn" id="6_vxo8i"]
 [ext_resource type="PackedScene" uid="uid://brmlidkc2i1mv" path="res://trashbox/战斗系统/Attack/Skills/Projectile/指针代码块.tscn" id="7_ec3xn"]
+[ext_resource type="PackedScene" uid="uid://ifqffn2m742v" path="res://trashbox/战斗系统/Attack/Skills/Projectile/材质球代码块.tscn" id="8_ee6ub"]
+[ext_resource type="PackedScene" uid="uid://bvex383v2qd8o" path="res://trashbox/战斗系统/Attack/Skills/Projectile/着色器优化器代码块.tscn" id="9_am2y4"]
 
 [node name="技能组背包" type="Control"]
 layout_mode = 3
@@ -110,11 +112,15 @@ layout_mode = 2
 texture = ExtResource("1_rcf4k")
 script = ExtResource("2_hbsjy")
 
+[node name="材质球代码块" parent="GridContainer/TextureRect11" instance=ExtResource("8_ee6ub")]
+
 [node name="TextureRect12" type="TextureRect" parent="GridContainer"]
 texture_filter = 1
 layout_mode = 2
 texture = ExtResource("1_rcf4k")
 script = ExtResource("2_hbsjy")
+
+[node name="着色器优化器代码块" parent="GridContainer/TextureRect12" instance=ExtResource("9_am2y4")]
 
 [node name="TextureRect13" type="TextureRect" parent="GridContainer"]
 texture_filter = 1

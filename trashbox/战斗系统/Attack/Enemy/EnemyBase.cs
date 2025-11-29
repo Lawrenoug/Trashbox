@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using Attack;
+using Buff;
 
 namespace Enemy
 {
@@ -10,8 +11,13 @@ namespace Enemy
 		public virtual float CurrentHP { get; set; } = 100;
 		public virtual float ATK { get; set; } = 10;
 		public virtual float ATS { get; set; } = 1;
+		public virtual float MoveSpeed { get; set; } = 100;
 		public virtual string enemyName { get; set; } = "Enemy";
 		public virtual string state { get; set; } = "";
+
+		public virtual BuffBase[] CurrentBuff { get; set; }
+
+		public virtual float DamageMultiplier { get; set; } = 1;
 
 		public override void _Ready()
 		{
@@ -50,7 +56,7 @@ namespace Enemy
 
 		public virtual void TakeDamage(float damage)
 		{
-			CurrentHP -= damage;
+			CurrentHP -=damage* DamageMultiplier;
 			GD.Print($"{enemyName} 受到 {damage} 点伤害，当前生命值：{CurrentHP}/{MaxHP}");
 		}
 
@@ -58,6 +64,11 @@ namespace Enemy
 		{
 			QueueFree();
 			GD.Print($"{enemyName} 死亡");
+		}
+
+		public virtual void ApplyBuff(BuffBase buff)
+		{
+			
 		}
 	}
 }

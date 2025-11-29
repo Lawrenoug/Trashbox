@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://bvex383v2qd8o"]
+
+[ext_resource type="Texture2D" uid="uid://cdsa3i85rkfu5" path="res://trashbox/战斗系统/UI/kenney_tiny-dungeon/Tiles/tile_0106.png" id="1_43awr"]
+[ext_resource type="Script" uid="uid://c1onxpjs8glv8" path="res://trashbox/战斗系统/Attack/Skills/Projectile/ShaderOptimizer.cs" id="2_t720v"]
+
+[node name="着色器优化器代码块" type="Sprite2D"]
+texture_filter = 1
+position = Vector2(16, 16)
+texture = ExtResource("1_43awr")
+script = ExtResource("2_t720v")

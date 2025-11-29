@@ -3,24 +3,24 @@ using System;
 
 namespace Attack
 {
-	public partial class Pointer : Skill
+	public partial class MaterialBall : Skill
 	{
 		public override string skillType { get; set; } = "projectile";
-		public override string skillName { get; set; } = "指针";
+		public override string skillName { get; set; } = "材质球";
 
-		public override string skillDescription { get; set; } = "可自动追踪距离最近的敌方单位，对其造成100点伤害";
+		public override string skillDescription { get; set; } = "对敌人造成40点伤害，并使敌人陷入【游戏渲染中】状态，每秒受到10点法术伤害，持续 5 秒，最多叠3层。";
 
-        public override string skillQuote { get; set; } = "虽然它飞得慢，但它永远不会指错地方……大概吧。";
+        public override string skillQuote { get; set; } = "你这法线贴图方向都不对！连PBR流程都没走对，还好意思当BUG？";
 
-		public override float ATK { get; set; } = 100;//攻击力
+		public override float ATK { get; set; } = 40;//攻击力
 
-		public override float ATS { get; set; } = 0.1f;//攻速
+		public override float ATS { get; set; } = 0.5f;//攻速
 
 		public override float RNG { get; set; } = 1;//攻击范围
 
 		public override int AttackCount { get; set; } = 1;//弹道
 
-		public override bool enableTarcking { get; set; } = true;//是否跟踪
+		public override bool enableTarcking { get; set; } = false;//是否跟踪
 
 
 
@@ -35,11 +35,11 @@ namespace Attack
 				float size = NormalData.AttackLength / (count + 1);
 				for (int i = 1; i <= count; i++)
 				{
-					PackedScene bulletScene = GD.Load<PackedScene>("res://trashbox/战斗系统/Attack/Skills/Projectile/指针投射物.tscn");
+					PackedScene bulletScene = GD.Load<PackedScene>("res://trashbox/战斗系统/Attack/Skills/Projectile/材质球投射物.tscn");
 
 					Node bulletNode = bulletScene.Instantiate();
 
-					if (bulletNode is PointerBullet bullet)
+					if (bulletNode is MaterialBallBullet bullet)
 					{
 						//int count = skillData.AttackCount;
 						//GD.Print(count);
@@ -64,10 +64,10 @@ namespace Attack
 				//GD.Print("2");
 				for (int i = 0; i < count; i++)
 				{
-					PackedScene bulletScene = GD.Load<PackedScene>("res://trashbox/战斗系统/Attack/Skills/Projectile/指针投射物.tscn");
+					PackedScene bulletScene = GD.Load<PackedScene>("res://trashbox/战斗系统/Attack/Skills/Projectile/材质球投射物.tscn");
 					Node bulletNode = bulletScene.Instantiate();
 					//GD.Print("3");
-					if (bulletNode is PointerBullet bullet)
+					if (bulletNode is MaterialBallBullet bullet)
 					{
 						//GD.Print("发射");
 						bullet.Initialize(skillData);

@@ -11,7 +11,7 @@ namespace Attack
 
 		public bool enableAttack = true;//是否开启攻击
 		private int skillCount = 8;
-		private float _attackDelay = 0.5f;//间隔时间
+		private float _attackDelay = 2.0f;//间隔时间
 		private float _timeDelay = 0;//记录间隔时间
 		private Skill[] skills=new Skill[]{};
 
@@ -30,6 +30,12 @@ namespace Attack
 			skillData = new SkillData();
 			ClearSkillData();
 
+		}
+
+		// 添加减少攻击延迟的方法
+		public void ReduceAttackDelay(float percentage)
+		{
+			_attackDelay *= (1.0f - percentage);
 		}
 
 		// 插入技能组
@@ -92,6 +98,7 @@ namespace Attack
 			skillData.RNG =0;
 			skillData.AttackCount = 0;
 			skillData.enableTarcking = false;
+			skillData.BuffTypes.Clear();
 		}
 		
 		private void AddSkillData(SkillData _skillData)
@@ -101,6 +108,10 @@ namespace Attack
 			skillData.RNG += _skillData.RNG;
 			skillData.AttackCount += _skillData.AttackCount;
 			skillData.enableTarcking = skillData.enableTarcking || _skillData.enableTarcking;
+			foreach(string buffType in _skillData.BuffTypes)
+			{
+				skillData.BuffTypes.Add(buffType);
+			}
         }
 	}
 }

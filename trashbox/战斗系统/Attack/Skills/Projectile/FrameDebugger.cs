@@ -3,24 +3,24 @@ using System;
 
 namespace Attack
 {
-	public partial class Pointer : Skill
+	public partial class FrameDebugger : Skill
 	{
 		public override string skillType { get; set; } = "projectile";
-		public override string skillName { get; set; } = "指针";
+		public override string skillName { get; set; } = "帧调试器";
 
-		public override string skillDescription { get; set; } = "可自动追踪距离最近的敌方单位，对其造成100点伤害";
+		public override string skillDescription { get; set; } = "对命中的敌人施加【程序调试中】状态，使其攻击速度降低 50%，移动速度降低 30%，持续 4 秒";
 
-        public override string skillQuote { get; set; } = "虽然它飞得慢，但它永远不会指错地方……大概吧。";
+        public override string skillQuote { get; set; } = "让我看看你这一帧到底调用了多少Draw Call。";
 
-		public override float ATK { get; set; } = 100;//攻击力
+		public override float ATK { get; set; } = 40;//攻击力
 
-		public override float ATS { get; set; } = 0.1f;//攻速
+		public override float ATS { get; set; } = 0.5f;//攻速
 
 		public override float RNG { get; set; } = 1;//攻击范围
 
 		public override int AttackCount { get; set; } = 1;//弹道
 
-		public override bool enableTarcking { get; set; } = true;//是否跟踪
+		public override bool enableTarcking { get; set; } = false;//是否跟踪
 
 
 
@@ -35,11 +35,11 @@ namespace Attack
 				float size = NormalData.AttackLength / (count + 1);
 				for (int i = 1; i <= count; i++)
 				{
-					PackedScene bulletScene = GD.Load<PackedScene>("res://trashbox/战斗系统/Attack/Skills/Projectile/指针投射物.tscn");
+					PackedScene bulletScene = GD.Load<PackedScene>("res://trashbox/战斗系统/Attack/Skills/Projectile/帧调试器投射物.tscn");
 
 					Node bulletNode = bulletScene.Instantiate();
 
-					if (bulletNode is PointerBullet bullet)
+					if (bulletNode is FrameDebuggerBullet bullet)
 					{
 						//int count = skillData.AttackCount;
 						//GD.Print(count);
@@ -64,10 +64,10 @@ namespace Attack
 				//GD.Print("2");
 				for (int i = 0; i < count; i++)
 				{
-					PackedScene bulletScene = GD.Load<PackedScene>("res://trashbox/战斗系统/Attack/Skills/Projectile/指针投射物.tscn");
+					PackedScene bulletScene = GD.Load<PackedScene>("res://trashbox/战斗系统/Attack/Skills/Projectile/帧调试器投射物.tscn");
 					Node bulletNode = bulletScene.Instantiate();
 					//GD.Print("3");
-					if (bulletNode is PointerBullet bullet)
+					if (bulletNode is FrameDebuggerBullet bullet)
 					{
 						//GD.Print("发射");
 						bullet.Initialize(skillData);

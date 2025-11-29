@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://c3ly5p5u0b24c"]
+
+[ext_resource type="Texture2D" uid="uid://cd5fw6t45fqpo" path="res://trashbox/战斗系统/UI/kenney_tiny-dungeon/Tiles/tile_0119.png" id="1_sc3e0"]
+[ext_resource type="Script" uid="uid://dfn21ooklkwci" path="res://trashbox/战斗系统/Attack/Skills/Projectile/PostProcessing.cs" id="2_0uqut"]
+
+[node name="后期处理代码块" type="Sprite2D"]
+texture_filter = 1
+position = Vector2(16, 16)
+texture = ExtResource("1_sc3e0")
+script = ExtResource("2_0uqut")

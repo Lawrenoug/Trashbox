@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://ytyv2gupbqui"]
+
+[ext_resource type="Texture2D" uid="uid://dlpsi13hrgmh2" path="res://trashbox/战斗系统/UI/kenney_tiny-dungeon/Tiles/tile_0129.png" id="1_8k0dx"]
+[ext_resource type="Script" uid="uid://v48yf400x25f" path="res://trashbox/战斗系统/Attack/Skills/Projectile/NetworkCommunication.cs" id="2_adx12"]
+
+[node name="网络通信代码块" type="Sprite2D"]
+position = Vector2(16, 16)
+texture = ExtResource("1_8k0dx")
+script = ExtResource("2_adx12")

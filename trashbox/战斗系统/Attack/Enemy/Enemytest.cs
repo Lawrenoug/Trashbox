@@ -5,7 +5,8 @@ namespace Enemy
 {
 	public partial class Enemytest : EnemyBase
 	{
-
+        public override float MaxHP { get; set; } = 1000000;
+        public override float CurrentHP { get; set; } = 1000000;
 		public override void _Ready()
         {
             base._Ready();

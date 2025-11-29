@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://cap8n6gy1ldwl"]
+
+[ext_resource type="Texture2D" uid="uid://1r3pmcseuxq8" path="res://trashbox/战斗系统/UI/kenney_tiny-dungeon/Tiles/tile_0114.png" id="1_tchv1"]
+[ext_resource type="Script" uid="uid://ce5rqndcvvhfh" path="res://trashbox/战斗系统/Attack/Skills/Amendment/MultipleRenderPasses.cs" id="2_oijjx"]
+
+[node name="多通道渲染" type="Sprite2D"]
+texture_filter = 1
+position = Vector2(16, 16)
+texture = ExtResource("1_tchv1")
+script = ExtResource("2_oijjx")

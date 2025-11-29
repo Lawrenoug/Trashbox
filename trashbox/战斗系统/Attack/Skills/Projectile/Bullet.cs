@@ -10,6 +10,8 @@ namespace Attack
 		public virtual float ATS { get; set; } = 1;
 		public virtual bool enableTarcking { get; set; } = false;
 
+        public virtual SkillData skillData { get; set; }=new SkillData();
+
 		private Node2D target; // 跟踪目标
         private float trackingRange = 1000f; // 跟踪范围
 
@@ -23,7 +25,7 @@ namespace Attack
 
 		public virtual void Initialize(SkillData _skillData)
 		{
-			
+			skillData = _skillData;
 		}
 
 		public override void _Process(double delta)
@@ -60,7 +62,7 @@ namespace Attack
 			}
 		}
 
-		private void OnBodyEntered(Node body)
+		public virtual void OnBodyEntered(Node body)
 		{
 			if (body.IsInGroup("enemy"))
 			{
@@ -153,6 +155,12 @@ namespace Attack
                     target = null;
                 }
             }
+        }
+
+        public virtual void SetBuff(Node body)
+        {
+            EnemyBase enemy = body as EnemyBase;
+            enemy.ApplyBuff(null);
         }
 	}
 }

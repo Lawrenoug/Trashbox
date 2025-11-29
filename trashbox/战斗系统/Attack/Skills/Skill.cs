@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 namespace Attack
 {
@@ -23,6 +24,8 @@ namespace Attack
         public virtual int AttackCount { get; set; } = 1;//弹道
 
         public virtual bool enableTarcking { get; set; } = false;
+
+        public virtual string buffType{get;set;}="";
 
         public virtual SkillData GetSkillData()
         {
@@ -59,12 +62,13 @@ namespace Attack
         public float RNG;
         public int AttackCount;
         public bool enableTarcking;
+        public List<string> BuffTypes;
     }
 
     public static class NormalData
     {
         public static float AttackLength = 150;
-        public static float ATS = 300;
+        public static float ATS = 100;
 
         public static SkillData AddData(SkillData skillData_1, SkillData skillData_2)
         {

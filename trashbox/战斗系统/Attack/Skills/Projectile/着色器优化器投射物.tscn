@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://wcup4tvlni5t"]
+
+[ext_resource type="Script" uid="uid://ckhgs7acbxoc0" path="res://trashbox/战斗系统/Attack/Skills/Projectile/ShaderOptimizerBullet.cs" id="1_fchfl"]
+[ext_resource type="Texture2D" uid="uid://cdsa3i85rkfu5" path="res://trashbox/战斗系统/UI/kenney_tiny-dungeon/Tiles/tile_0106.png" id="2_kmwo2"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_kmwo2"]
+
+[node name="着色器优化器投射物" type="RigidBody2D"]
+collision_layer = 4
+collision_mask = 4
+contact_monitor = true
+max_contacts_reported = 1
+script = ExtResource("1_fchfl")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_kmwo2")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+rotation = 1.5707964
+texture = ExtResource("2_kmwo2")

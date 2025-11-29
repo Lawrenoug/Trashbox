@@ -8,11 +8,11 @@ namespace Attack
 		public override string skillType { get; set; } = "projectile";
 		public override string skillName { get; set; } = "字符";
 
-		public override string skillDescription { get; set; } = "";
+		public override string skillDescription { get; set; } = "发射一枚随机字符，对敌人造成10点伤害";
 
-        public override string skillQuote { get; set; } = "";
+        public override string skillQuote { get; set; } = "//TODO: 这里以后要换个酷炫的特效";
 
-		public override float ATK { get; set; } = 1;//攻击力
+		public override float ATK { get; set; } = 10;//攻击力
 
 		public override float ATS { get; set; } = 1;//攻速
 

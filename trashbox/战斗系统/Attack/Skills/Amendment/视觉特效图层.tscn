@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://ca1brffqo3iw7"]
+
+[ext_resource type="Texture2D" uid="uid://mv1kc8ro3nu3" path="res://trashbox/战斗系统/UI/kenney_tiny-dungeon/Tiles/tile_0116.png" id="1_g71he"]
+[ext_resource type="Script" uid="uid://dpt03fm10qjy6" path="res://trashbox/战斗系统/Attack/Skills/Amendment/VisualEffectsLayer.cs" id="2_38d7c"]
+
+[node name="视觉特效图层" type="Sprite2D"]
+texture_filter = 1
+position = Vector2(16, 16)
+texture = ExtResource("1_g71he")
+script = ExtResource("2_38d7c")

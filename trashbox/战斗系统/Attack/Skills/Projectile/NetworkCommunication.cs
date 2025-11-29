@@ -3,24 +3,24 @@ using System;
 
 namespace Attack
 {
-	public partial class Pointer : Skill
+	public partial class NetworkCommunication : Skill
 	{
 		public override string skillType { get; set; } = "projectile";
-		public override string skillName { get; set; } = "指针";
+		public override string skillName { get; set; } = "网络通信";
 
-		public override string skillDescription { get; set; } = "可自动追踪距离最近的敌方单位，对其造成100点伤害";
+		public override string skillDescription { get; set; } = "命中首个敌人后，对其造成40点伤害，并附加【网络波动】效果，带有【网络波动】的敌方目标会对周围的敌方单位造成一次10点的链接冲击，然后清除【网络波动】效果。";
 
-        public override string skillQuote { get; set; } = "虽然它飞得慢，但它永远不会指错地方……大概吧。";
+        public override string skillQuote { get; set; } = "丢包？不存在的，这波是DDoS攻击。";
 
-		public override float ATK { get; set; } = 100;//攻击力
+		public override float ATK { get; set; } = 40;//攻击力
 
-		public override float ATS { get; set; } = 0.1f;//攻速
+		public override float ATS { get; set; } = 0.5f;//攻速
 
 		public override float RNG { get; set; } = 1;//攻击范围
 
 		public override int AttackCount { get; set; } = 1;//弹道
 
-		public override bool enableTarcking { get; set; } = true;//是否跟踪
+		public override bool enableTarcking { get; set; } = false;//是否跟踪
 
 
 
@@ -35,11 +35,11 @@ namespace Attack
 				float size = NormalData.AttackLength / (count + 1);
 				for (int i = 1; i <= count; i++)
 				{
-					PackedScene bulletScene = GD.Load<PackedScene>("res://trashbox/战斗系统/Attack/Skills/Projectile/指针投射物.tscn");
+					PackedScene bulletScene = GD.Load<PackedScene>("res://trashbox/战斗系统/Attack/Skills/Projectile/NetworkCommunicationBullet.cs");
 
 					Node bulletNode = bulletScene.Instantiate();
 
-					if (bulletNode is PointerBullet bullet)
+					if (bulletNode is NetworkCommunicationBullet bullet)
 					{
 						//int count = skillData.AttackCount;
 						//GD.Print(count);
@@ -64,10 +64,10 @@ namespace Attack
 				//GD.Print("2");
 				for (int i = 0; i < count; i++)
 				{
-					PackedScene bulletScene = GD.Load<PackedScene>("res://trashbox/战斗系统/Attack/Skills/Projectile/指针投射物.tscn");
+					PackedScene bulletScene = GD.Load<PackedScene>("res://trashbox/战斗系统/Attack/Skills/Projectile/NetworkCommunicationBullet.cs");
 					Node bulletNode = bulletScene.Instantiate();
 					//GD.Print("3");
-					if (bulletNode is PointerBullet bullet)
+					if (bulletNode is NetworkCommunicationBullet bullet)
 					{
 						//GD.Print("发射");
 						bullet.Initialize(skillData);
