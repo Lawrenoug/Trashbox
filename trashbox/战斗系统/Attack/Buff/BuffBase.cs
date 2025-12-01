@@ -16,9 +16,9 @@ namespace Buff
 		public virtual float intervalElapsed { get; set; } = 0;//已间隔时间
 		public virtual float DamageValue { get; set; }
 		public virtual void BuffResult()
-        {
-            
-        }
+		{
+			
+		}
 
 		public virtual void Improve(string ImproveType)
 		{
@@ -39,8 +39,8 @@ namespace Buff
 	}
 
 	public partial class GameRendering: BuffBase
-    {
-        public override BuffType buffType { get; set; } = BuffType.GameRendering;
+	{
+		public override BuffType buffType { get; set; } = BuffType.GameRendering;
 
 		public override string buffName { get; set; } = "游戏渲染中";
 		public override float duration { get; set; } = 5;
@@ -70,21 +70,21 @@ namespace Buff
 			timeElapsed += (float)delta;
 			intervalElapsed += (float)delta;
 			if (intervalElapsed >= interval)
-            {
+			{
 				intervalElapsed = 0;
 				BuffResult();
-            }
+			}
 			if (timeElapsed >= duration)
 			{
 				QueueFree();
 			}
 		}
 	
-    }
+	}
 
 	public partial class NetworkFluctuation: BuffBase
-    {
-        public override BuffType buffType { get; set; } = BuffType.NetworkFluctuation;
+	{
+		public override BuffType buffType { get; set; } = BuffType.NetworkFluctuation;
 
 		public override string buffName { get; set; } = "网络波动";
 		public override float duration { get; set; } = 5;
@@ -98,8 +98,8 @@ namespace Buff
 		{
 			EnemyBase enemy = GetParent<EnemyBase>();
 			if(enemy!=null)
-            {
-                Godot.Collections.Array<Node> enemies = enemy.GetTree().GetNodesInGroup("enemy");
+			{
+				Godot.Collections.Array<Node> enemies = enemy.GetTree().GetNodesInGroup("enemy");
 				
 				foreach (Node node in enemies)
 				{
@@ -116,7 +116,7 @@ namespace Buff
 					}
 				}
 				enemy.TakeDamage(DamageValue);
-            }
+			}
 		}
 
 		public override void _Ready()
@@ -125,11 +125,11 @@ namespace Buff
 			BuffResult();
 		}
 	
-    }
+	}
 
 	public partial class ProgramDebugging: BuffBase
-    {
-        public override BuffType buffType { get; set; } = BuffType.ProgramDebugging;
+	{
+		public override BuffType buffType { get; set; } = BuffType.ProgramDebugging;
 
 		public override string buffName { get; set; } = "程序调试中";
 		public override float duration { get; set; } = 4;
@@ -170,12 +170,12 @@ namespace Buff
 			}
 		}
 	
-    }
+	}
 
 
 	public partial class MemoryWeakPoint: BuffBase
-    {
-        public override BuffType buffType { get; set; } = BuffType.MemoryWeakPoint;
+	{
+		public override BuffType buffType { get; set; } = BuffType.MemoryWeakPoint;
 
 		public override string buffName { get; set; } = "内存弱点";
 		public override float duration { get; set; } = 3;
@@ -215,16 +215,16 @@ namespace Buff
 			}
 		}
 	
-    }
+	}
 
 	public partial class RealTimeDebugging: BuffBase
-    {
-        
-    }
+	{
+		
+	}
 
 	public partial class Experience: BuffBase
-    {
-        public override BuffType buffType { get; set; } = BuffType.Experience;
+	{
+		public override BuffType buffType { get; set; } = BuffType.Experience;
 
 		public override string buffName { get; set; } = "经验";
 		public override float duration { get; set; } = 3;
@@ -250,7 +250,7 @@ namespace Buff
 			BuffResult();
 		}
 	
-    }
+	}
 	public enum BuffType
 	{
 		GameRendering,        // 【游戏渲染中】每秒受到10点伤害，持续 5 秒，最多叠3层。
