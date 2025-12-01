@@ -53,14 +53,18 @@ namespace Attack
 							seltItem.Position = new Godot.Vector2(16, 16);
 							seltItem.RemoveFromGroup(groupName);
 
+							var parent = GetNodeOrNull<Control>("/root/Node2D/技能战斗列表");
+							if (parent != null)
+							{
+								var skillGroupsUIManager = parent.GetChild<SkillGroupsUIManager>(0);
+								skillGroupsUIManager.RequestUpdate();
 
-							var parent = GetNode<Control>("/root/Node2D/技能战斗列表");
-							var skillGroupsUIManager = parent.GetChild<SkillGroupsUIManager>(0);
-							skillGroupsUIManager.RequestUpdate();
-
-							var player = GetNode<PlayerManager>("/root/Node2D/Player");
-							player.attackManager.InsertSkill(skillGroupsUIManager.GetSkillList());
-
+								var player = GetNodeOrNull<PlayerManager>("/root/Node2D/Player");
+								if (player != null)
+								{
+									//player.attackManager.InsertSkill(skillGroupsUIManager.GetSkillList());
+								}
+							}
 						}
 						else
 						{

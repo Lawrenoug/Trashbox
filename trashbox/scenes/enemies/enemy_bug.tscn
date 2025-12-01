@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://c5o72qxb332l4"]
 
-[ext_resource type="Script" uid="uid://dyv4r2a0nv68" path="res://trashbox/scenes/enemies/enemy_bug.gd" id="1_ee3ng"]
+[ext_resource type="Script" uid="uid://dyv4r2a0nv68" path="res://trashbox/scripts/enemy_bug.gd" id="1_ee3ng"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_6o1av"]
 

@@ -28,6 +28,7 @@ namespace Attack
 			// _test.Add(new Pixel());
 			// InsertSkill(_test);
 			skillData = new SkillData();
+			skillData.BuffTypes = new List<string>(); // 初始化BuffTypes列表
 			ClearSkillData();
 
 		}

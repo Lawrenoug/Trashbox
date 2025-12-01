@@ -1,0 +1,83 @@
+[gd_scene load_steps=6 format=3 uid="uid://cvqojluycs71d"]
+
+[ext_resource type="Theme" uid="uid://1gy6tx3ub7fh" path="res://trashbox/assets/pixel_ui_theme.tres" id="1_o6jce"]
+[ext_resource type="Script" uid="uid://cftbewp0txe0q" path="res://trashbox/scripts/login_screen.gd" id="2_lomxj"]
+[ext_resource type="Texture2D" uid="uid://d0wq4dsrro3aa" path="res://trashbox/assets/sprites/背景.png" id="3_dfnao"]
+[ext_resource type="PackedScene" uid="uid://pwwp08nxemy2" path="res://trashbox/scenes/main/desktop_screen.tscn" id="3_lomxj"]
+[ext_resource type="Texture2D" uid="uid://cq2cakdhoyhlw" path="res://trashbox/assets/sprites/头像.png" id="4_xhswx"]
+
+[node name="LoginScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_o6jce")
+script = ExtResource("2_lomxj")
+desktop_scene = ExtResource("3_lomxj")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_dfnao")
+expand_mode = 1
+
+[node name="LoginBox" type="VBoxContainer" parent="."]
+custom_minimum_size = Vector2(330, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -155.0
+offset_top = -50.5
+offset_right = 155.0
+offset_bottom = 50.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_o6jce")
+theme_override_constants/separation = 5
+
+[node name="Avatar" type="TextureRect" parent="LoginBox"]
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("4_xhswx")
+
+[node name="PasswordLabel" type="Label" parent="LoginBox"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Mr.Luo"
+
+[node name="MarginContainer" type="MarginContainer" parent="LoginBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_right = 40
+
+[node name="PasswordInput" type="LineEdit" parent="LoginBox/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+placeholder_text = "输入密码"
+alignment = 1
+
+[node name="MarginContainer2" type="MarginContainer" parent="LoginBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_right = 40
+
+[node name="LoginButton" type="Button" parent="LoginBox/MarginContainer2"]
+layout_mode = 2
+text = "登录"
+
+[node name="ErrorLabel" type="Label" parent="LoginBox"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+text = "访问被拒绝"
+
+[node name="ErrorTimer" type="Timer" parent="."]

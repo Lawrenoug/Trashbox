@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://bmp8aes8ioje0"]
 
-[ext_resource type="Script" uid="uid://drjvunkq8qfl5" path="res://trashbox/scenes/player/player.gd" id="1_euyhh"]
+[ext_resource type="Script" uid="uid://drjvunkq8qfl5" path="res://trashbox/scripts/player.gd" id="1_euyhh"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_y2388"]
 
