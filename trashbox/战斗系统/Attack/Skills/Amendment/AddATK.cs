@@ -11,7 +11,7 @@ namespace Attack
 
 		public override string skillDescription { get; set; } = "提升你投射物 20%伤害";
 
-        public override string skillQuote { get; set; } = "我把省下来的内存都堆到伤害值里了，没想到吧？";
+		public override string skillQuote { get; set; } = "我把省下来的内存都堆到伤害值里了，没想到吧？";
 
 		public override float ATK { get; set; } = 20f;//攻击力
 
