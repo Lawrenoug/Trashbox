@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="SkillData" load_steps=2 format=3 uid="uid://dmh10gdbanlp3"]
+
+[ext_resource type="Script" uid="uid://dsbuh1nsnajyn" path="res://trashbox/scripts/skill_data.gd" id="1_i3oq4"]
+
+[resource]
+script = ExtResource("1_i3oq4")
+metadata/_custom_type_script = "uid://dsbuh1nsnajyn"
