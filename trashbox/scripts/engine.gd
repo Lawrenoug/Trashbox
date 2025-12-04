@@ -1,37 +1,44 @@
 extends "res://trashbox/scripts/window_base.gd"
 
 # --- 1. 节点引用 ---
-# (路径基于你提供的代码，请确保场景结构一致)
+# 【重要】如果报错 Node not found，请去场景树右键复制正确路径替换下面
 # 中间：预览视口
 @onready var preview_viewport = $BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/PreviewViewport/GameViewContainer/GameViewport
 # 右侧：描述文本
 @onready var description_text: RichTextLabel = $BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/DescriptionPanel/DescriptionText
-# 左下：技能库容器
-@onready var deck_grid: GridContainer = $BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillDeckPanel/DeckContent/DeckScroll/DeckGrid
+# 左下：技能库容器 (GridContainer)
+@onready var library_grid: GridContainer = $BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillDeckPanel/DeckContent/DeckScroll/DeckGrid
+# 左上：携带技能容器 (VBoxContainer)
+@onready var equipped_list: VBoxContainer = $BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillLogPanel/LogContent/LogScroll/LogList
 
-# --- 2. 资源预加载 ---
-# 【重要】你需要创建一个专门用于演示技能的小场景(练功房)，里面放个木桩和发射器
-# 如果还没做，请先新建一个 Node2D 场景保存到这个路径，否则会报错
+# --- 2. 接口：技能数据 ---
+# 请在编辑器的检查器中，把你做好的 .tres 文件拖到这就两个数组里
+@export var library_skills: Array[Resource]  # 技能库里的技能
+@export var equipped_skills: Array[Resource] # 当前携带的技能
+
+# --- 3. 资源预加载 ---
+# 专门用于演示技能的小场景 (练功房)
 const PreviewStageScene = preload("res://trashbox/scenes/main/skill_preview_stage.tscn")
 
 # 当前加载的预览舞台实例
 var current_preview_instance = null
 
 func _ready():
-	super._ready() # 必须调用父类
+	super._ready() # 必须调用父类，保证窗口能拖动
 	
 	# 1. 初始化中间的预览舞台
 	_init_preview_stage()
 	
-	# 2. 生成左侧的技能列表
-	_populate_skill_list()
+	# 2. 刷新左侧两栏的 UI
+	_refresh_library_ui()
+	_refresh_equipped_ui()
 	
 	# 3. 设置右侧默认文本
-	description_text.text = "[center]请在左侧选择一个 [color=yellow]模块 (技能)[/color] 查看详细文档。[/center]"
+	description_text.text = "[center]系统就绪。\n请在左侧选择一个 [color=yellow]模块 (技能)[/color] 查看详细文档。[/center]"
 
 # --- 初始化预览舞台 (中间视口) ---
 func _init_preview_stage():
-	# 清理残留
+	# 清理视口里残留的东西
 	for child in preview_viewport.get_children():
 		child.queue_free()
 	
@@ -42,57 +49,65 @@ func _init_preview_stage():
 	else:
 		print("错误：未找到 PreviewStageScene 场景文件！")
 
-# --- 生成技能列表 (左下侧栏) ---
-func _populate_skill_list():
-	# 模拟的技能数据 (未来可以从 JSON 或 Resource 读取)
-	var skills = [
-		{
-			"name": "快速排序斩",
-			"desc": "对单个目标造成 [color=red]30[/color] 点物理伤害。\n\n[i]时间复杂度 O(nlogn)，非常高效的单体清理手段。[/i]",
-			"anim_name": "attack_quick_sort" 
-		},
-		{
-			"name": "递归护盾",
-			"desc": "获得 [color=blue]10[/color] 点护甲。\n\n[i]如果护盾被击破，自动调用自身重新生成 50% 的护盾量。小心栈溢出！[/i]",
-			"anim_name": "skill_recursion"
-		},
-		{
-			"name": "垃圾回收 (GC)",
-			"desc": "回复 [color=green]15[/color] 点生命值，移除自身所有负面状态。\n\n[i]清理内存中的无用对象，让系统重获新生。[/i]",
-			"anim_name": "skill_gc"
-		},
-		{
-			"name": "死循环",
-			"desc": "对所有敌人施加 [color=purple]眩晕[/color] 1 回合。\n\n[i]while(true) { 敌人无法行动; }[/i]",
-			"anim_name": "skill_infinite_loop"
-		}
-	]
-	
-	# 清空现有列表
-	for child in deck_grid.get_children():
+# --- 刷新左下角：技能库 ---
+func _refresh_library_ui():
+	# 清空现有按钮
+	for child in library_grid.get_children():
 		child.queue_free()
-	
-	# 动态生成按钮
-	for skill_data in skills:
+		
+	for skill in library_skills:
+		if skill == null: continue # 跳过空槽位
+		
 		var btn = Button.new()
-		btn.text = skill_data["name"]
+		# 读取资源里的技能名
+		btn.text = skill.skill_name
 		# 设置按钮最小高度，方便点击
 		btn.custom_minimum_size = Vector2(0, 40)
-		# 连接点击信号，把当前这个技能的数据传过去
-		btn.pressed.connect(_on_skill_selected.bind(skill_data))
-		deck_grid.add_child(btn)
+		
+		# 连接点击信号，把当前这个技能的数据(Resource)传过去
+		btn.pressed.connect(_on_skill_selected.bind(skill))
+		
+		library_grid.add_child(btn)
+		
+
+# --- 刷新左上角：携带技能 (日志样式) ---
+func _refresh_equipped_ui():
+	# 清空现有列表
+	for child in equipped_list.get_children():
+		child.queue_free()
+		
+	for skill in equipped_skills:
+		if skill == null: continue
+		
+		# 这里用 Button 模拟日志条目，也可以用 Label
+		var slot = Button.new()
+		# 加上前缀模拟运行日志
+		slot.text = "> [Running] " + skill.skill_name
+		slot.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		slot.flat = true
+		slot.add_theme_color_override("font_color", Color.GREEN) # 设为绿色字
+		
+		# 点击也可以查看详情
+		slot.pressed.connect(_on_skill_selected.bind(skill))
+		
+		equipped_list.add_child(slot)
+		
+		slot.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS # 超出显示省略号...
+		slot.clip_text = true # 开启裁剪
 
 # --- 核心交互：选中技能 ---
-func _on_skill_selected(data):
-	# 1. 更新右侧描述
-	# 使用 BBCode 进行富文本显示
-	var title = "[font_size=24][b]%s[/b][/font_size]\n\n" % data["name"]
-	var content = data["desc"]
-	description_text.text = title + content
+func _on_skill_selected(skill_data):
+	# 1. 更新右侧描述 (读取 .tres 里的数据)
+	# 使用 BBCode 进行排版
+	var title = "[font_size=32][b]%s[/b][/font_size]\n\n" % skill_data.skill_name
+	var cost_info = "[color=orange]消耗: %d[/color]   [color=red]伤害: %d[/color]\n\n" % [skill_data.cost, skill_data.damage]
+	var desc = skill_data.description
 	
-	# 2. (可选) 更新中间的演示动画
-	# 这里只是打印，等你做好了 PreviewStage 里的动画逻辑，可以在这里调用
-	print("正在演示技能动画: ", data["anim_name"])
+	description_text.text = title + cost_info + desc
+	
+	# 2. 更新中间的演示动画
+	# 假设你的 skill_preview_stage.tscn 里有个函数叫 play_demo(anim_name)
+	print("正在请求演示动画: ", skill_data.animation_name)
 	
 	if current_preview_instance and current_preview_instance.has_method("play_demo"):
-		current_preview_instance.play_demo(data["anim_name"])
+		current_preview_instance.play_demo(skill_data.animation_name)

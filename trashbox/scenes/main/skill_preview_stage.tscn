@@ -1,3 +1,55 @@
-[gd_scene format=3 uid="uid://r1twd8l6w7wa"]
+[gd_scene load_steps=6 format=3 uid="uid://r1twd8l6w7wa"]
+
+[ext_resource type="Texture2D" uid="uid://c2whhpo2e72ch" path="res://trashbox/assets/sprites/像素怪.png" id="1_7qgnq"]
+[ext_resource type="Script" uid="uid://c28sne5rg2rre" path="res://trashbox/scenes/main/skill_preview_stage.gd" id="1_allmg"]
+
+[sub_resource type="Animation" id="Animation_allmg"]
+resource_name = "attack_quick_sort"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Dummy:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(0.96543545, 0.3623024, 0.34649637, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_i404t"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Dummy:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ngxx7"]
+_data = {
+&"RESET": SubResource("Animation_i404t"),
+&"attack_quick_sort": SubResource("Animation_allmg")
+}
 
 [node name="Skillpreviewstage" type="Node2D"]
+script = ExtResource("1_allmg")
+
+[node name="Dummy" type="Sprite2D" parent="."]
+texture = ExtResource("1_7qgnq")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_ngxx7")
+}
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(2, 2)
