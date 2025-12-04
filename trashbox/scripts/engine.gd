@@ -2,7 +2,9 @@ extends "res://trashbox/scripts/window_base.gd"
 
 # --- 1. 引用那个“洞” (SubViewport) ---
 # 【重要】请去场景树里右键 GameViewport -> 复制节点路径 -> 替换下面的路径
-@onready var game_viewport = $BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/CombatViewport/GameViewContainer/GameViewport
+@onready var game_viewport = $BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/PreviewViewport/GameViewContainer/GameViewport
+@onready var description_text: RichTextLabel = $BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/DescriptionPanel/DescriptionText
+@onready var deck_grid: GridContainer = $BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillDeckPanel/DeckContent/DeckScroll/DeckGrid
 
 # --- 2. 关卡池 ---
 # 在编辑器里把你的 level_01.tscn, level_02.tscn 拖进去

@@ -93,40 +93,37 @@ layout_mode = 2
 size_flags_horizontal = 3
 split_offset = 200
 
-[node name="CombatViewport" type="PanelContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub" index="0"]
+[node name="PreviewViewport" type="PanelContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub" index="0"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_bvc11")
 
-[node name="Placeholder" type="Label" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/CombatViewport" index="0"]
+[node name="Placeholder" type="Label" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/PreviewViewport" index="0"]
 layout_mode = 2
 
-[node name="GameViewContainer" type="SubViewportContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/CombatViewport" index="1"]
+[node name="GameViewContainer" type="SubViewportContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/PreviewViewport" index="1"]
 layout_mode = 2
 mouse_filter = 0
 stretch = true
 
-[node name="GameViewport" type="SubViewport" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/CombatViewport/GameViewContainer" index="0"]
+[node name="GameViewport" type="SubViewport" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/PreviewViewport/GameViewContainer" index="0"]
 transparent_bg = true
 handle_input_locally = false
-size = Vector2i(226, 241)
+size = Vector2i(226, 237)
 render_target_update_mode = 4
 
-[node name="MapPanel" type="PanelContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub" index="1"]
+[node name="DescriptionPanel" type="PanelContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub" index="1"]
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_wrolx")
 
-[node name="MapContent" type="VBoxContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/MapPanel" index="0"]
+[node name="DescriptionText" type="RichTextLabel" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/DescriptionPanel" index="0"]
 layout_mode = 2
+theme_override_font_sizes/normal_font_size = 8
+bbcode_enabled = true
+text = "请在左侧选择一个技能以查看详细文档"
 
-[node name="TitleMap" type="Label" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/MapPanel/MapContent" index="0"]
-layout_mode = 2
-
-[node name="MapScroll" type="ScrollContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/MapPanel/MapContent" index="1"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="MapCanvas" type="Control" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/MapPanel/MapContent/MapScroll" index="0"]
+[node name="TimelinePanel" type="PanelContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot" index="2"]
+custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
