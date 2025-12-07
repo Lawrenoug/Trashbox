@@ -91,37 +91,38 @@ func _refresh_equipped_ui():
 
 # --- 核心交互：选中技能 ---
 func _on_skill_selected(skill_scene: PackedScene):
-	# 当前正在演示的技能实例
-	var current_skill_instance = null
-		_load_preview_stage()
+	# 1. 预览区清理
+	for child in preview_viewport.get_children():
+		child.queue_free()
 
-	# 2. 【关键】再次实例化来获取详细信息
-	# 此时我们需要这个实例存在，甚至可能把它放到视口里演示
-	skill_instance = skill_scene.instantiate()
-	
+	# 2. 实例化技能预览
 	var skill_instance = skill_scene.instantiate()
-	var s_name = skill_instance.skill_name
-	var s_cost = skill_instance.cost
-	var s_dmg = skill_instance.damage
-	var s_desc = skill_instance.description
-	var s_anim = skill_instance.animation_name
-	
-	# 更新文本
+	preview_viewport.add_child(skill_instance)
+	current_skill_instance = skill_instance
+
+	# 3. 读取数据更新右侧描述
+	var s_name = "未命名"
+	var s_desc = "无描述"
+	var s_dmg = 0
+	var s_cost = 0
+	if "skill_name" in skill_instance:
+		s_name = skill_instance.skill_name
+	if "description" in skill_instance:
+		s_desc = skill_instance.description
+	if "damage" in skill_instance:
+		s_dmg = skill_instance.damage
+	if "cost" in skill_instance:
+		s_cost = skill_instance.cost
+
 	var title = "[font_size=32][b]%s[/b][/font_size]\n\n" % s_name
 	var info = "[color=orange]消耗: %d[/color]   [color=red]伤害: %d[/color]\n\n" % [s_cost, s_dmg]
 	description_text.text = title + info + s_desc
-	
-	# 3. 演示动画
-	if current_content_instance and current_content_instance.has_method("play_demo"):
-		current_content_instance.play_demo(s_anim)
-	
-	# 4. 这个用于读取信息的实例用完了，如果不需要把它放到场景里，就销毁
-	# 如果你想直接把技能特效显示出来，也可以把它 add_child 到视口里
-	var skill_instance = skill_scene.instantiate()
 
-	# 2. 只实例化技能的预览部分（不加载完整战斗场景）
-	preview_viewport.add_child(skill_instance)
-	current_skill_instance = skill_instance
+	# 4. 如果技能有演示功能，可以调用
+	if skill_instance.has_method("demo"):
+		skill_instance.demo()
+	elif skill_instance.has_node("AnimationPlayer"):
+		skill_instance.get_node("AnimationPlayer").play("attack")
 
 
 # ... (后面的 load_level, _load_preview_stage 等代码保持不变) ...
