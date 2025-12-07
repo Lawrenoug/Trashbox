@@ -97,7 +97,7 @@ func _on_skill_selected(skill_scene: PackedScene):
 
 	# 2. 【关键】再次实例化来获取详细信息
 	# 此时我们需要这个实例存在，甚至可能把它放到视口里演示
-	var skill_instance = skill_scene.instantiate()
+	skill_instance = skill_scene.instantiate()
 	
 	# 读取属性
 	var s_name = skill_instance.skill_name
@@ -145,8 +145,8 @@ func _on_level_selected(level_index):
 
 # 新增：切换到战斗场景的方法
 func start_battle():
-    # 请将路径替换为你的战斗场景实际路径
-    get_tree().change_scene_to_file("res://trashbox/scenes/main/battle_scene.tscn")
+	# 请将路径替换为你的战斗场景实际路径
+	get_tree().change_scene_to_file("res://trashbox/scenes/main/battle_scene.tscn")
 
 func load_level(index: int):
 	if level_scenes.is_empty(): return
