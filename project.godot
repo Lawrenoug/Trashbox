@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Trashbox"
-run/main_scene="uid://cvqojluycs71d"
+run/main_scene="uid://r7o76g52148v"
 config/features=PackedStringArray("4.5", "C#", "Forward Plus")
 config/icon="res://trashbox/战斗系统/icon.svg"
 <<<<<<<HEADrun/main_scene="uid://diioyhmevc7oj"
