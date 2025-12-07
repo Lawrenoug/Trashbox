@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://deg0wronr46cw"]
+[gd_scene load_steps=11 format=3 uid="uid://deg0wronr46cw"]
 
 [ext_resource type="PackedScene" uid="uid://bv17lh6n2q5kb" path="res://trashbox/scenes/main/window_base.tscn" id="1_wavt3"]
 [ext_resource type="Script" uid="uid://bdg5phergyfhk" path="res://trashbox/scripts/engine.gd" id="2_em83p"]
-[ext_resource type="Resource" uid="uid://cudc3alucqs12" path="res://trashbox/assets/skills/skill_quick_sort.tres" id="3_wrolx"]
-[ext_resource type="Resource" uid="uid://dmh10gdbanlp3" path="res://trashbox/assets/skills/skill_recursion.tres" id="4_58lqr"]
 [ext_resource type="PackedScene" uid="uid://cdm3a2td2r178" path="res://trashbox/scenes/main/mapsystem.tscn" id="5_58lqr"]
+[ext_resource type="PackedScene" uid="uid://cty56ew0kcqbu" path="res://trashbox/scenes/levels/level_base.tscn" id="5_iba87"]
+[ext_resource type="PackedScene" uid="uid://dk1ae2t3e6fi7" path="res://trashbox/战斗系统/技能战斗列表.tscn" id="5_t5267"]
+[ext_resource type="PackedScene" uid="uid://bj20pol0nbg0o" path="res://trashbox/战斗系统/技能组背包.tscn" id="6_ftt37"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wavt3"]
 bg_color = Color(0.31431612, 0.31431612, 0.31431603, 1)
@@ -20,8 +21,9 @@ bg_color = Color(0.3137255, 0.3137255, 0.3137255, 1)
 
 [node name="WindowBase" instance=ExtResource("1_wavt3")]
 script = ExtResource("2_em83p")
-library_skills = Array[Resource]([ExtResource("3_wrolx")])
-equipped_skills = Array[Resource]([ExtResource("4_58lqr")])
+library_skills = Array[PackedScene]([ExtResource("6_ftt37")])
+equipped_skills = Array[PackedScene]([ExtResource("5_t5267")])
+level_scenes = Array[PackedScene]([ExtResource("5_iba87")])
 
 [node name="CloseButton" parent="BgColor/MainLayout/TitleBar" index="1"]
 text = "X"
@@ -52,44 +54,45 @@ size_flags_vertical = 3
 split_offset = 200
 
 [node name="LeftColumn" type="VSplitContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain" index="0"]
-custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 
 [node name="SkillLogPanel" type="PanelContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn" index="0"]
+custom_minimum_size = Vector2(50, 150)
 layout_mode = 2
-size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_wavt3")
 
-[node name="LogContent" type="VBoxContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillLogPanel" index="0"]
+[node name="技能战斗列表" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillLogPanel" index="0" instance=ExtResource("5_t5267")]
 layout_mode = 2
 
-[node name="TitleLog" type="Label" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillLogPanel/LogContent" index="0"]
-layout_mode = 2
-
-[node name="LogScroll" type="ScrollContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillLogPanel/LogContent" index="1"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="LogList" type="VBoxContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillLogPanel/LogContent/LogScroll" index="0"]
-layout_mode = 2
+[node name="GridContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillLogPanel/技能战斗列表" index="0"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+columns = 2
 
 [node name="SkillDeckPanel" type="PanelContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn" index="1"]
+custom_minimum_size = Vector2(50, 100)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_em83p")
 
-[node name="DeckContent" type="VBoxContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillDeckPanel" index="0"]
+[node name="技能组背包" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillDeckPanel" index="0" instance=ExtResource("6_ftt37")]
 layout_mode = 2
 
-[node name="TitleDeck" type="Label" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillDeckPanel/DeckContent" index="0"]
-layout_mode = 2
-
-[node name="DeckScroll" type="ScrollContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillDeckPanel/DeckContent" index="1"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="DeckGrid" type="GridContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillDeckPanel/DeckContent/DeckScroll" index="0"]
-layout_mode = 2
+[node name="GridContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillDeckPanel/技能组背包" index="0"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="SplitSub" type="HSplitContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain" index="1"]
 layout_mode = 2
@@ -112,7 +115,7 @@ stretch = true
 [node name="GameViewport" type="SubViewport" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/PreviewViewport/GameViewContainer" index="0"]
 transparent_bg = true
 handle_input_locally = false
-size = Vector2i(126, 137)
+size = Vector2i(126, 262)
 render_target_update_mode = 4
 
 [node name="DescriptionPanel" type="PanelContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub" index="1"]
@@ -133,3 +136,6 @@ layout_mode = 2
 
 [node name="MapSystem" parent="BgColor/MainLayout/ContentSlot/EditorRoot/TimelinePanel" index="0" instance=ExtResource("5_58lqr")]
 layout_mode = 2
+
+[editable path="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillLogPanel/技能战斗列表"]
+[editable path="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillDeckPanel/技能组背包"]

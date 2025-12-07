@@ -1,113 +1,167 @@
 extends "res://trashbox/scripts/window_base.gd"
 
-# --- 1. 节点引用 ---
-# 【重要】如果报错 Node not found，请去场景树右键复制正确路径替换下面
-# 中间：预览视口
+# --- 1. 节点引用 (保持不变) ---
 @onready var preview_viewport = $BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/PreviewViewport/GameViewContainer/GameViewport
-# 右侧：描述文本
 @onready var description_text: RichTextLabel = $BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/DescriptionPanel/DescriptionText
-# 左下：技能库容器 (GridContainer)
-@onready var library_grid: GridContainer = $BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillDeckPanel/DeckContent/DeckScroll/DeckGrid
-# 左上：携带技能容器 (VBoxContainer)
-@onready var equipped_list: VBoxContainer = $BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillLogPanel/LogContent/LogScroll/LogList
+@onready var library_grid: GridContainer = $BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillDeckPanel/技能组背包/GridContainer
+@onready var equipped_list: GridContainer = $BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillLogPanel/技能战斗列表/GridContainer
+@onready var map_system = $BgColor/MainLayout/ContentSlot/EditorRoot/TimelinePanel/MapSystem
 
-# --- 2. 接口：技能数据 ---
-# 请在编辑器的检查器中，把你做好的 .tres 文件拖到这就两个数组里
-@export var library_skills: Array[Resource]  # 技能库里的技能
-@export var equipped_skills: Array[Resource] # 当前携带的技能
+# --- 2. 接口：改为 PackedScene (场景) ---
+# 【变化】现在这里拖入的是 .tscn 文件，而不是 .tres 文件
+@export var library_skills: Array[PackedScene] 
+@export var equipped_skills: Array[PackedScene]
 
-# --- 3. 资源预加载 ---
-# 专门用于演示技能的小场景 (练功房)
+# --- 3. 关卡接口 (保持不变) ---
+@export var level_scenes: Array[PackedScene]
+
 const PreviewStageScene = preload("res://trashbox/scenes/main/skill_preview_stage.tscn")
-
-# 当前加载的预览舞台实例
-var current_preview_instance = null
+var current_content_instance = null
 
 func _ready():
-	super._ready() # 必须调用父类，保证窗口能拖动
+	super._ready()
 	
-	# 1. 初始化中间的预览舞台
-	_init_preview_stage()
+	_load_preview_stage()
 	
-	# 2. 刷新左侧两栏的 UI
+	# 刷新 UI
 	_refresh_library_ui()
 	_refresh_equipped_ui()
 	
-	# 3. 设置右侧默认文本
-	description_text.text = "[center]系统就绪。\n请在左侧选择一个 [color=yellow]模块 (技能)[/color] 查看详细文档。[/center]"
-
-# --- 初始化预览舞台 (中间视口) ---
-func _init_preview_stage():
-	# 清理视口里残留的东西
-	for child in preview_viewport.get_children():
-		child.queue_free()
+	description_text.text = "[center]系统就绪。\n读取 .tscn 技能模块中...[/center]"
 	
-	# 实例化练功房
-	if PreviewStageScene:
-		current_preview_instance = PreviewStageScene.instantiate()
-		preview_viewport.add_child(current_preview_instance)
-	else:
-		print("错误：未找到 PreviewStageScene 场景文件！")
+	if map_system:
+		map_system.level_selected.connect(_on_level_selected)
 
 # --- 刷新左下角：技能库 ---
 func _refresh_library_ui():
-	# 清空现有按钮
-	for child in library_grid.get_children():
-		child.queue_free()
+	#for child in library_grid.get_children(): child.queue_free()
 		
-	for skill in library_skills:
-		if skill == null: continue # 跳过空槽位
+	for skill_scene in library_skills:
+		if skill_scene == null: continue
 		
+		# 【关键变化】为了读取 .tscn 里的名字，必须先实例化
+		var temp_instance = skill_scene.instantiate()
+		
+		# 检查它是不是一个合法的技能 (有没有继承 Skill 类)
+		# 这里的 'Skill' 是你队友定义的 class_name
+		if not "skill_name" in temp_instance:
+			print("警告：该场景缺少 skill_name 属性，可能不是技能！")
+			temp_instance.queue_free()
+			continue
+			
 		var btn = Button.new()
-		# 读取资源里的技能名
-		btn.text = skill.skill_name
-		# 设置按钮最小高度，方便点击
+		# 读取实例化后的属性
+		btn.text = temp_instance.skill_name 
 		btn.custom_minimum_size = Vector2(0, 40)
+		btn.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		
-		# 连接点击信号，把当前这个技能的数据(Resource)传过去
-		btn.pressed.connect(_on_skill_selected.bind(skill))
+		# 连接信号：把这个 PackedScene 传给点击函数
+		btn.pressed.connect(_on_skill_selected.bind(skill_scene))
 		
 		library_grid.add_child(btn)
 		
+		# 读完数据就销毁这个临时对象，不占内存
+		temp_instance.queue_free()
 
-# --- 刷新左上角：携带技能 (日志样式) ---
+# --- 刷新左上角：携带技能 ---
 func _refresh_equipped_ui():
-	# 清空现有列表
-	for child in equipped_list.get_children():
-		child.queue_free()
+	#for child in equipped_list.get_children(): child.queue_free()
 		
-	for skill in equipped_skills:
-		if skill == null: continue
+	for skill_scene in equipped_skills:
+		if skill_scene == null: continue
 		
-		# 这里用 Button 模拟日志条目，也可以用 Label
+		# 同样需要实例化来读取名字
+		var temp_instance = skill_scene.instantiate()
+		if not "skill_name" in temp_instance:
+			print("错误：发现一个无效的技能场景！它没有 skill_name 属性。场景名: ", temp_instance.name)
+			# 销毁它，并跳过这次循环，不要让游戏崩溃
+			temp_instance.queue_free()
+			continue
+		# 这里省略类型检查，假设拖进来的都是对的
 		var slot = Button.new()
-		# 加上前缀模拟运行日志
-		slot.text = "> [Running] " + skill.skill_name
+		slot.text = "> [Running] " + temp_instance.skill_name
 		slot.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		slot.flat = true
-		slot.add_theme_color_override("font_color", Color.GREEN) # 设为绿色字
+		slot.add_theme_color_override("font_color", Color.GREEN)
 		
-		# 点击也可以查看详情
-		slot.pressed.connect(_on_skill_selected.bind(skill))
+		slot.pressed.connect(_on_skill_selected.bind(skill_scene))
 		
 		equipped_list.add_child(slot)
-		
-		slot.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS # 超出显示省略号...
-		slot.clip_text = true # 开启裁剪
+		temp_instance.queue_free()
 
 # --- 核心交互：选中技能 ---
-func _on_skill_selected(skill_data):
-	# 1. 更新右侧描述 (读取 .tres 里的数据)
-	# 使用 BBCode 进行排版
-	var title = "[font_size=32][b]%s[/b][/font_size]\n\n" % skill_data.skill_name
-	var cost_info = "[color=orange]消耗: %d[/color]   [color=red]伤害: %d[/color]\n\n" % [skill_data.cost, skill_data.damage]
-	var desc = skill_data.description
-	
-	description_text.text = title + cost_info + desc
-	
-	# 2. 更新中间的演示动画
-	# 假设你的 skill_preview_stage.tscn 里有个函数叫 play_demo(anim_name)
-	print("正在请求演示动画: ", skill_data.animation_name)
-	
-	if current_preview_instance and current_preview_instance.has_method("play_demo"):
-		current_preview_instance.play_demo(skill_data.animation_name)
+func _on_skill_selected(skill_scene: PackedScene):
+	# 1. 预览区清理
+	for child in preview_viewport.get_children():
+		child.queue_free()
+
+	# 2. 实例化技能预览
+	var skill_instance = skill_scene.instantiate()
+	preview_viewport.add_child(skill_instance)
+	current_skill_instance = skill_instance
+
+	# 3. 读取数据更新右侧描述
+	var s_name = "未命名"
+	var s_desc = "无描述"
+	var s_dmg = 0
+	var s_cost = 0
+	if "skill_name" in skill_instance:
+		s_name = skill_instance.skill_name
+	if "description" in skill_instance:
+		s_desc = skill_instance.description
+	if "damage" in skill_instance:
+		s_dmg = skill_instance.damage
+	if "cost" in skill_instance:
+		s_cost = skill_instance.cost
+
+	var title = "[font_size=32][b]%s[/b][/font_size]\n\n" % s_name
+	var info = "[color=orange]消耗: %d[/color]   [color=red]伤害: %d[/color]\n\n" % [s_cost, s_dmg]
+	description_text.text = title + info + s_desc
+
+	# 4. 如果技能有演示功能，可以调用
+	if skill_instance.has_method("demo"):
+		skill_instance.demo()
+	elif skill_instance.has_node("AnimationPlayer"):
+		skill_instance.get_node("AnimationPlayer").play("attack")
+
+
+# ... (后面的 load_level, _load_preview_stage 等代码保持不变) ...
+# 请把之前完整代码里的那些辅助函数补在后面
+# ----------------------------------------------------
+# 以下是补全的辅助代码，直接粘贴在下面即可
+# ----------------------------------------------------
+
+func _load_preview_stage():
+	_clear_viewport()
+	if PreviewStageScene:
+		current_content_instance = PreviewStageScene.instantiate()
+		current_content_instance.name = "SkillPreviewStage" # 方便判断
+		preview_viewport.add_child(current_content_instance)
+
+func _on_level_selected(level_index):
+	var safe_index = 0
+	if level_scenes.size() > 0:
+		safe_index = level_index % level_scenes.size()
+	load_level(safe_index)
+
+# 新增：切换到战斗场景的方法
+func start_battle():
+	# 请将路径替换为你的战斗场景实际路径
+	get_tree().change_scene_to_file("res://trashbox/scenes/main/battle_scene.tscn")
+
+func load_level(index: int):
+	if level_scenes.is_empty(): return
+	_clear_viewport()
+	var scene_res = level_scenes[index]
+	if scene_res:
+		current_content_instance = scene_res.instantiate()
+		preview_viewport.add_child(current_content_instance)
+		description_text.text = "[center]战斗模块加载中...\nLevel %d[/center]" % index
+
+func _clear_viewport():
+	if current_content_instance != null:
+		current_content_instance.queue_free()
+		current_content_instance = null
+		var current_skill_instance = null # 当前正在演示的技能实例
+	for child in preview_viewport.get_children():
+		child.queue_free()
