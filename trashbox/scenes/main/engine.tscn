@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://deg0wronr46cw"]
+[gd_scene load_steps=12 format=3 uid="uid://deg0wronr46cw"]
 
 [ext_resource type="PackedScene" uid="uid://bv17lh6n2q5kb" path="res://trashbox/scenes/main/window_base.tscn" id="1_wavt3"]
 [ext_resource type="Script" uid="uid://bdg5phergyfhk" path="res://trashbox/scripts/engine.gd" id="2_em83p"]
@@ -6,6 +6,9 @@
 [ext_resource type="PackedScene" uid="uid://cty56ew0kcqbu" path="res://trashbox/scenes/levels/level_base.tscn" id="5_iba87"]
 [ext_resource type="PackedScene" uid="uid://dk1ae2t3e6fi7" path="res://trashbox/战斗系统/技能战斗列表.tscn" id="5_t5267"]
 [ext_resource type="PackedScene" uid="uid://bj20pol0nbg0o" path="res://trashbox/战斗系统/技能组背包.tscn" id="6_ftt37"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_iba87"]
+font_color = Color(0.53333336, 0.53333336, 0.53333336, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wavt3"]
 bg_color = Color(0.31431612, 0.31431612, 0.31431603, 1)
@@ -41,12 +44,18 @@ layout_mode = 2
 
 [node name="File" type="Button" parent="BgColor/MainLayout/ContentSlot/EditorRoot/MenuBar" index="0"]
 layout_mode = 2
+text = "文件"
 
 [node name="Debug" type="Button" parent="BgColor/MainLayout/ContentSlot/EditorRoot/MenuBar" index="1"]
 layout_mode = 2
+text = "调试"
 
 [node name="Status" type="Label" parent="BgColor/MainLayout/ContentSlot/EditorRoot/MenuBar" index="2"]
 layout_mode = 2
+size_flags_horizontal = 3
+text = "IDLE"
+label_settings = SubResource("LabelSettings_iba87")
+horizontal_alignment = 2
 
 [node name="SplitMain" type="HSplitContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot" index="1"]
 layout_mode = 2

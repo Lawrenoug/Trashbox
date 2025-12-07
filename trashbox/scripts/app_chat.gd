@@ -44,12 +44,14 @@ func init_data(desktop_node):
 func _switch_chat_to(target_name: String):
 	current_chat_target = target_name
 	current_contact_label.text = target_name
+	chat_log.clear()
 	
 	if chat_history.has(target_name):
 		chat_log.text = chat_history[target_name]
 	else:
 		chat_log.text = ""
 	
+	# 自动滚动到底部
 	await get_tree().process_frame
 	chat_log.scroll_to_line(chat_log.get_line_count())
 
