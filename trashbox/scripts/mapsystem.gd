@@ -136,6 +136,7 @@ func _on_node_clicked(index):
 	_update_node_states()
 	
 	print("地图通知：请求进入第 %d 关" % index)
+	await tween.finished
 	level_selected.emit(index)
 
 # --- 动画工具 ---

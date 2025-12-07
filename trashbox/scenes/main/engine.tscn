@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://deg0wronr46cw"]
+[gd_scene load_steps=11 format=3 uid="uid://deg0wronr46cw"]
 
 [ext_resource type="PackedScene" uid="uid://bv17lh6n2q5kb" path="res://trashbox/scenes/main/window_base.tscn" id="1_wavt3"]
 [ext_resource type="Script" uid="uid://bdg5phergyfhk" path="res://trashbox/scripts/engine.gd" id="2_em83p"]
 [ext_resource type="PackedScene" uid="uid://cdm3a2td2r178" path="res://trashbox/scenes/main/mapsystem.tscn" id="5_58lqr"]
+[ext_resource type="PackedScene" uid="uid://cty56ew0kcqbu" path="res://trashbox/scenes/levels/level_base.tscn" id="5_iba87"]
 [ext_resource type="PackedScene" uid="uid://dk1ae2t3e6fi7" path="res://trashbox/战斗系统/技能战斗列表.tscn" id="5_t5267"]
 [ext_resource type="PackedScene" uid="uid://bj20pol0nbg0o" path="res://trashbox/战斗系统/技能组背包.tscn" id="6_ftt37"]
 
@@ -22,6 +23,7 @@ bg_color = Color(0.3137255, 0.3137255, 0.3137255, 1)
 script = ExtResource("2_em83p")
 library_skills = Array[PackedScene]([ExtResource("6_ftt37")])
 equipped_skills = Array[PackedScene]([ExtResource("5_t5267")])
+level_scenes = Array[PackedScene]([ExtResource("5_iba87")])
 
 [node name="CloseButton" parent="BgColor/MainLayout/TitleBar" index="1"]
 text = "X"
@@ -91,7 +93,6 @@ offset_right = 0.0
 offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
-columns = 4
 
 [node name="SplitSub" type="HSplitContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain" index="1"]
 layout_mode = 2
