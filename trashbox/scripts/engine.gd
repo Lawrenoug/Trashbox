@@ -1,113 +1,116 @@
 extends "res://trashbox/scripts/window_base.gd"
 
 # --- 1. 节点引用 ---
-# 【重要】如果报错 Node not found，请去场景树右键复制正确路径替换下面
-# 中间：预览视口
+# (保持不变，如果你的路径改过请修正)
 @onready var preview_viewport = $BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/PreviewViewport/GameViewContainer/GameViewport
-# 右侧：描述文本
-@onready var description_text: RichTextLabel = $BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/DescriptionPanel/DescriptionText
-# 左下：技能库容器 (GridContainer)
-@onready var library_grid: GridContainer = $BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillDeckPanel/DeckContent/DeckScroll/DeckGrid
-# 左上：携带技能容器 (VBoxContainer)
-@onready var equipped_list: VBoxContainer = $BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillLogPanel/LogContent/LogScroll/LogList
+@onready var description_text = $BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/DescriptionPanel/DescriptionText
+@onready var library_grid = $BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillDeckPanel/技能组背包/GridContainer
+@onready var equipped_grid = $BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillLogPanel/技能战斗列表/GridContainer
 
-# --- 2. 接口：技能数据 ---
-# 请在编辑器的检查器中，把你做好的 .tres 文件拖到这就两个数组里
-@export var library_skills: Array[Resource]  # 技能库里的技能
-@export var equipped_skills: Array[Resource] # 当前携带的技能
+# --- 2. 预加载格子模版 ---
+const SkillSlotScene = preload("res://trashbox/scenes/main/skill_slot.tscn")
 
-# --- 3. 资源预加载 ---
-# 专门用于演示技能的小场景 (练功房)
-const PreviewStageScene = preload("res://trashbox/scenes/main/skill_preview_stage.tscn")
+# --- 3. 【核心修改】接口改为 PackedScene (场景文件) ---
+# 请在检查器里，把你队友做的 skill_fireball.tscn, skill_slash.tscn 等拖进来
+@export var library_skills: Array[PackedScene] 
+@export var equipped_skills: Array[PackedScene]
 
-# 当前加载的预览舞台实例
-var current_preview_instance = null
+# 当前正在演示的技能实例
+var current_skill_instance = null
 
 func _ready():
-	super._ready() # 必须调用父类，保证窗口能拖动
+	super._ready()
 	
-	# 1. 初始化中间的预览舞台
-	_init_preview_stage()
-	
-	# 2. 刷新左侧两栏的 UI
+	# 刷新界面
 	_refresh_library_ui()
 	_refresh_equipped_ui()
 	
-	# 3. 设置右侧默认文本
-	description_text.text = "[center]系统就绪。\n请在左侧选择一个 [color=yellow]模块 (技能)[/color] 查看详细文档。[/center]"
-
-# --- 初始化预览舞台 (中间视口) ---
-func _init_preview_stage():
-	# 清理视口里残留的东西
-	for child in preview_viewport.get_children():
-		child.queue_free()
-	
-	# 实例化练功房
-	if PreviewStageScene:
-		current_preview_instance = PreviewStageScene.instantiate()
-		preview_viewport.add_child(current_preview_instance)
-	else:
-		print("错误：未找到 PreviewStageScene 场景文件！")
+	description_text.text = "[center]系统就绪。\n请选择模块查看文档。[/center]"
 
 # --- 刷新左下角：技能库 ---
 func _refresh_library_ui():
-	# 清空现有按钮
-	for child in library_grid.get_children():
-		child.queue_free()
+	# A. 先清空容器里生成的格子 (保留队友做的背景板等其他东西)
+	# 注意：如果队友在 GridContainer 里放了装饰图，会被删掉。
+	# 建议让 GridContainer 只用来放生成的技能。
+	#for child in library_grid.get_children():
+		#child.queue_free()
 		
+	# B. 生成新格子
 	for skill in library_skills:
-		if skill == null: continue # 跳过空槽位
-		
-		var btn = Button.new()
-		# 读取资源里的技能名
-		btn.text = skill.skill_name
-		# 设置按钮最小高度，方便点击
-		btn.custom_minimum_size = Vector2(0, 40)
-		
-		# 连接点击信号，把当前这个技能的数据(Resource)传过去
-		btn.pressed.connect(_on_skill_selected.bind(skill))
-		
-		library_grid.add_child(btn)
-		
-
-# --- 刷新左上角：携带技能 (日志样式) ---
-func _refresh_equipped_ui():
-	# 清空现有列表
-	for child in equipped_list.get_children():
-		child.queue_free()
-		
-	for skill in equipped_skills:
 		if skill == null: continue
 		
-		# 这里用 Button 模拟日志条目，也可以用 Label
-		var slot = Button.new()
-		# 加上前缀模拟运行日志
-		slot.text = "> [Running] " + skill.skill_name
-		slot.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		slot.flat = true
-		slot.add_theme_color_override("font_color", Color.GREEN) # 设为绿色字
+		# 实例化漂亮格子
+		var slot = SkillSlotScene.instantiate()
 		
-		# 点击也可以查看详情
-		slot.pressed.connect(_on_skill_selected.bind(skill))
+		# 设置图标 (假设 slot 本身就是 TextureButton)
+		# 如果 slot 是个复杂的组合，用 slot.get_node("Icon") 获取
+		var btn = slot 
+		if "texture_normal" in btn:
+			btn.texture_normal = skill.icon # 确保你的 SkillData 里有 icon 变量
 		
-		equipped_list.add_child(slot)
+		# 绑定点击事件
+		if btn.has_signal("pressed"):
+			btn.pressed.connect(_on_skill_selected.bind(skill))
+			
+		library_grid.add_child(slot)
+
+# --- 刷新左上角：携带技能 ---
+func _refresh_equipped_ui():
+	#for child in equipped_grid.get_children():
+		#child.queue_free()
 		
-		slot.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS # 超出显示省略号...
-		slot.clip_text = true # 开启裁剪
+	for skill_scene in equipped_skills:
+		if skill_scene == null: continue
+		
+		var temp_skill = skill_scene.instantiate()
+		var slot = SkillSlotScene.instantiate()
+		var btn = _get_button_from_slot(slot)
+		
+		if "icon" in temp_skill and temp_skill.icon != null:
+			btn.texture_normal = temp_skill.icon
+			
+		if "skill_name" in temp_skill:
+			btn.tooltip_text = "[已装备] " + temp_skill.skill_name
+			
+		btn.pressed.connect(_on_skill_selected.bind(skill_scene))
+		equipped_grid.add_child(slot)
+		
+		temp_skill.queue_free()
 
 # --- 核心交互：选中技能 ---
-func _on_skill_selected(skill_data):
-	# 1. 更新右侧描述 (读取 .tres 里的数据)
-	# 使用 BBCode 进行排版
-	var title = "[font_size=32][b]%s[/b][/font_size]\n\n" % skill_data.skill_name
-	var cost_info = "[color=orange]消耗: %d[/color]   [color=red]伤害: %d[/color]\n\n" % [skill_data.cost, skill_data.damage]
-	var desc = skill_data.description
+func _on_skill_selected(skill_scene: PackedScene):
+	# 1. 清理中间视口
+	for child in preview_viewport.get_children():
+		child.queue_free()
 	
-	description_text.text = title + cost_info + desc
+	# 2. 【关键】在中间视口实例化真正的技能场景
+	var skill_instance = skill_scene.instantiate()
+	preview_viewport.add_child(skill_instance)
+	current_skill_instance = skill_instance
 	
-	# 2. 更新中间的演示动画
-	# 假设你的 skill_preview_stage.tscn 里有个函数叫 play_demo(anim_name)
-	print("正在请求演示动画: ", skill_data.animation_name)
+	# 3. 读取数据更新右侧描述
+	# 假设队友的代码里有这些变量：skill_name, description, damage, cost
+	var s_name = skill_instance.skill_name if "skill_name" in skill_instance else "未命名"
+	var s_desc = skill_instance.description if "description" in skill_instance else "无描述"
+	var s_dmg = skill_instance.damage if "damage" in skill_instance else 0
+	var s_cost = skill_instance.cost if "cost" in skill_instance else 0
 	
-	if current_preview_instance and current_preview_instance.has_method("play_demo"):
-		current_preview_instance.play_demo(skill_data.animation_name)
+	var title = "[font_size=32][b]%s[/b][/font_size]\n\n" % s_name
+	var info = "[color=orange]消耗: %d[/color]   [color=red]伤害: %d[/color]\n\n" % [s_cost, s_dmg]
+	
+	description_text.text = title + info + s_desc
+	
+	# 4. 如果技能有演示功能，可以调用
+	# 比如队友在技能里写了个 func demo(): ...
+	if skill_instance.has_method("demo"):
+		skill_instance.demo()
+	elif skill_instance.has_node("AnimationPlayer"):
+		# 或者尝试播放默认动画
+		skill_instance.get_node("AnimationPlayer").play("attack")
+
+# --- 辅助工具：获取格子里的按钮 ---
+func _get_button_from_slot(slot):
+	if slot is BaseButton: return slot
+	if slot.has_node("TextureButton"): return slot.get_node("TextureButton")
+	if slot.has_node("Button"): return slot.get_node("Button")
+	return null

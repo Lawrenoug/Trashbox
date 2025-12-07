@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://r1twd8l6w7wa"]
 
 [ext_resource type="Texture2D" uid="uid://c2whhpo2e72ch" path="res://trashbox/assets/sprites/像素怪.png" id="1_7qgnq"]
-[ext_resource type="Script" uid="uid://c28sne5rg2rre" path="res://trashbox/scenes/main/skill_preview_stage.gd" id="1_allmg"]
+[ext_resource type="Script" uid="uid://c28sne5rg2rre" path="res://trashbox/scripts/skill_preview_stage.gd" id="1_allmg"]
 
 [sub_resource type="Animation" id="Animation_allmg"]
 resource_name = "attack_quick_sort"

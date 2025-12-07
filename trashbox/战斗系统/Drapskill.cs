@@ -9,23 +9,23 @@ namespace Attack
 
 		public string groupName = "_skill_ui_group";
 		public override void _Ready()
-        {
+		{
 			GuiInput += (@event) => on_gui_input(@event);
-        }
+		}
 
 
 		public override void _Process(double delta)
-        {
-            if(GetTree().GetFirstNodeInGroup(groupName) is Sprite2D item)
-            {
+		{
+			if(GetTree().GetFirstNodeInGroup(groupName) is Sprite2D item)
+			{
 				item.GlobalPosition = GetGlobalMousePosition();
-            }
-        }
+			}
+		}
 
 		public void on_gui_input(InputEvent @event)
-        {
-            if(@event is InputEventMouseButton mb)
-            {
+		{
+			if(@event is InputEventMouseButton mb)
+			{
 				if (mb.Pressed && mb.ButtonIndex == MouseButton.Left)
 				{
 					//GD.Print("左键");
@@ -91,7 +91,7 @@ namespace Attack
 					
 				}
 				
-            } 
-        }
+			} 
+		}
 	}
 }
