@@ -1,11 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://bkdtc0sissw5q"]
+[gd_scene load_steps=3 format=3 uid="uid://bkdtc0sissw5q"]
 
 [ext_resource type="PackedScene" uid="uid://bv17lh6n2q5kb" path="res://trashbox/scenes/main/window_base.tscn" id="1_t6xrs"]
-[ext_resource type="Texture2D" uid="uid://b5llbkmijvlv3" path="res://trashbox/assets/sprites/folder.png" id="2_bs5vr"]
-[ext_resource type="Texture2D" uid="uid://ibu536hxcm2d" path="res://trashbox/assets/sprites/jpg.png" id="3_kpil7"]
-[ext_resource type="Texture2D" uid="uid://bb4etyheaua6u" path="res://trashbox/assets/sprites/txt.png" id="4_vjbdm"]
+[ext_resource type="Script" uid="uid://iawvicmvlkrq" path="res://trashbox/scripts/app_folder.gd" id="2_2cqje"]
 
 [node name="WindowBase" instance=ExtResource("1_t6xrs")]
+custom_minimum_size = Vector2(700, 400)
+script = ExtResource("2_2cqje")
 
 [node name="TitleLabel" parent="BgColor/MainLayout/TitleBar" index="0"]
 theme_override_colors/font_color = Color(0.28118682, 0.28118688, 0.28118682, 1)
@@ -24,18 +24,3 @@ grow_vertical = 2
 
 [node name="GridContainer" type="GridContainer" parent="BgColor/MainLayout/ContentSlot/ScrollContainer" index="0"]
 layout_mode = 2
-
-[node name="txt" type="Button" parent="BgColor/MainLayout/ContentSlot/ScrollContainer/GridContainer" index="0"]
-layout_mode = 2
-icon = ExtResource("4_vjbdm")
-flat = true
-
-[node name="jpg" type="Button" parent="BgColor/MainLayout/ContentSlot/ScrollContainer/GridContainer" index="1"]
-layout_mode = 2
-icon = ExtResource("3_kpil7")
-flat = true
-
-[node name="folder" type="Button" parent="BgColor/MainLayout/ContentSlot/ScrollContainer/GridContainer" index="2"]
-layout_mode = 2
-icon = ExtResource("2_bs5vr")
-flat = true

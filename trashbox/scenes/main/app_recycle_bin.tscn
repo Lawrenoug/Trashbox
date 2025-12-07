@@ -9,7 +9,7 @@ script = ExtResource("2_q5pmc")
 [node name="CloseButton" parent="BgColor/MainLayout/TitleBar" index="1"]
 text = "X"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="BgColor/MainLayout/ContentSlot" index="0"]
+[node name="BodyLayout" type="VBoxContainer" parent="BgColor/MainLayout/ContentSlot" index="0"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -17,14 +17,14 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Button" type="Button" parent="BgColor/MainLayout/ContentSlot/VBoxContainer" index="0"]
+[node name="Button" type="Button" parent="BgColor/MainLayout/ContentSlot/BodyLayout" index="0"]
 layout_mode = 2
 text = "清空回收站"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="BgColor/MainLayout/ContentSlot" index="1"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="GridContainer" type="GridContainer" parent="BgColor/MainLayout/ContentSlot/ScrollContainer" index="0"]
+[node name="ScrollContainer" type="ScrollContainer" parent="BgColor/MainLayout/ContentSlot/BodyLayout" index="1"]
 layout_mode = 2
+size_flags_vertical = 3
+
+[node name="GridContainer" type="GridContainer" parent="BgColor/MainLayout/ContentSlot/BodyLayout/ScrollContainer" index="0"]
+layout_mode = 2
+columns = 5

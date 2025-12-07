@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://r7o76g52148v"]
 
-[ext_resource type="Script" uid="uid://bvmhal72bnwg3" path="res://trashbox/scenes/main/intro_sequence.gd" id="1_or5ht"]
+[ext_resource type="Script" uid="uid://bvmhal72bnwg3" path="res://trashbox/scripts/intro_sequence.gd" id="1_or5ht"]
 [ext_resource type="Texture2D" uid="uid://bs2csrftmjnfd" path="res://trashbox/assets/sprites/剧情1.png" id="2_5givo"]
 [ext_resource type="PackedScene" uid="uid://cvqojluycs71d" path="res://trashbox/scenes/main/login_screen.tscn" id="3_uur3f"]
 

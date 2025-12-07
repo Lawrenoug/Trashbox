@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://ie5gpmc7sqn2"]
+
+[ext_resource type="PackedScene" uid="uid://bv17lh6n2q5kb" path="res://trashbox/scenes/main/window_base.tscn" id="1_agd2k"]
+[ext_resource type="Script" uid="uid://2dlhji8ht5d6" path="res://trashbox/scripts/file_viewer.gd" id="2_d8f8p"]
+
+[node name="WindowBase" instance=ExtResource("1_agd2k")]
+script = ExtResource("2_d8f8p")
+
+[node name="ImageViewer" type="TextureRect" parent="BgColor/MainLayout/ContentSlot" index="0"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TextViewer" type="RichTextLabel" parent="BgColor/MainLayout/ContentSlot" index="1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
