@@ -56,12 +56,10 @@ scale = Vector2(7, 7)
 texture = ExtResource("3_g14j6")
 
 [node name="技能战斗列表" parent="." instance=ExtResource("5_ykrsh")]
-scale = Vector2(2, 2)
 
 [node name="技能组背包" parent="." instance=ExtResource("6_g14j6")]
 offset_left = 600.0
 offset_right = 600.0
-scale = Vector2(2, 2)
 
 [node name="敌人2" type="RigidBody2D" parent="." groups=["enemy"]]
 position = Vector2(785, 481)

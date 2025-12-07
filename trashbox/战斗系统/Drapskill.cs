@@ -62,7 +62,7 @@ namespace Attack
 								var player = GetNodeOrNull<PlayerManager>("/root/Node2D/Player");
 								if (player != null)
 								{
-									//player.attackManager.InsertSkill(skillGroupsUIManager.GetSkillList());
+									player.attackManager.InsertSkill(skillGroupsUIManager.GetSkillList());
 								}
 							}
 						}
@@ -84,7 +84,7 @@ namespace Attack
 							skillGroupsUIManager.RequestUpdate();
 
 							var player = GetNode<PlayerManager>("/root/Node2D/Player");
-							//player.attackManager.InsertSkill(skillGroupsUIManager.GetSkillList());
+							player.attackManager.InsertSkill(skillGroupsUIManager.GetSkillList());
 						}
 					}
 

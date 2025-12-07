@@ -46,6 +46,7 @@ namespace Attack
 
 		public override void Projectile(SkillData skillData, Godot.Vector2 startPosiition, Node BulletNode)//发射
 		{
+			GD.Print("fire Symbol Projectile");
 			skillData = NormalData.AddData(GetSkillData(), skillData);
 
 			int count = skillData.AttackCount;

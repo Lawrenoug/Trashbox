@@ -30,7 +30,7 @@ namespace Attack
 			skillData = new SkillData();
 			skillData.BuffTypes = new List<string>(); // 初始化BuffTypes列表
 			ClearSkillData();
-
+			GD.Print("AttackManager 构造函数被调用");
 		}
 
 		// 添加减少攻击延迟的方法
