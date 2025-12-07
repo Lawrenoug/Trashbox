@@ -117,7 +117,12 @@ func _on_skill_selected(skill_scene: PackedScene):
 	
 	# 4. 这个用于读取信息的实例用完了，如果不需要把它放到场景里，就销毁
 	# 如果你想直接把技能特效显示出来，也可以把它 add_child 到视口里
-	skill_instance.queue_free()
+	var skill_instance = skill_scene.instantiate()
+
+	# 2. 只实例化技能的预览部分（不加载完整战斗场景）
+	preview_viewport.add_child(skill_instance)
+	current_skill_instance = skill_instance
+
 
 # ... (后面的 load_level, _load_preview_stage 等代码保持不变) ...
 # 请把之前完整代码里的那些辅助函数补在后面
@@ -137,6 +142,11 @@ func _on_level_selected(level_index):
 	if level_scenes.size() > 0:
 		safe_index = level_index % level_scenes.size()
 	load_level(safe_index)
+
+# 新增：切换到战斗场景的方法
+func start_battle():
+    # 请将路径替换为你的战斗场景实际路径
+    get_tree().change_scene_to_file("res://trashbox/scenes/main/battle_scene.tscn")
 
 func load_level(index: int):
 	if level_scenes.is_empty(): return
