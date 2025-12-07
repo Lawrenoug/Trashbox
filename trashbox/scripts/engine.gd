@@ -91,15 +91,15 @@ func _refresh_equipped_ui():
 
 # --- 核心交互：选中技能 ---
 func _on_skill_selected(skill_scene: PackedScene):
-	# 1. 恢复练功房视口
-	if not (current_content_instance is Node2D and current_content_instance.name.begins_with("SkillPreview")):
+	# 当前正在演示的技能实例
+	var current_skill_instance = null
 		_load_preview_stage()
 
 	# 2. 【关键】再次实例化来获取详细信息
 	# 此时我们需要这个实例存在，甚至可能把它放到视口里演示
 	skill_instance = skill_scene.instantiate()
 	
-	# 读取属性
+	var skill_instance = skill_scene.instantiate()
 	var s_name = skill_instance.skill_name
 	var s_cost = skill_instance.cost
 	var s_dmg = skill_instance.damage
