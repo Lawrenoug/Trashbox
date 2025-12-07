@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://b67ucmdqicy8g"]
+
+[ext_resource type="PackedScene" uid="uid://cmtnptb71x54w" path="res://trashbox/战斗系统/Attack/Enemy/弹幕/弹幕谱面/弹幕谱面编辑器.tscn" id="1_kx8g4"]
+
+[node name="编谱" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="弹幕谱面编辑器" parent="." instance=ExtResource("1_kx8g4")]
+layout_mode = 0
+scale = Vector2(0.5, 0.5)

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="BulletTrackConfig" load_steps=3 format=3 uid="uid://dbfkfbw0w50t1"]
+
+[ext_resource type="Script" uid="uid://18g7sk2g7ji6" path="res://trashbox/战斗系统/Attack/Enemy/弹幕/BulletTrackConfig.cs" id="1_jqsjs"]
+
+[sub_resource type="Curve" id="Curve_b6yt4"]
+_data = [Vector2(0.23111112, 0.7187755), 0.0, 0.0, 0, 0, Vector2(0.5555556, 0.33305293), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[resource]
+script = ExtResource("1_jqsjs")
+SpeedCurve = SubResource("Curve_b6yt4")
+BezierPoints = PackedVector2Array(1, 1, 10, 10, 100, 100)
+metadata/_custom_type_script = "uid://18g7sk2g7ji6"

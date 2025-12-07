@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://lwysks8h1ujt"]
+
+[ext_resource type="Script" uid="uid://cmeealb2wmc6j" path="res://trashbox/战斗系统/Attack/Enemy/EnemyManager.cs" id="1_s5mhu"]
+
+[node name="弹幕系统管理器" type="Node2D"]
+script = ExtResource("1_s5mhu")

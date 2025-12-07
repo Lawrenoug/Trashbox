@@ -1,9 +1,21 @@
-[gd_scene load_steps=2 format=3 uid="uid://dtwqji6wtvhcl"]
+[gd_scene load_steps=5 format=3 uid="uid://dtwqji6wtvhcl"]
 
 [ext_resource type="Texture2D" uid="uid://de5or7du4lccg" path="res://trashbox/战斗系统/UI/kenney_tiny-dungeon/Tiles/tile_0110.png" id="1_eg0kr"]
+[ext_resource type="Script" uid="uid://clys0cm6okr4y" path="res://trashbox/战斗系统/Attack/Enemy/弹幕/DanmakuEnemy.cs" id="1_kuxi0"]
+[ext_resource type="Resource" uid="uid://c8jb1rw7niaji" path="res://trashbox/战斗系统/Attack/Enemy/弹幕/弹幕谱面/text02.tres" id="2_p67rm"]
+[ext_resource type="PackedScene" uid="uid://djia782m6qkhd" path="res://trashbox/战斗系统/Attack/Skills/Prefab/投射物.tscn" id="3_h1umt"]
 
 [node name="待办事项" type="RigidBody2D"]
+gravity_scale = 0.0
+script = ExtResource("1_kuxi0")
+SpellCardResource = ExtResource("2_p67rm")
+BulletScene = ExtResource("3_h1umt")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
+rotation = 1.5707964
 texture = ExtResource("1_eg0kr")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+
+[node name="Node2D" type="Node2D" parent="."]
