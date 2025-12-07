@@ -162,5 +162,6 @@ func _clear_viewport():
 	if current_content_instance != null:
 		current_content_instance.queue_free()
 		current_content_instance = null
+		var current_skill_instance = null # 当前正在演示的技能实例
 	for child in preview_viewport.get_children():
 		child.queue_free()
