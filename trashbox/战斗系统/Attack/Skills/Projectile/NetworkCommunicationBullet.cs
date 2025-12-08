@@ -9,31 +9,31 @@ namespace Attack
 	public partial class NetworkCommunicationBullet : Bullet
 	{
 		public  override float ATK { get; set; } = 0;
-        public override float ATS { get; set; } = 1;
-        public override bool enableTarcking { get; set; } = false;
+		public override float ATS { get; set; } = 1;
+		public override bool enableTarcking { get; set; } = false;
 
 
-        public override void Initialize(SkillData _skillData)
-        {
+		public override void Initialize(SkillData _skillData)
+		{
 			base.Initialize(_skillData);
-            var Sprite2D = GetNode<Sprite2D>("Sprite2D");
-            Sprite2D.Scale = new Godot.Vector2(_skillData.RNG, _skillData.RNG);
-            var collisionShape2D = GetNode<CollisionShape2D>("CollisionShape2D");
-            collisionShape2D.Scale = new Godot.Vector2(_skillData.RNG, _skillData.RNG);
+			var Sprite2D = GetNode<Sprite2D>("Sprite2D");
+			Sprite2D.Scale = new Godot.Vector2(_skillData.RNG, _skillData.RNG);
+			var collisionShape2D = GetNode<CollisionShape2D>("CollisionShape2D");
+			collisionShape2D.Scale = new Godot.Vector2(_skillData.RNG, _skillData.RNG);
 			
-            ATK += _skillData.ATK;
-            ATS += _skillData.ATS;
-            enableTarcking = _skillData.enableTarcking;
-        }
+			ATK += _skillData.ATK;
+			ATS += _skillData.ATS;
+			enableTarcking = _skillData.enableTarcking;
+		}
 
-        public override void _Ready()
-        {
-            base._Ready();
-        }
-        public override void _Process(double delta)
-        {
-            base._Process(delta);
-        }
+		public override void _Ready()
+		{
+			base._Ready();
+		}
+		public override void _Process(double delta)
+		{
+			base._Process(delta);
+		}
 
 		public override void OnBodyEntered(Node body)
 		{

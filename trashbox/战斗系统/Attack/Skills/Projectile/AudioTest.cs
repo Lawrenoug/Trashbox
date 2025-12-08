@@ -10,7 +10,7 @@ namespace Attack
 
 		public override string skillDescription { get; set; } = "对所有敌人造成25点伤害";
 
-        public override string skillQuote { get; set; } = "测试音频，1，2，3……啊，好像音量开太大了。";
+		public override string skillQuote { get; set; } = "测试音频，1，2，3……啊，好像音量开太大了。";
 
 		public override float ATK { get; set; } = 25;//攻击力
 

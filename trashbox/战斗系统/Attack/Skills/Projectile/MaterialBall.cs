@@ -10,7 +10,7 @@ namespace Attack
 
 		public override string skillDescription { get; set; } = "对敌人造成40点伤害，并使敌人陷入【游戏渲染中】状态，每秒受到10点法术伤害，持续 5 秒，最多叠3层。";
 
-        public override string skillQuote { get; set; } = "你这法线贴图方向都不对！连PBR流程都没走对，还好意思当BUG？";
+		public override string skillQuote { get; set; } = "你这法线贴图方向都不对！连PBR流程都没走对，还好意思当BUG？";
 
 		public override float ATK { get; set; } = 40;//攻击力
 

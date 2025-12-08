@@ -1,7 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://r1twd8l6w7wa"]
+[gd_scene load_steps=9 format=3 uid="uid://r1twd8l6w7wa"]
 
 [ext_resource type="Texture2D" uid="uid://c2whhpo2e72ch" path="res://trashbox/assets/sprites/像素怪.png" id="1_7qgnq"]
 [ext_resource type="Script" uid="uid://c28sne5rg2rre" path="res://trashbox/scripts/skill_preview_stage.gd" id="1_allmg"]
+[ext_resource type="Script" uid="uid://08knfvnynesi" path="res://trashbox/战斗系统/Characters/Player/PlayerManager.cs" id="3_ngxx7"]
+[ext_resource type="Texture2D" uid="uid://de5or7du4lccg" path="res://trashbox/战斗系统/UI/kenney_tiny-dungeon/Tiles/tile_0110.png" id="4_gwh2e"]
 
 [sub_resource type="Animation" id="Animation_i404t"]
 length = 0.001
@@ -40,6 +42,8 @@ _data = {
 &"attack_quick_sort": SubResource("Animation_allmg")
 }
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_ngxx7"]
+
 [node name="Skillpreviewstage" type="Node2D"]
 script = ExtResource("1_allmg")
 
@@ -53,3 +57,23 @@ libraries = {
 
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(2, 2)
+
+[node name="Player" type="RigidBody2D" parent="." node_paths=PackedStringArray("startShootPosition", "BulletContainer")]
+position = Vector2(-124, 0)
+gravity_scale = 0.0
+script = ExtResource("3_ngxx7")
+startShootPosition = NodePath("发射点")
+BulletContainer = NodePath("../玩家子弹")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("CircleShape2D_ngxx7")
+
+[node name="Sprite2D" type="Sprite2D" parent="Player"]
+texture_filter = 1
+rotation = -1.5707964
+texture = ExtResource("4_gwh2e")
+
+[node name="发射点" type="Node2D" parent="Player"]
+position = Vector2(50, 0)
+
+[node name="玩家子弹" type="Node2D" parent="."]

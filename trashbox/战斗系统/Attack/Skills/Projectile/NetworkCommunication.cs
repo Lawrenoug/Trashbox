@@ -10,7 +10,7 @@ namespace Attack
 
 		public override string skillDescription { get; set; } = "命中首个敌人后，对其造成40点伤害，并附加【网络波动】效果，带有【网络波动】的敌方目标会对周围的敌方单位造成一次10点的链接冲击，然后清除【网络波动】效果。";
 
-        public override string skillQuote { get; set; } = "丢包？不存在的，这波是DDoS攻击。";
+		public override string skillQuote { get; set; } = "丢包？不存在的，这波是DDoS攻击。";
 
 		public override float ATK { get; set; } = 40;//攻击力
 

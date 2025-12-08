@@ -10,7 +10,7 @@ namespace Attack
 
 		public override string skillDescription { get; set; } = "对敌方单位造成30点伤害，并附加【内存弱点】持续3秒，附加【内存弱点】的敌方单位受到的伤害提高10%，可叠加3层。";
 
-        public override string skillQuote { get; set; } = "找到你的内存泄漏了，现在，让我们把它变成伤害泄漏。";
+		public override string skillQuote { get; set; } = "找到你的内存泄漏了，现在，让我们把它变成伤害泄漏。";
 
 		public override float ATK { get; set; } = 30;//攻击力
 

@@ -10,7 +10,7 @@ namespace Attack
 
 		public override string skillDescription { get; set; } = "击中敌人后在地面目标区域生成一个持续 6 秒的【优化区域】,进入区域的敌人会获得【游戏渲染中】状态";
 
-        public override string skillQuote { get; set; } = "优化完毕，现在BUG的运行效率更高了——我是说，它死得更快了。";
+		public override string skillQuote { get; set; } = "优化完毕，现在BUG的运行效率更高了——我是说，它死得更快了。";
 
 		public override float ATK { get; set; } = 40;//攻击力
 

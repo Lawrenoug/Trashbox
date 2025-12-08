@@ -10,7 +10,7 @@ namespace Attack
 
 		public override string skillDescription { get; set; } = "对命中的敌人施加【程序调试中】状态，使其攻击速度降低 50%，移动速度降低 30%，持续 4 秒";
 
-        public override string skillQuote { get; set; } = "让我看看你这一帧到底调用了多少Draw Call。";
+		public override string skillQuote { get; set; } = "让我看看你这一帧到底调用了多少Draw Call。";
 
 		public override float ATK { get; set; } = 40;//攻击力
 

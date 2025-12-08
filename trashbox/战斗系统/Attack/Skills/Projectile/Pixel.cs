@@ -12,7 +12,7 @@ namespace Attack
 
 		public override string skillDescription { get; set; } = "";
 
-        public override string skillQuote { get; set; } = "";
+		public override string skillQuote { get; set; } = "";
 
 		public override float ATK { get; set; } = 1;//攻击力
 

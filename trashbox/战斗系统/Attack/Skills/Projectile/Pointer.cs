@@ -10,7 +10,7 @@ namespace Attack
 
 		public override string skillDescription { get; set; } = "可自动追踪距离最近的敌方单位，对其造成100点伤害";
 
-        public override string skillQuote { get; set; } = "虽然它飞得慢，但它永远不会指错地方……大概吧。";
+		public override string skillQuote { get; set; } = "虽然它飞得慢，但它永远不会指错地方……大概吧。";
 
 		public override float ATK { get; set; } = 100;//攻击力
 

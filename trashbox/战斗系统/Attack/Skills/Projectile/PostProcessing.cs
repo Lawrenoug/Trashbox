@@ -12,7 +12,7 @@ namespace Attack
 
 		public override string skillDescription { get; set; } = "立即结算敌人身上【游戏渲染中】状态剩余持续时间的 100% 伤害，并清除【游戏渲染中】状态。";
 
-        public override string skillQuote { get; set; } = "完了，后处理堆得太厚，游戏崩了……咦，敌人怎么也跟着崩了？";
+		public override string skillQuote { get; set; } = "完了，后处理堆得太厚，游戏崩了……咦，敌人怎么也跟着崩了？";
 
 		public override float ATK { get; set; } = 40;//攻击力
 
