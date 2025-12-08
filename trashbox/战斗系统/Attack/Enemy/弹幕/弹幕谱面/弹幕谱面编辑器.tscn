@@ -1,8 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://cmtnptb71x54w"]
-
-[ext_resource type="Script" uid="uid://cq2a2pos6y5ai" path="res://trashbox/战斗系统/Attack/Enemy/弹幕/DanmakuEditor.cs" id="1_5ca3h"]
-
-[node name="弹幕谱面编辑器" type="Control"]
-layout_mode = 3
-anchors_preset = 0
-script = ExtResource("1_5ca3h")

@@ -1,9 +1,0 @@
-[gd_resource type="Resource" script_class="SpellCardConfig" load_steps=3 format=3 uid="uid://c8jb1rw7niaji"]
-
-[ext_resource type="Script" uid="uid://bcdkfhu1ntcha" path="res://trashbox/战斗系统/Attack/Enemy/弹幕/SpellCardConfig.cs" id="1_33p88"]
-[ext_resource type="Resource" uid="uid://dbfkfbw0w50t1" path="res://trashbox/战斗系统/Attack/Enemy/弹幕/弹幕谱面/text01.tres" id="1_xw405"]
-
-[resource]
-script = ExtResource("1_33p88")
-Tracks = [ExtResource("1_xw405")]
-metadata/_custom_type_script = "uid://bcdkfhu1ntcha"

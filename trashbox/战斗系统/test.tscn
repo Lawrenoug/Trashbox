@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://diioyhmevc7oj"]
+[gd_scene load_steps=11 format=3 uid="uid://diioyhmevc7oj"]
 
 [ext_resource type="Script" uid="uid://08knfvnynesi" path="res://trashbox/战斗系统/Characters/Player/PlayerManager.cs" id="1_37kl0"]
 [ext_resource type="Texture2D" uid="uid://de5or7du4lccg" path="res://trashbox/战斗系统/UI/kenney_tiny-dungeon/Tiles/tile_0110.png" id="2_ykrsh"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://wu5u283uabfv" path="res://trashbox/战斗系统/UI/kenney_tiny-dungeon/Tiles/tile_0108.png" id="4_vbegm"]
 [ext_resource type="PackedScene" uid="uid://dk1ae2t3e6fi7" path="res://trashbox/战斗系统/技能战斗列表.tscn" id="5_ykrsh"]
 [ext_resource type="PackedScene" uid="uid://bj20pol0nbg0o" path="res://trashbox/战斗系统/技能组背包.tscn" id="6_g14j6"]
+[ext_resource type="PackedScene" uid="uid://dtwqji6wtvhcl" path="res://trashbox/战斗系统/Attack/Enemy/待办事项.tscn" id="8_fp85g"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6uqi0"]
 
@@ -78,3 +79,7 @@ shape = SubResource("CapsuleShape2D_8uh7m")
 texture_filter = 1
 scale = Vector2(9, 9)
 texture = ExtResource("4_vbegm")
+
+[node name="待办事项" parent="." instance=ExtResource("8_fp85g")]
+position = Vector2(506, 368)
+SpellCardDuration = 60.0
