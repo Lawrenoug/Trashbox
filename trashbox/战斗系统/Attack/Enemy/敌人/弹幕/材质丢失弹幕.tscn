@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://b4stwoob4w476"]
+
+[ext_resource type="Texture2D" uid="uid://ch8sk81pb5vd1" path="res://trashbox/战斗系统/UI/kenney_tiny-dungeon/Tiles/tile_0072.png" id="1_merol"]
+[ext_resource type="Script" uid="uid://cu65xhbm6tfvp" path="res://trashbox/战斗系统/Attack/Enemy/敌人/弹幕/MissingMaterialBullet.cs" id="1_ock61"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ock61"]
+
+[node name="材质丢失弹幕" type="RigidBody2D"]
+script = ExtResource("1_ock61")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("1_merol")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_ock61")

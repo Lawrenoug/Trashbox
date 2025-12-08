@@ -7,17 +7,26 @@ namespace Enemy
 {
 	public abstract partial class EnemyBase : RigidBody2D
 	{
+		[Export] public PackedScene bulletPrefab;
 		public virtual float MaxHP { get; set; } = 100;
 		public virtual float CurrentHP { get; set; } = 100;
 		public virtual float ATK { get; set; } = 10;
-		public virtual float ATS { get; set; } = 1;
+		public virtual float ATS { get; set; } = 10;
 		public virtual float MoveSpeed { get; set; } = 100;
 		public virtual string enemyName { get; set; } = "Enemy";
-		public virtual string state { get; set; } = "";
+		public virtual EnemyState state { get; set; } = EnemyState.Idle;//默认空闲状态
 
 		public virtual BuffBase[] CurrentBuff { get; set; }
 
 		public virtual float DamageMultiplier { get; set; } = 1;
+
+		public float timeSinceLastAttack = 0f;
+
+		public Vector2 nextPosition=new Vector2();
+
+		//private bool isMoving = false;
+
+		
 
 		public override void _Ready()
 		{
@@ -32,7 +41,29 @@ namespace Enemy
 		{
 			if (CurrentHP <= 0)
 			{
-				Die();
+				state = EnemyState.Dead;
+			}
+			switch(state)
+			{
+				case EnemyState.Moving:
+					if(GlobalPosition.DistanceTo(nextPosition)<0.1f)
+                    {
+                        state=EnemyState.Attacking;
+						break;
+					}
+					else
+                    {
+                        Move();
+                    }
+					break;
+				case EnemyState.Attacking:
+					Attack(delta);
+					break;
+				case EnemyState.Dead:
+					Die();
+					break;
+				default:
+					break;
 			}
 		}
 
@@ -52,14 +83,64 @@ namespace Enemy
 			GD.Print($"{enemyName} 被玩家子弹击中");
 		}
 
-		public virtual void Move()
+		public virtual void MoveTo(Vector2 _position)
 		{
-
+			state = EnemyState.Moving;
+			nextPosition = _position;
 		}
 
-		public virtual void Attack()
+		public virtual void Move()
 		{
-
+			// 移动 towards() 方法
+			Vector2 direction = nextPosition - GlobalPosition;
+			float distance = direction.Length();
+			if (distance > 0)
+			{
+				direction = direction.Normalized();
+				GlobalPosition += direction * MoveSpeed * (float)GetProcessDeltaTime();
+			}
+		}
+		public virtual void Attack(double delta)
+		{
+			timeSinceLastAttack += (float)delta;
+			if (ATS <= 0)
+			{
+				ATS = 0.1f; // 防止除零错误
+			}
+			
+			// 检查是否到了攻击时间
+			float attackInterval = 1.0f / ATS;
+			if (timeSinceLastAttack >= 1)
+			{
+				// 重置计时器
+				timeSinceLastAttack = 0f;
+				
+				// 添加空值检查以防止NullReferenceException
+				if (bulletPrefab == null)
+				{
+					GD.Print("警告: bulletPrefab未分配");
+					return;
+				}
+				
+				var BulletContainer = GetNode<Node2D>("BulletContainer");
+				if (BulletContainer == null)
+				{
+					GD.Print("错误: 未找到BulletContainer节点");
+					return;
+				}
+				
+				var prefab = bulletPrefab.Instantiate<EnemyBullet>();
+				//prefab.GlobalPosition=GlobalPosition;
+				if (prefab == null)
+				{
+					GD.Print("错误: 无法实例化子弹预制体");
+					return;
+				}
+				
+				BulletContainer.AddChild(prefab);
+				GD.Print($"{enemyName} 发射子弹，位置: {GlobalPosition}");
+				prefab.init(GetNode<Node2D>("发射点").GlobalPosition,0f,ATK);
+			}
 		}
 
 		// 虚方法：开始特殊攻击（如弹幕攻击）
@@ -110,30 +191,14 @@ namespace Enemy
 		}
 	}
 
-	public class EnemyBulletTool
-    {
-		private PackedScene bulletPrefab;
-		private BulletPattern pattern;
+	
 
-		public EnemyBulletTool(PackedScene _bulletPrefab, BulletPattern _pattern)
-		{
-			bulletPrefab = _bulletPrefab;
-			pattern = _pattern;
-		}
-
-        public static Vector2 UpdateBulletPosition(Vector2 _lastPosition)
-        {
-            return Vector2.Zero;
-        }
-    }
-
-	public enum BulletPattern
+	public enum EnemyState
 	{
-		Straight,//直线
-		Ring,//环形
-		Spiral,//螺旋
-		Bezier,//贝塞尔曲线
-		Track,//追踪
-		Wave//波浪
+		Idle,
+		Moving,
+		Attacking,
+		Dead
 	}
+	
 }

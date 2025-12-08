@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://cxbcra8ixnpp1"]
+
+[ext_resource type="Script" uid="uid://ds4s20cmwt6nq" path="res://trashbox/战斗系统/Attack/Enemy/敌人/弹幕/backlogBullet.cs" id="1_q4gjn"]
+[ext_resource type="Texture2D" uid="uid://3jlq22dnlowq" path="res://trashbox/战斗系统/UI/kenney_tiny-dungeon/Tiles/tile_0057.png" id="2_t5kfa"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_sbu7i"]
+
+[node name="待办事项弹幕" type="RigidBody2D"]
+script = ExtResource("1_q4gjn")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_sbu7i")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_t5kfa")
