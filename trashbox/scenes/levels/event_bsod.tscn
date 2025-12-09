@@ -1,0 +1,69 @@
+[gd_scene load_steps=3 format=3 uid="uid://r7iq45uonsyw"]
+
+[ext_resource type="Script" uid="uid://x6lmubpr44kl" path="res://trashbox/scenes/levels/event_bsod.gd" id="1_shjl1"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_shjl1"]
+bg_color = Color(0.3469611, 0.72328484, 0.44457972, 1)
+
+[node name="Event_BSOD" type="Node2D"]
+script = ExtResource("1_shjl1")
+
+[node name="Background" type="ColorRect" parent="."]
+offset_right = 1920.0
+offset_bottom = 1080.0
+color = Color(0, 0, 0, 1)
+
+[node name="Obelisk" type="ColorRect" parent="."]
+offset_left = 789.0
+offset_top = 188.0
+offset_right = 1089.0
+offset_bottom = 788.0
+color = Color(0, 0, 0.6666667, 1)
+
+[node name="ErrorText" type="Label" parent="Obelisk"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "A problem has been detected...
+STOP: 0x000000"
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="HUD" type="CanvasLayer" parent="CanvasLayer"]
+
+[node name="HPBar" type="ProgressBar" parent="CanvasLayer/HUD"]
+offset_left = 17.0
+offset_top = 21.0
+offset_right = 96.0
+offset_bottom = 48.0
+theme_override_styles/background = SubResource("StyleBoxFlat_shjl1")
+
+[node name="Window" type="PanelContainer" parent="CanvasLayer"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -40.0
+offset_right = 20.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Title" type="Label" parent="CanvasLayer/Window"]
+layout_mode = 2
+
+[node name="Description" type="RichTextLabel" parent="CanvasLayer/Window"]
+layout_mode = 2
+
+[node name="HBox" type="HBoxContainer" parent="CanvasLayer/Window"]
+layout_mode = 2
+
+[node name="Option1" type="Button" parent="CanvasLayer/Window/HBox"]
+layout_mode = 2
+
+[node name="Option2" type="Button" parent="CanvasLayer/Window/HBox"]
+layout_mode = 2
+
+[node name="Option3" type="Button" parent="CanvasLayer/Window/HBox"]
+layout_mode = 2
