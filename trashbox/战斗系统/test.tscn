@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://diioyhmevc7oj"]
+[gd_scene load_steps=12 format=3 uid="uid://diioyhmevc7oj"]
 
 [ext_resource type="Script" uid="uid://08knfvnynesi" path="res://trashbox/战斗系统/Characters/Player/PlayerManager.cs" id="1_37kl0"]
 [ext_resource type="Texture2D" uid="uid://de5or7du4lccg" path="res://trashbox/战斗系统/UI/kenney_tiny-dungeon/Tiles/tile_0110.png" id="2_ykrsh"]
@@ -7,7 +7,8 @@
 [ext_resource type="Texture2D" uid="uid://wu5u283uabfv" path="res://trashbox/战斗系统/UI/kenney_tiny-dungeon/Tiles/tile_0108.png" id="4_vbegm"]
 [ext_resource type="PackedScene" uid="uid://dk1ae2t3e6fi7" path="res://trashbox/战斗系统/技能战斗列表.tscn" id="5_ykrsh"]
 [ext_resource type="PackedScene" uid="uid://bj20pol0nbg0o" path="res://trashbox/战斗系统/技能组背包.tscn" id="6_g14j6"]
-[ext_resource type="PackedScene" uid="uid://br6tv0h5slieu" path="res://trashbox/战斗系统/Attack/Enemy/敌人/性能瓶颈.tscn" id="11_1488x"]
+[ext_resource type="PackedScene" uid="uid://bka7d3r5nvwxj" path="res://trashbox/战斗系统/Attack/Enemy/敌人/设定冲突.tscn" id="8_stln8"]
+[ext_resource type="PackedScene" uid="uid://o1g2yn4pe36c" path="res://trashbox/战斗系统/Attack/Enemy/敌人/弹幕/设定冲突弹幕_1.tscn" id="9_2g437"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6uqi0"]
 
@@ -80,5 +81,6 @@ texture_filter = 1
 scale = Vector2(9, 9)
 texture = ExtResource("4_vbegm")
 
-[node name="性能瓶颈" parent="." instance=ExtResource("11_1488x")]
-position = Vector2(549, 328)
+[node name="设定冲突" parent="." instance=ExtResource("8_stln8")]
+position = Vector2(615, 303)
+bulletPrefab = ExtResource("9_2g437")
