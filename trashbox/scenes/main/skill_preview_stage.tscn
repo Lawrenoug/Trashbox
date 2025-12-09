@@ -48,6 +48,7 @@ _data = {
 script = ExtResource("1_allmg")
 
 [node name="Dummy" type="Sprite2D" parent="."]
+position = Vector2(0, -56)
 texture = ExtResource("1_7qgnq")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
@@ -56,10 +57,10 @@ libraries = {
 }
 
 [node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2(2, 2)
+anchor_mode = 0
 
 [node name="Player" type="RigidBody2D" parent="." node_paths=PackedStringArray("startShootPosition", "BulletContainer")]
-position = Vector2(-124, 0)
+position = Vector2(-124, -55)
 gravity_scale = 0.0
 script = ExtResource("3_ngxx7")
 startShootPosition = NodePath("发射点")

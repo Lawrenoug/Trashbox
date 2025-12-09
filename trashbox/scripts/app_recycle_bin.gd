@@ -13,13 +13,22 @@ const ICON_FILE = preload("res://trashbox/assets/sprites/txt.png") # 通用文�
 const FileViewerScene = preload("res://trashbox/scenes/main/file_viewer.tscn")
 
 func _ready():
-	super._ready() # 必须调用父类
+	super._ready()
 	
 	if btn_empty:
 		btn_empty.pressed.connect(_on_empty_clicked)
 	
-	# 初始化：生成初始垃圾文件
-	_generate_trash_items()
+	# 【核心修改】检查桌面记录的状态
+	var desktop = get_parent() # 获取桌面节点
+	# 如果桌面说“没清空过”，或者是第一次打开(desktop可能为空的保护逻辑)
+	if desktop and "is_recycle_bin_cleared" in desktop:
+		if desktop.is_recycle_bin_cleared == false:
+			_generate_trash_items()
+		else:
+			print("回收站已是清空状态，不再生成文件")
+	else:
+		# 预览场景时的后备逻辑
+		_generate_trash_items()
 
 func _generate_trash_items():
 	# 1. 剧情关键物品：辞职信
@@ -99,17 +108,15 @@ func _open_viewer(title, content):
 
 func _on_empty_clicked():
 	var children = file_grid.get_children()
-	if children.is_empty():
-		return
+	if children.is_empty(): return
 
-	# 播放一个简单的删除动画：逐个消失
 	for child in children:
-		var tween = create_tween()
-		tween.tween_property(child, "scale", Vector2.ZERO, 0.1)
-		await tween.finished
 		child.queue_free()
 	
-	# 剧情反馈
+	# 【核心修改】告诉桌面：回收站空了！
 	var desktop = get_parent()
+	if desktop and "is_recycle_bin_cleared" in desktop:
+		desktop.is_recycle_bin_cleared = true
+	
 	if desktop.has_method("show_notification"):
-		desktop.show_notification("回收站", "已清空 1024 个无用文件。\n但记忆是删不掉的。")
+		desktop.show_notification("系统", "回收站已永久清空。")

@@ -23,7 +23,7 @@ var global_chat_data = {
 	"老板": "[color=#888888]系统: 已经是好友了，开始聊天吧。[/color]\n",
 	"华姐": "[color=#888888]系统: 已经是好友了，开始聊天吧。[/color]\n"
 }
-
+var is_recycle_bin_cleared = false 
 func _ready():
 	# 初始化：隐藏弹窗
 	if notification_popup:
@@ -90,24 +90,24 @@ func incoming_message(sender: String, msg: String):
 	show_notification("新消息: " + sender, msg)
 	get_tree().call_group("ChatApps", "receive_message", sender, msg)
 
-# --- 显示弹窗 (修复版) ---
 func show_notification(title_text: String, msg_text: String):
 	if notification_popup and notification_anim:
-		# 1. 设置内容并显示
 		notification_popup.visible = true
 		notif_title.text = title_text
 		notif_msg.text = msg_text
 		
-		# 2. 播放弹出动画
+		# 播放弹出
 		notification_anim.play("popup")
 		
-		# 3. 【新增】等待 3 秒
-		# 创建一个临时的计时器
-		await get_tree().create_timer(3.0).timeout
+		# 【修复】创建一个计时器，等待 3 秒
+		# 使用 create_timer 是最稳妥的，不受其他帧逻辑影响
+		var timer = get_tree().create_timer(3.0)
+		await timer.timeout
 		
-		# 4. 【新增】播放消失动画 (倒放 popup 动画)
-		notification_anim.play_backwards("popup")
+		# 播放消失 (倒放 popup 动画，或者是直接隐藏)
+		# 如果你没有做消失动画，可以直接 notification_popup.visible = false
+		if notification_anim.has_animation("popup"):
+			notification_anim.play_backwards("popup")
+			await notification_anim.animation_finished
 		
-		# 5. 等动画播完，彻底隐藏 (防止挡住点击)
-		await notification_anim.animation_finished
 		notification_popup.visible = false

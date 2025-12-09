@@ -146,10 +146,15 @@ func _on_locked_folder_clicked(item_data):
 		else:
 			# 密码错误，震动窗口
 			var tween = create_tween()
-			var original_pos = dialog.position
+			var original_pos = dialog.position # 这是 Vector2i
+			
 			for i in range(5):
-				tween.tween_property(dialog, "position", original_pos + Vector2(randf_range(-5,5), 0), 0.05)
+				# 【修复点】将随机偏移量强转为 Vector2i
+				var offset = Vector2i(int(randf_range(-5, 5)), 0)
+				tween.tween_property(dialog, "position", original_pos + offset, 0.05)
+			
 			tween.tween_property(dialog, "position", original_pos, 0.05)
+			
 			input.text = ""
 			input.placeholder_text = "密码错误！"
 	)
