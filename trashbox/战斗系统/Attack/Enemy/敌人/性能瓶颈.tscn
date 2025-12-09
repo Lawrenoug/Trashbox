@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://br6tv0h5slieu"]
+[gd_scene load_steps=6 format=3 uid="uid://br6tv0h5slieu"]
 
 [ext_resource type="Script" uid="uid://1k07vvmtcyyo" path="res://trashbox/战斗系统/Attack/Enemy/敌人/PerformanceBottleneckEnemy.cs" id="1_yl7fu"]
+[ext_resource type="PackedScene" uid="uid://bpc4b23mpglmm" path="res://trashbox/战斗系统/Attack/Enemy/敌人/弹幕/性能瓶颈弹幕_2.tscn" id="2_14i21"]
 [ext_resource type="PackedScene" uid="uid://urdt15gmue2s" path="res://trashbox/战斗系统/Attack/Enemy/敌人/弹幕/性能瓶颈弹幕_1.tscn" id="2_jkaie"]
 [ext_resource type="Texture2D" uid="uid://drj0v0ccyn1sy" path="res://trashbox/战斗系统/UI/kenney_tiny-dungeon/Tiles/tile_0111.png" id="2_sgs2g"]
 
@@ -11,7 +12,7 @@ collision_layer = 4
 collision_mask = 0
 gravity_scale = 0.0
 script = ExtResource("1_yl7fu")
-bulletPrefab_2 = ExtResource("2_jkaie")
+bulletPrefab_2 = ExtResource("2_14i21")
 bulletPrefab = ExtResource("2_jkaie")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
