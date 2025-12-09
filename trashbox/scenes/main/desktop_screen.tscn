@@ -96,6 +96,7 @@ flat = true
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
+mouse_filter = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="NotificationPopup"]
 

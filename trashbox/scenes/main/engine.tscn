@@ -24,8 +24,6 @@ bg_color = Color(0.3137255, 0.3137255, 0.3137255, 1)
 
 [node name="WindowBase" instance=ExtResource("1_wavt3")]
 script = ExtResource("2_em83p")
-library_skills = Array[PackedScene]([])
-equipped_skills = Array[PackedScene]([])
 level_scenes = Array[PackedScene]([ExtResource("5_iba87")])
 
 [node name="CloseButton" parent="BgColor/MainLayout/TitleBar" index="1"]

@@ -90,10 +90,24 @@ func incoming_message(sender: String, msg: String):
 	show_notification("新消息: " + sender, msg)
 	get_tree().call_group("ChatApps", "receive_message", sender, msg)
 
-# --- 显示弹窗 ---
+# --- 显示弹窗 (修复版) ---
 func show_notification(title_text: String, msg_text: String):
 	if notification_popup and notification_anim:
+		# 1. 设置内容并显示
 		notification_popup.visible = true
 		notif_title.text = title_text
 		notif_msg.text = msg_text
+		
+		# 2. 播放弹出动画
 		notification_anim.play("popup")
+		
+		# 3. 【新增】等待 3 秒
+		# 创建一个临时的计时器
+		await get_tree().create_timer(3.0).timeout
+		
+		# 4. 【新增】播放消失动画 (倒放 popup 动画)
+		notification_anim.play_backwards("popup")
+		
+		# 5. 等动画播完，彻底隐藏 (防止挡住点击)
+		await notification_anim.animation_finished
+		notification_popup.visible = false

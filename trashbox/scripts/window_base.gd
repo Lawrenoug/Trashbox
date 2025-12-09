@@ -3,9 +3,15 @@ extends Control
 var dragging = false
 var drag_start_position = Vector2()
 
+@onready var close_button = $BgColor/MainLayout/TitleBar/CloseButton
+
 func _ready():
-	# 连接关闭信号
-	$BgColor/MainLayout/TitleBar/CloseButton.pressed.connect(_on_close_pressed)
+	# 【修复 1】强制设置关闭按钮的文字
+	if close_button:
+		close_button.text = "X"
+		# 连接关闭信号
+		close_button.pressed.connect(_on_close_pressed)
+	
 	# 连接拖拽信号
 	var title_bar = $BgColor/MainLayout/TitleBar
 	title_bar.gui_input.connect(_on_title_bar_input)
