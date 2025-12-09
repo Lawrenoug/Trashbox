@@ -49,3 +49,11 @@ func play_demo_with_scene(skill_scene: PackedScene):
 			dummy_player.TestSkill(skill_scene)
 		else:
 			print("错误：Player 节点没有 TestSkill 方法，请检查 C# 脚本是否编译。")
+
+func update_sequence(skill_packed_array: Array):
+	if dummy_player and is_instance_valid(dummy_player):
+		if dummy_player.has_method("TestSkillSequence"):
+			# 调用刚才在 C# 里写的新方法
+			dummy_player.TestSkillSequence(skill_packed_array)
+		else:
+			print("错误：C# PlayerManager 尚未编译 TestSkillSequence 方法！")

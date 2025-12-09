@@ -113,9 +113,15 @@ func preview_skill_instance(skill_node: Node):
 		print("警告：该技能节点没有对应的场景文件路径，无法在练功房演示。")
 
 # --- 地图选择 -> 全屏跳转 ---
-func _on_level_selected(level_index):
+func _on_level_selected(level_index, level_type):
+	print("Engine: 收到地图选择信号 -> 层数: ", level_index, ", 类型: ", level_type)
+	
+	# 这里你可以根据 level_type (0=普通, 1=精英, 2=Boss, 3=事件) 做不同的逻辑
+	# 目前暂时保持原有的按索引跳转逻辑：
+	
 	var safe_index = 0
 	if level_scenes.size() > 0:
+		# 防止索引越界
 		safe_index = level_index % level_scenes.size()
 	
 	load_level_full_screen(safe_index)
@@ -145,3 +151,45 @@ func set_status_log(action_name: String):
 	status_timer = -1.0 
 	status_label.text = "> " + action_name
 	status_label.modulate = Color(0, 1, 0)
+
+# --- 供 C# 背包脚本调用 ---
+func scan_and_update_sequence():
+	set_status_log("正在同步战斗序列...")
+	
+	# 1. 寻找背包里的 GridContainer (存放格子的容器)
+	# 根据你的场景结构，我们需要在 engine 场景里找到它
+	# 你的 engine.tscn 结构有点深，使用 find_child 递归查找是最稳妥的
+	var grid_container = find_child("GridContainer", true, false)
+	
+	if not grid_container:
+		print("错误：在 Engine 中找不到 GridContainer，无法同步技能！")
+		return
+	
+	# 2. 收集所有技能的 PackedScene
+	var sequence_array: Array[PackedScene] = []
+	var debug_names = ""
+	
+	# 遍历所有格子 (TextureRect)
+	for slot in grid_container.get_children():
+		# 检查格子里有没有技能 (技能是格子的子节点)
+		if slot.get_child_count() > 0:
+			var skill_node = slot.get_child(0)
+			
+			# 只要这个节点有文件路径，就说明它是我们要的技能
+			if skill_node.scene_file_path != "":
+				var packed = load(skill_node.scene_file_path)
+				sequence_array.append(packed)
+				
+				# (可选) 获取名字用来打印日志
+				var s_name = skill_node.get("skillName")
+				if s_name: debug_names += "[" + s_name + "] "
+	
+	# 3. 发送给练功房
+	if sequence_array.is_empty():
+		set_status_log("序列为空")
+		return
+		
+	if current_preview_instance:
+		print("同步序列: ", debug_names)
+		current_preview_instance.update_sequence(sequence_array)
+		set_status_log("序列更新: " + str(sequence_array.size()) + " 个模块")

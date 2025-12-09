@@ -119,8 +119,7 @@ namespace CharacterManager
 			// QueueFree(); // 建议先不销毁，或者由 Engine 处理失败逻辑后再销毁
 		}
 
-		// --- 供 GDScript 调用的技能演示接口 ---
-		// 【修改接口】供 GDScript 调用的测试方法
+		// --- 供 GDScript 调用的单技能测试接口 ---
 		public void TestSkill(PackedScene skillScene)
 		{
 			// GD.Print("C# Player: 收到测试技能 -> " + skillScene.ResourcePath);
@@ -150,16 +149,55 @@ namespace CharacterManager
 				{
 					attackManager.BulletNode = BulletContainer;
 				}
-				
-				// 技能被 Insert 后，AttackLoop 会自动在下一帧处理发射
-				// 如果你想强制立即发射，可能需要手动重置 _timeDelay
-				// 但通常 InsertSkill 会重置状态，等待自然发射即可
 			}
 			else
 			{
 				GD.PrintErr("TestSkill 错误: 传入的场景根节点不是 Skill 类型！");
 				skillNode.QueueFree(); // 清理无效实例
 			}
+		}
+
+		// --- 【新增】供 GDScript 调用的技能序列测试接口 ---
+		// 这个方法接收一个 PackedScene 数组，实例化后作为一个完整的技能组传给 AttackManager
+		public void TestSkillSequence(Godot.Collections.Array<PackedScene> skillScenes)
+		{
+			if (attackManager == null) return;
+			if (skillScenes == null || skillScenes.Count == 0) return;
+
+			// 1. 创建一个新的 C# 列表
+			var sequenceList = new System.Collections.Generic.List<Skill>();
+
+			// 2. 遍历传入的所有场景
+			foreach (var scene in skillScenes)
+			{
+				if (scene == null) continue;
+
+				// 实例化技能节点
+				var node = scene.Instantiate();
+				
+				// 尝试转为 Skill 类型
+				if (node is Skill skillScript)
+				{
+					sequenceList.Add(skillScript);
+				}
+				else
+				{
+					// 如果不是 Skill 类型，清理掉防止内存泄漏
+					node.QueueFree();
+				}
+			}
+
+			// 3. 将整个列表塞给攻击管理器
+			// 这样 AttackManager 的 AttackLoop 就会按顺序通过 index 循环这些技能
+			attackManager.InsertSkill(sequenceList);
+			
+			// 4. 确保子弹容器有效
+			if (attackManager.BulletNode == null && BulletContainer != null)
+			{
+				attackManager.BulletNode = BulletContainer;
+			}
+			
+			GD.Print($"C# Player: 已更新技能序列，包含 {sequenceList.Count} 个技能模块");
 		}
 	}
 }
