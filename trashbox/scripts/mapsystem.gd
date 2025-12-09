@@ -1,11 +1,11 @@
 extends Control
-signal level_selected(level_index)
+signal level_selected(level_index, level_type)
 
 # --- 1. 素材配置 (请替换为你实际的头像/图标路径) ---
 const ICON_NORMAL = preload("res://trashbox/assets/sprites/boss.png")
 const ICON_ELITE = preload("res://trashbox/assets/sprites/boss.png")
 const ICON_BOSS = preload("res://trashbox/assets/sprites/boss.png")
-
+const ICON_EVENT = preload("res://trashbox/assets/sprites/folder.png") # 【新增】事件图标(暂用文件夹代替)
 # --- 2. 布局配置 ---
 const NODE_SIZE = Vector2(64, 64) # 【关键】强制按钮大小，不要太大
 const X_SPACING = 150             # 横向间距
@@ -44,16 +44,26 @@ func _generate_single_line_map():
 	for i in range(LAYER_COUNT):
 		var btn = TextureButton.new()
 		
-		# 决定类型 (最后是Boss)
-		var type = 0 # 默认普通
+		# 决定类型: 0=普通, 1=精英, 2=Boss, 3=事件
+		var type = 0 
 		if i == LAYER_COUNT - 1: type = 2
-		elif i > 0 and i % 4 == 0: type = 1 # 每4关一个精英
+		elif i > 0 and i % 4 == 0: type = 1
+		elif i > 0 and i % 3 == 0: type = 3 # 【新增】每3层可能出现一个事件
 		
 		# 设置图片
 		match type:
-			0: btn.texture_normal = ICON_NORMAL
-			1: btn.texture_normal = ICON_ELITE
-			2: btn.texture_normal = ICON_BOSS
+			0: 
+				btn.texture_normal = ICON_NORMAL
+				btn.tooltip_text = "运行时错误 (战斗)"
+			1: 
+				btn.texture_normal = ICON_ELITE
+				btn.tooltip_text = "内存溢出 (精英)"
+			2: 
+				btn.texture_normal = ICON_BOSS
+				btn.tooltip_text = "版本发布 (Boss)"
+			3: 
+				btn.texture_normal = ICON_EVENT # 【新增】
+				btn.tooltip_text = "随机需求 (事件)"
 		
 		# --- 【核心修正：强制缩放图片】---
 		btn.ignore_texture_size = true  # 忽略原图尺寸
@@ -66,7 +76,7 @@ func _generate_single_line_map():
 		btn.position = Vector2(50 + i * X_SPACING, center_y)
 		
 		# 连接点击信号
-		btn.pressed.connect(_on_node_clicked.bind(i))
+		btn.pressed.connect(_on_node_clicked.bind(i, type))
 		
 		map_canvas.add_child(btn)
 		map_nodes.append(btn)
@@ -119,7 +129,7 @@ func _update_node_states():
 			_stop_breathing(btn)
 
 # 点击事件
-func _on_node_clicked(index):
+func _on_node_clicked(index, type):
 	current_level_index = index
 	
 	# 1. 玩家移动动画
@@ -135,9 +145,9 @@ func _on_node_clicked(index):
 	# 3. 更新状态
 	_update_node_states()
 	
-	print("地图通知：请求进入第 %d 关" % index)
+	print("地图通知：请求进入第 %d 关, 类型 %d" % [index, type])
 	await tween.finished
-	level_selected.emit(index)
+	level_selected.emit(index, type) # 【修改】发出信号带类型
 
 # --- 动画工具 ---
 func _start_breathing(node):

@@ -19,18 +19,13 @@ namespace Attack
 
 		private SkillData skillData;
 
-		
-
 		public AttackManager(Node _BulletNode)
 		{
 			BulletNode = _BulletNode;
-			// List<Skill> _test = new List<Skill>();
-			// _test.Add(new Pixel());
-			// InsertSkill(_test);
 			skillData = new SkillData();
-			skillData.BuffTypes = new List<string>(); // 初始化BuffTypes列表
+			// 【修复】确保构造时初始化列表
+			skillData.BuffTypes = new List<string>(); 
 			ClearSkillData();
-
 		}
 
 		// 添加减少攻击延迟的方法
@@ -45,50 +40,41 @@ namespace Attack
 			enableAttack = false;
 			skills = _skills.ToArray();
 			skillCount = _skills.Count;
-			GD.Print("技能组："+skillCount);
+			GD.Print("技能组数量：" + skillCount);
 			enableAttack = true;
 		}
 
-		public void AttackLoop(float delta,Godot.Vector2 startPosiition)
+		public void AttackLoop(float delta, Godot.Vector2 startPosiition)
 		{
 			_timeDelay += delta;
 			if (_attackDelay <= _timeDelay)
 			{
-				if(!enableAttack)
-                {
-					return;
-                }
-				if (BulletNode == null)
-				{
-					return;
-				}
-				if(skills.Length<=0)
-                {
-					return;
-                }
+				if(!enableAttack) return;
+				if (BulletNode == null) return;
+				if(skills.Length <= 0) return;
+
 				if (skillsIndex < skillCount)
 				{
+					// 处理 Amendment (修正类技能)
 					while (skillsIndex < skillCount && skills[skillsIndex].skillType == "amendment")
 					{
 						AddSkillData(skills[skillsIndex++].GetSkillData());
 					}
 					
-						if (skillsIndex < skillCount && skills[skillsIndex].skillType == "projectile")
-						{
-							//GD.Print("发射点："+startPosiition);
-							skills[skillsIndex].Projectile(skillData, startPosiition,BulletNode);
-							ClearSkillData();
-							skillsIndex++;
-							_timeDelay = 0;
-							//GD.Print("攻击");
-						}
-					
+					// 处理 Projectile (投射物类技能)
+					if (skillsIndex < skillCount && skills[skillsIndex].skillType == "projectile")
+					{
+						skills[skillsIndex].Projectile(skillData, startPosiition, BulletNode);
+						ClearSkillData();
+						skillsIndex++;
+						_timeDelay = 0;
+					}
 				}
 				else
 				{
 					skillsIndex = 0;
 					ClearSkillData();
-                }
+				}
 			}
 		}
 
@@ -96,23 +82,42 @@ namespace Attack
 		{
 			skillData.ATK = 0;
 			skillData.ATS = 0;
-			skillData.RNG =0;
+			skillData.RNG = 0;
 			skillData.AttackCount = 0;
 			skillData.enableTarcking = false;
-			skillData.BuffTypes.Clear();
+			
+			// 【修复】防止空指针，重新初始化或清空
+			if (skillData.BuffTypes == null)
+			{
+				skillData.BuffTypes = new List<string>();
+			}
+			else
+			{
+				skillData.BuffTypes.Clear();
+			}
 		}
 		
 		private void AddSkillData(SkillData _skillData)
-        {
+		{
 			skillData.ATK += _skillData.ATK;
 			skillData.ATS += _skillData.ATS;
 			skillData.RNG += _skillData.RNG;
 			skillData.AttackCount += _skillData.AttackCount;
 			skillData.enableTarcking = skillData.enableTarcking || _skillData.enableTarcking;
-			foreach(string buffType in _skillData.BuffTypes)
+			
+			// 【修复】核心修复点：防止列表为空导致的崩溃
+			if (skillData.BuffTypes == null) 
 			{
-				skillData.BuffTypes.Add(buffType);
+				skillData.BuffTypes = new List<string>();
 			}
-        }
+
+			if (_skillData.BuffTypes != null)
+			{
+				foreach(string buffType in _skillData.BuffTypes)
+				{
+					skillData.BuffTypes.Add(buffType);
+				}
+			}
+		}
 	}
 }

@@ -1,9 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://deg0wronr46cw"]
+[gd_scene load_steps=11 format=3 uid="uid://deg0wronr46cw"]
 
 [ext_resource type="PackedScene" uid="uid://bv17lh6n2q5kb" path="res://trashbox/scenes/main/window_base.tscn" id="1_wavt3"]
 [ext_resource type="Script" uid="uid://bdg5phergyfhk" path="res://trashbox/scripts/engine.gd" id="2_em83p"]
 [ext_resource type="PackedScene" uid="uid://cdm3a2td2r178" path="res://trashbox/scenes/main/mapsystem.tscn" id="5_58lqr"]
-[ext_resource type="PackedScene" uid="uid://cty56ew0kcqbu" path="res://trashbox/scenes/levels/level_base.tscn" id="5_iba87"]
 [ext_resource type="PackedScene" uid="uid://dk1ae2t3e6fi7" path="res://trashbox/战斗系统/技能战斗列表.tscn" id="5_t5267"]
 [ext_resource type="PackedScene" uid="uid://bj20pol0nbg0o" path="res://trashbox/战斗系统/技能组背包.tscn" id="6_ftt37"]
 
@@ -24,7 +23,7 @@ bg_color = Color(0.3137255, 0.3137255, 0.3137255, 1)
 
 [node name="WindowBase" instance=ExtResource("1_wavt3")]
 script = ExtResource("2_em83p")
-level_scenes = Array[PackedScene]([ExtResource("5_iba87")])
+level_scenes = Array[PackedScene]([])
 
 [node name="CloseButton" parent="BgColor/MainLayout/TitleBar" index="1"]
 text = "X"
@@ -55,7 +54,10 @@ text = "IDLE"
 label_settings = SubResource("LabelSettings_iba87")
 horizontal_alignment = 2
 
-[node name="SplitMain" type="HSplitContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot" index="1"]
+[node name="PanelContainer" type="PanelContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot" index="1"]
+layout_mode = 2
+
+[node name="SplitMain" type="HSplitContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot" index="2"]
 layout_mode = 2
 size_flags_vertical = 3
 split_offset = 200
@@ -137,7 +139,7 @@ theme_override_font_sizes/normal_font_size = 8
 bbcode_enabled = true
 text = "请在左侧选择一个技能以查看详细文档"
 
-[node name="TimelinePanel" type="PanelContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot" index="2"]
+[node name="TimelinePanel" type="PanelContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot" index="3"]
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 

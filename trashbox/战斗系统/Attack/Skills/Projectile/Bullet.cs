@@ -19,8 +19,15 @@ namespace Attack
 		{
 			base._Ready();
 			
+			// 【修复】强制开启接触监视器，否则无法检测碰撞
+			ContactMonitor = true;
+			MaxContactsReported = 5;
+
 			// 连接碰撞信号
-			Connect("body_entered", new Callable(this, nameof(OnBodyEntered)));
+			if (!IsConnected("body_entered", new Callable(this, nameof(OnBodyEntered))))
+			{
+				Connect("body_entered", new Callable(this, nameof(OnBodyEntered)));
+			}
 		}
 
 		public virtual void Initialize(SkillData _skillData)
@@ -41,23 +48,21 @@ namespace Attack
 			}
 		}
 
-		//超出屏幕自动销毁
+		// 超出屏幕自动销毁
 		private void _on_VisibilityNotifier2D_screen_exited()
 		{
 			Vector2 screenSize = GetViewportRect().Size;
 			Vector2 globalPos = GlobalPosition;
-			float extraBounds = 50; // 额外边界（像素）
+			float extraBounds = 50; 
 
-			// 正确的判断逻辑：只要满足任意一个边界超出，就销毁
 			bool isOffScreen =
-				globalPos.X < -extraBounds ||          // 左超出
-				globalPos.X > screenSize.X + extraBounds ||  // 右超出
-				globalPos.Y < -extraBounds ||          // 上超出
-				globalPos.Y > screenSize.Y + extraBounds;   // 下超出
+				globalPos.X < -extraBounds ||          
+				globalPos.X > screenSize.X + extraBounds ||  
+				globalPos.Y < -extraBounds ||          
+				globalPos.Y > screenSize.Y + extraBounds;   
 
 			if (isOffScreen)
 			{
-				GD.Print("子弹超出屏幕（含额外边界），自动销毁");
 				QueueFree();
 			}
 		}
@@ -66,9 +71,13 @@ namespace Attack
 		{
 			if (body.IsInGroup("enemy"))
 			{
-				GD.Print("子弹碰撞到敌人，自动销毁");
+				GD.Print("子弹命中: " + body.Name);
 				EnemyBase enemy = body as EnemyBase;
-				enemy.TakeDamage(ATK);
+				// 判空，防止碰到了在 enemy 组但不是 EnemyBase 的东西
+				if (enemy != null)
+				{
+					enemy.TakeDamage(ATK);
+				}
 				QueueFree();
 			}
 		}
@@ -77,14 +86,14 @@ namespace Attack
 		private void HandleStraightMovement(double delta)
 		{
 			float moveDistance = ATS * (float)delta * NormalData.ATS;
-			Godot.Vector2 movement = Transform.X * moveDistance;
+			// 修正方向计算，确保沿子弹朝向飞行
+			Godot.Vector2 movement = Transform.X * moveDistance; 
 			GlobalPosition += movement;
 		}
 
 		// 寻找最近的目标
 		private void FindNearestTarget()
 		{
-			// 假设敌人都在 "enemy" 组中
 			var enemies = GetTree().GetNodesInGroup("enemy");
 			Node2D nearestEnemy = null;
 			float nearestDistance = float.MaxValue;
@@ -95,7 +104,6 @@ namespace Attack
 				{
 					float distance = GlobalPosition.DistanceTo(enemy.GlobalPosition);
 					
-					// 只考虑在跟踪范围内的敌人
 					if (distance < trackingRange && distance < nearestDistance)
 					{
 						nearestDistance = distance;
@@ -105,16 +113,8 @@ namespace Attack
 			}
 
 			target = nearestEnemy;
-			
-			if (target != null)
-			{
-				//GD.Print("找到目标，距离: " + nearestDistance);
-			}
-			else
-			{
-				//GD.Print("未找到目标");
-			}
 		}
+
 		// 跟踪移动
 		private void HandleTrackingMovement(double delta)
 		{
@@ -129,21 +129,14 @@ namespace Attack
 				}
 			}
 
-			// 计算朝向目标的移动
 			Godot.Vector2 direction = (target.GlobalPosition - GlobalPosition).Normalized();
 			float moveDistance = ATS * (float)delta * NormalData.ATS;
 			
-			// 更新位置
 			GlobalPosition += direction * moveDistance;
-			
-			// 更新旋转朝向目标
 			LookAt(target.GlobalPosition);
-			
-			// 检查是否超出跟踪范围
 			CheckTargetDistance();
 		}
 
-		// 检查目标距离，如果超出跟踪范围则放弃目标
 		private void CheckTargetDistance()
 		{
 			if (target != null && IsInstanceValid(target))
@@ -151,7 +144,6 @@ namespace Attack
 				float distance = GlobalPosition.DistanceTo(target.GlobalPosition);
 				if (distance > trackingRange)
 				{
-					GD.Print("目标超出跟踪范围，放弃目标");
 					target = null;
 				}
 			}
@@ -160,7 +152,10 @@ namespace Attack
 		public virtual void SetBuff(Node body)
 		{
 			EnemyBase enemy = body as EnemyBase;
-			enemy.ApplyBuff(null);
+			if (enemy != null)
+			{
+				enemy.ApplyBuff(null);
+			}
 		}
 	}
 }

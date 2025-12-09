@@ -1,6 +1,6 @@
 extends Node2D
 
-@onready var dummy_enemy = $Dummy        # 敌人
+@onready var dummy_enemy = $DummyEnemy       # 敌人
 @onready var dummy_player = $Player      # 玩家 (挂载 C# 脚本的节点)
 @onready var anim_player = $AnimationPlayer
 
@@ -42,5 +42,10 @@ func play_demo(anim_name: String):
 		anim_player.play(anim_name)
 
 func play_demo_with_scene(skill_scene: PackedScene):
-	if dummy_player and dummy_player.has_method("TestSkill"):
-		dummy_player.TestSkill(skill_scene)
+	# 检查 Player 节点是否存在且有效
+	if dummy_player and is_instance_valid(dummy_player):
+		# 注意：跨语言调用，确保方法名 TestSkill 大小写正确
+		if dummy_player.has_method("TestSkill"):
+			dummy_player.TestSkill(skill_scene)
+		else:
+			print("错误：Player 节点没有 TestSkill 方法，请检查 C# 脚本是否编译。")

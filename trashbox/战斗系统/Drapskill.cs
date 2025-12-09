@@ -27,22 +27,20 @@ namespace Attack
 			{
 				if (mb.Pressed && mb.ButtonIndex == MouseButton.Left)
 				{
-					// --- 【新增逻辑开始】 ---
-					// 点击时，通知 Engine 更新右侧描述
+					// 1. 获取当前格子里的技能节点
 					var currentItem = GetChildOrNull<Node>(0);
-					if (currentItem != null)
-					{
-						// 1. 寻找 Engine 节点 (通过组名)
-						var engineNode = GetTree().GetFirstNodeInGroup("EngineUI");
-						if (engineNode != null)
-						{
-							// 2. 调用 GDScript 的方法
-							engineNode.Call("preview_skill_instance", currentItem);
-						}
-					}
-					// --- 【新增逻辑结束】 ---
+					
+					// 2. 寻找 Engine 节点
+					var engineNode = GetTree().GetFirstNodeInGroup("EngineUI");
 
-					// 下面是原有的拖拽逻辑 (稍微做了路径安全处理)
+					// --- 【修复1：点击显示文字描述】 ---
+					if (currentItem != null && engineNode != null)
+					{
+						// 调用 engine.gd 里的函数显示文字
+						engineNode.Call("preview_skill_instance", currentItem);
+					}
+
+					// --- 原有的拖拽/交换逻辑 ---
 					var item = GetChildOrNull<Sprite2D>(0);
 					var seltItem = GetTree().GetFirstNodeInGroup(groupName) as Sprite2D;
 					
@@ -56,7 +54,7 @@ namespace Attack
 					}
 					else
 					{
-						// 放置或交换逻辑
+						// 放置或交换
 						if (item == null)
 						{
 							PlaceItem(seltItem, this);
@@ -66,8 +64,12 @@ namespace Attack
 							SwapItems(item, seltItem);
 						}
 						
-						// 更新逻辑 (使用了更安全的查找方式，防止在 Engine 场景报错)
-						UpdateSkillListSafe();
+						// --- 【修复2：拖拽完成后，通知引擎更新战斗演示】 ---
+						if (engineNode != null)
+						{
+							// 我们延迟一帧调用，确保 UI 节点层级已经更新完毕
+							engineNode.CallDeferred("scan_and_update_sequence");
+						}
 					}
 				}
 			} 
