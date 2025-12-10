@@ -1,0 +1,37 @@
+[gd_scene load_steps=4 format=3 uid="uid://cbtvietpdhekf"]
+
+[ext_resource type="Script" uid="uid://i8mogrwj8y3w" path="res://trashbox/战斗系统/Attack/Skills/Projectile/PointerBullet.cs" id="1_1j78e"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xjm2y"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_1j78e"]
+font_size = 200
+
+[node name="指针投射物" type="RigidBody2D" groups=["Bullet"]]
+collision_layer = 4
+collision_mask = 4
+contact_monitor = true
+max_contacts_reported = 1
+script = ExtResource("1_1j78e")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_xjm2y")
+
+[node name="Label" type="Label" parent="."]
+texture_filter = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -8.0
+offset_top = -14.0
+offset_right = 171.0
+offset_bottom = 259.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.1, 0.1)
+text = "->"
+label_settings = SubResource("LabelSettings_1j78e")
+horizontal_alignment = 1
+vertical_alignment = 1

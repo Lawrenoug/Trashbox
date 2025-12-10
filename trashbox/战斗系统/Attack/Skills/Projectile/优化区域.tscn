@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://cv74007pc4cbm"]
+
+[ext_resource type="Script" uid="uid://djm4uefmrbe7y" path="res://trashbox/战斗系统/Attack/Skills/Projectile/ShaderOptimizerArea.cs" id="1_qsr8i"]
+[ext_resource type="Texture2D" uid="uid://cen1mcgid3jf5" path="res://trashbox/战斗系统/UI/kenney_tiny-dungeon/Tiles/tile_0048.png" id="2_4m44m"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_dwcsq"]
+
+[node name="优化区域" type="Area2D"]
+collision_layer = 4
+collision_mask = 4
+script = ExtResource("1_qsr8i")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(10, 10)
+shape = SubResource("CircleShape2D_dwcsq")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+z_index = -1
+scale = Vector2(10, 10)
+texture = ExtResource("2_4m44m")

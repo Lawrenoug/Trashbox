@@ -1,0 +1,115 @@
+[gd_scene load_steps=11 format=3 uid="uid://pwwp08nxemy2"]
+
+[ext_resource type="Script" uid="uid://cplhjjnf0p3j6" path="res://trashbox/scripts/desktop_screen.gd" id="1_1m4g2"]
+[ext_resource type="Texture2D" uid="uid://b2ag8neelt1je" path="res://trashbox/assets/sprites/菜单.png" id="1_xm50m"]
+[ext_resource type="Texture2D" uid="uid://64tiskwuwr1m" path="res://trashbox/assets/sprites/电脑桌面.png" id="2_tagyk"]
+[ext_resource type="Theme" uid="uid://1gy6tx3ub7fh" path="res://trashbox/assets/pixel_ui_theme.tres" id="3_tagyk"]
+[ext_resource type="Texture2D" uid="uid://ftn1g5nctp7y" path="res://trashbox/assets/sprites/文件夹.png" id="5_wa37d"]
+[ext_resource type="Texture2D" uid="uid://cn2ku2vo752ou" path="res://trashbox/assets/sprites/回收站.png" id="6_fjr7a"]
+[ext_resource type="Texture2D" uid="uid://nvtwqspqxf0p" path="res://trashbox/assets/sprites/Chatbro.png" id="7_on2mt"]
+[ext_resource type="Texture2D" uid="uid://c5apch2evm7eo" path="res://trashbox/assets/sprites/引擎.png" id="8_w12mn"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wa37d"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fjr7a"]
+
+[node name="DesktopScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_1m4g2")
+
+[node name="Wallpaper" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_tagyk")
+expand_mode = 1
+
+[node name="Taskbar" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -42.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("3_tagyk")
+
+[node name="TaskbarItems" type="HBoxContainer" parent="Taskbar"]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="StartButton" type="Button" parent="Taskbar/TaskbarItems"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_wa37d")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_fjr7a")
+icon = ExtResource("1_xm50m")
+
+[node name="Control" type="Control" parent="Taskbar/TaskbarItems"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ClockLabel" type="Label" parent="Taskbar/TaskbarItems"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "20：30
+2025/11/17"
+
+[node name="DesktopIcons" type="GridContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/v_separation = 10
+
+[node name="文件夹" type="Button" parent="DesktopIcons"]
+layout_mode = 2
+icon = ExtResource("5_wa37d")
+flat = true
+
+[node name="回收站" type="Button" parent="DesktopIcons"]
+layout_mode = 2
+icon = ExtResource("6_fjr7a")
+flat = true
+
+[node name="Chatbro" type="Button" parent="DesktopIcons"]
+layout_mode = 2
+icon = ExtResource("7_on2mt")
+flat = true
+
+[node name="引擎" type="Button" parent="DesktopIcons"]
+layout_mode = 2
+icon = ExtResource("8_w12mn")
+flat = true
+
+[node name="NotificationPopup" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="NotificationPopup"]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="NotificationPopup"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NotificationPopup/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Title" type="Label" parent="NotificationPopup/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Message" type="Label" parent="NotificationPopup/HBoxContainer/VBoxContainer"]
+layout_mode = 2

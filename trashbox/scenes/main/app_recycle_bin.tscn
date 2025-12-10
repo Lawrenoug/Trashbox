@@ -1,0 +1,30 @@
+[gd_scene load_steps=3 format=3 uid="uid://dn4f56r0ew7wc"]
+
+[ext_resource type="PackedScene" uid="uid://bv17lh6n2q5kb" path="res://trashbox/scenes/main/window_base.tscn" id="1_p3f36"]
+[ext_resource type="Script" uid="uid://lp5xa7sfd2vs" path="res://trashbox/scripts/app_recycle_bin.gd" id="2_q5pmc"]
+
+[node name="WindowBase" instance=ExtResource("1_p3f36")]
+script = ExtResource("2_q5pmc")
+
+[node name="CloseButton" parent="BgColor/MainLayout/TitleBar" index="1"]
+text = "X"
+
+[node name="BodyLayout" type="VBoxContainer" parent="BgColor/MainLayout/ContentSlot" index="0"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button" type="Button" parent="BgColor/MainLayout/ContentSlot/BodyLayout" index="0"]
+layout_mode = 2
+text = "清空回收站"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="BgColor/MainLayout/ContentSlot/BodyLayout" index="1"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="GridContainer" type="GridContainer" parent="BgColor/MainLayout/ContentSlot/BodyLayout/ScrollContainer" index="0"]
+layout_mode = 2
+columns = 5

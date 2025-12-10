@@ -1,0 +1,46 @@
+[gd_scene load_steps=2 format=3 uid="uid://bv17lh6n2q5kb"]
+
+[ext_resource type="Script" uid="uid://b80cy4v7a7i1k" path="res://trashbox/scripts/window_base.gd" id="1_mmn3x"]
+
+[node name="WindowBase" type="Control"]
+custom_minimum_size = Vector2(400, 300)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_mmn3x")
+
+[node name="BgColor" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MainLayout" type="VBoxContainer" parent="BgColor"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="TitleBar" type="HBoxContainer" parent="BgColor/MainLayout"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="BgColor/MainLayout/TitleBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+horizontal_alignment = 1
+
+[node name="CloseButton" type="Button" parent="BgColor/MainLayout/TitleBar"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+
+[node name="ContentSlot" type="Control" parent="BgColor/MainLayout"]
+layout_mode = 2
+size_flags_vertical = 3

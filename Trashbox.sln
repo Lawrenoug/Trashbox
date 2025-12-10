@@ -1,0 +1,19 @@
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trashbox", "Trashbox.csproj", "{16CCE14D-27A4-4E27-8E00-0B173B07D97B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+	Debug|Any CPU = Debug|Any CPU
+	ExportDebug|Any CPU = ExportDebug|Any CPU
+	ExportRelease|Any CPU = ExportRelease|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{16CCE14D-27A4-4E27-8E00-0B173B07D97B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16CCE14D-27A4-4E27-8E00-0B173B07D97B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16CCE14D-27A4-4E27-8E00-0B173B07D97B}.ExportDebug|Any CPU.ActiveCfg = ExportDebug|Any CPU
+		{16CCE14D-27A4-4E27-8E00-0B173B07D97B}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
+		{16CCE14D-27A4-4E27-8E00-0B173B07D97B}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
+		{16CCE14D-27A4-4E27-8E00-0B173B07D97B}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
+	EndGlobalSection
+EndGlobal

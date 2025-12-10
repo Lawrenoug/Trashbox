@@ -1,0 +1,32 @@
+[gd_scene load_steps=3 format=3 uid="uid://cdm3a2td2r178"]
+
+[ext_resource type="Script" uid="uid://g3n6uiexvwar" path="res://trashbox/scripts/mapsystem.gd" id="1_qcnhh"]
+[ext_resource type="Texture2D" uid="uid://chkcegep7i36d" path="res://trashbox/assets/sprites/头像.jpg" id="2_fupw0"]
+
+[node name="MapSystem" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_qcnhh")
+
+[node name="MapScroller" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+vertical_scroll_mode = 0
+
+[node name="MapCanvas" type="Control" parent="MapScroller"]
+custom_minimum_size = Vector2(2000, 150)
+layout_mode = 2
+
+[node name="PlayerIcon" type="Sprite2D" parent="MapScroller/MapCanvas"]
+z_index = 1
+texture = ExtResource("2_fupw0")

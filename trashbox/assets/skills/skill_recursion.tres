@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="SkillData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://trashbox/scripts/skill_data.gd" id="1_manual"]
+
+[resource]
+script = ExtResource("1_manual")
+skill_name = "递归护盾"
+description = "获得 10 点护甲。"
+damage = 0
+cost = 0
+animation_name = "skill_recursion"
+is_passive = false

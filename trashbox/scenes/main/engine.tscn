@@ -1,0 +1,151 @@
+[gd_scene load_steps=12 format=3 uid="uid://deg0wronr46cw"]
+
+[ext_resource type="PackedScene" uid="uid://bv17lh6n2q5kb" path="res://trashbox/scenes/main/window_base.tscn" id="1_wavt3"]
+[ext_resource type="Script" uid="uid://bdg5phergyfhk" path="res://trashbox/scripts/engine.gd" id="2_em83p"]
+[ext_resource type="PackedScene" uid="uid://cdm3a2td2r178" path="res://trashbox/scenes/main/mapsystem.tscn" id="5_58lqr"]
+[ext_resource type="PackedScene" uid="uid://cty56ew0kcqbu" path="res://trashbox/scenes/levels/level_base.tscn" id="5_iba87"]
+[ext_resource type="PackedScene" uid="uid://dk1ae2t3e6fi7" path="res://trashbox/战斗系统/技能战斗列表.tscn" id="5_t5267"]
+[ext_resource type="PackedScene" uid="uid://bj20pol0nbg0o" path="res://trashbox/战斗系统/技能组背包.tscn" id="6_ftt37"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_iba87"]
+font_color = Color(0.53333336, 0.53333336, 0.53333336, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wavt3"]
+bg_color = Color(0.31431612, 0.31431612, 0.31431603, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_em83p"]
+bg_color = Color(0.3137255, 0.3137255, 0.3137255, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bvc11"]
+bg_color = Color(0.3137255, 0.3137255, 0.3137255, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wrolx"]
+bg_color = Color(0.3137255, 0.3137255, 0.3137255, 1)
+
+[node name="WindowBase" instance=ExtResource("1_wavt3")]
+script = ExtResource("2_em83p")
+level_scenes = Array[PackedScene]([ExtResource("5_iba87")])
+
+[node name="CloseButton" parent="BgColor/MainLayout/TitleBar" index="1"]
+text = "X"
+
+[node name="EditorRoot" type="VBoxContainer" parent="BgColor/MainLayout/ContentSlot" index="0"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MenuBar" type="HBoxContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot" index="0"]
+layout_mode = 2
+
+[node name="File" type="Button" parent="BgColor/MainLayout/ContentSlot/EditorRoot/MenuBar" index="0"]
+layout_mode = 2
+text = "文件"
+
+[node name="Debug" type="Button" parent="BgColor/MainLayout/ContentSlot/EditorRoot/MenuBar" index="1"]
+layout_mode = 2
+text = "调试"
+
+[node name="Status" type="Label" parent="BgColor/MainLayout/ContentSlot/EditorRoot/MenuBar" index="2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "IDLE"
+label_settings = SubResource("LabelSettings_iba87")
+horizontal_alignment = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot" index="1"]
+layout_mode = 2
+
+[node name="SplitMain" type="HSplitContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot" index="2"]
+layout_mode = 2
+size_flags_vertical = 3
+split_offset = 200
+
+[node name="LeftColumn" type="VSplitContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain" index="0"]
+layout_mode = 2
+
+[node name="SkillLogPanel" type="PanelContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn" index="0"]
+custom_minimum_size = Vector2(50, 150)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_wavt3")
+
+[node name="技能战斗列表" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillLogPanel" index="0" instance=ExtResource("5_t5267")]
+layout_mode = 2
+
+[node name="GridContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillLogPanel/技能战斗列表" index="0"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+columns = 2
+
+[node name="SkillDeckPanel" type="PanelContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn" index="1"]
+custom_minimum_size = Vector2(50, 100)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_em83p")
+
+[node name="技能组背包" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillDeckPanel" index="0" instance=ExtResource("6_ftt37")]
+layout_mode = 2
+
+[node name="GridContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillDeckPanel/技能组背包" index="0"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SplitSub" type="HSplitContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain" index="1"]
+layout_mode = 2
+size_flags_horizontal = 3
+split_offset = 200
+
+[node name="PreviewViewport" type="PanelContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_bvc11")
+
+[node name="Placeholder" type="Label" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/PreviewViewport" index="0"]
+layout_mode = 2
+
+[node name="GameViewContainer" type="SubViewportContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/PreviewViewport" index="1"]
+layout_mode = 2
+mouse_filter = 0
+stretch = true
+
+[node name="GameViewport" type="SubViewport" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/PreviewViewport/GameViewContainer" index="0"]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(126, 262)
+render_target_update_mode = 4
+
+[node name="DescriptionPanel" type="PanelContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub" index="1"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wrolx")
+
+[node name="DescriptionText" type="RichTextLabel" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/DescriptionPanel" index="0"]
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 8
+bbcode_enabled = true
+text = "请在左侧选择一个技能以查看详细文档"
+
+[node name="TimelinePanel" type="PanelContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot" index="3"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+
+[node name="MapSystem" parent="BgColor/MainLayout/ContentSlot/EditorRoot/TimelinePanel" index="0" instance=ExtResource("5_58lqr")]
+layout_mode = 2
+
+[editable path="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillLogPanel/技能战斗列表"]
+[editable path="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillDeckPanel/技能组背包"]

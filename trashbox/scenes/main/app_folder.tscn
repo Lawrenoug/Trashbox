@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://bkdtc0sissw5q"]
+
+[ext_resource type="PackedScene" uid="uid://bv17lh6n2q5kb" path="res://trashbox/scenes/main/window_base.tscn" id="1_t6xrs"]
+[ext_resource type="Script" uid="uid://iawvicmvlkrq" path="res://trashbox/scripts/app_folder.gd" id="2_2cqje"]
+
+[node name="WindowBase" instance=ExtResource("1_t6xrs")]
+custom_minimum_size = Vector2(700, 400)
+script = ExtResource("2_2cqje")
+
+[node name="TitleLabel" parent="BgColor/MainLayout/TitleBar" index="0"]
+theme_override_colors/font_color = Color(0.28118682, 0.28118688, 0.28118682, 1)
+text = "我的电脑"
+
+[node name="CloseButton" parent="BgColor/MainLayout/TitleBar" index="1"]
+text = "X"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="BgColor/MainLayout/ContentSlot" index="0"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GridContainer" type="GridContainer" parent="BgColor/MainLayout/ContentSlot/ScrollContainer" index="0"]
+layout_mode = 2

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="SkillData" load_steps=2 format=3 uid="uid://cudc3alucqs12"]
+
+[ext_resource type="Script" uid="uid://dsbuh1nsnajyn" path="res://trashbox/scripts/skill_data.gd" id="1_manual"]
+
+[resource]
+script = ExtResource("1_manual")
+skill_name = "快速排序斩"
+description = "对单个目标造成 30 点伤害。"
+damage = 30
+animation_name = "attack_quick_sort"
+metadata/_custom_type_script = "uid://dsbuh1nsnajyn"

@@ -1,0 +1,65 @@
+[gd_scene load_steps=5 format=3 uid="uid://r7o76g52148v"]
+
+[ext_resource type="Script" uid="uid://bvmhal72bnwg3" path="res://trashbox/scripts/intro_sequence.gd" id="1_or5ht"]
+[ext_resource type="Texture2D" uid="uid://bs2csrftmjnfd" path="res://trashbox/assets/sprites/剧情1.png" id="2_5givo"]
+[ext_resource type="PackedScene" uid="uid://cvqojluycs71d" path="res://trashbox/scenes/main/login_screen.tscn" id="3_uur3f"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_ggdcl"]
+font_size = 32
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
+
+[node name="IntroSequence" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_or5ht")
+images = Array[Texture2D]([ExtResource("2_5givo")])
+texts = Array[String](["喂，啥事"])
+next_scene = ExtResource("3_uur3f")
+display_time = 5.0
+
+[node name="Illustration" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="StoryText" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -23.0
+grow_horizontal = 2
+grow_vertical = 0
+label_settings = SubResource("LabelSettings_ggdcl")
+horizontal_alignment = 1
+
+[node name="FadeLayer" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="SkipButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -63.0
+offset_bottom = 31.0
+grow_horizontal = 0
+text = "跳过 >>"
