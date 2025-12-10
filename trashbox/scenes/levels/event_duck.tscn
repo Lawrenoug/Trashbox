@@ -1,0 +1,97 @@
+[gd_scene load_steps=7 format=3 uid="uid://bcsvldvhgakuf"]
+
+[ext_resource type="Script" uid="uid://cdsdphs23igav" path="res://trashbox/scenes/levels/event_duck.gd" id="1_g4kxu"]
+[ext_resource type="Texture2D" uid="uid://d2jpwpfnp7ko4" path="res://trashbox/assets/sprites/duck.png" id="2_sfqtm"]
+[ext_resource type="Script" uid="uid://08knfvnynesi" path="res://trashbox/战斗系统/Characters/Player/PlayerManager.cs" id="3_mfw6c"]
+[ext_resource type="Texture2D" uid="uid://de5or7du4lccg" path="res://trashbox/战斗系统/UI/kenney_tiny-dungeon/Tiles/tile_0110.png" id="4_bpnpq"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_4rh2w"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g4kxu"]
+bg_color = Color(0.3469611, 0.72328484, 0.44457972, 1)
+
+[node name="Event_Duck" type="Node2D"]
+script = ExtResource("1_g4kxu")
+
+[node name="Background" type="ColorRect" parent="."]
+offset_right = 1920.0
+offset_bottom = 1080.0
+color = Color(1, 0.99215686, 0.8156863, 1)
+
+[node name="HolyLight" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0.19607843)
+
+[node name="TheDuck" type="Sprite2D" parent="."]
+modulate = Color(0.90588236, 0.90588236, 0, 1)
+position = Vector2(947.99994, 134.00003)
+scale = Vector2(7.062498, 6.96875)
+texture = ExtResource("2_sfqtm")
+
+[node name="Player" type="RigidBody2D" parent="." node_paths=PackedStringArray("startShootPosition", "BulletContainer")]
+position = Vector2(932, 415)
+rotation = -1.5707964
+gravity_scale = 0.0
+script = ExtResource("3_mfw6c")
+startShootPosition = NodePath("发射点")
+BulletContainer = NodePath("")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("CircleShape2D_4rh2w")
+
+[node name="Sprite2D" type="Sprite2D" parent="Player"]
+texture_filter = 1
+rotation = -1.5707964
+texture = ExtResource("4_bpnpq")
+
+[node name="发射点" type="Node2D" parent="Player"]
+position = Vector2(50, 0)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="HUD" type="CanvasLayer" parent="CanvasLayer"]
+
+[node name="HPBar" type="ProgressBar" parent="CanvasLayer/HUD"]
+offset_left = 17.0
+offset_top = 21.0
+offset_right = 96.0
+offset_bottom = 48.0
+theme_override_styles/background = SubResource("StyleBoxFlat_g4kxu")
+
+[node name="Window" type="PanelContainer" parent="CanvasLayer"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -82.0
+offset_top = -166.0
+offset_right = 82.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Window"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="CanvasLayer/Window/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(7.797182e-06, 0.7964645, 0.48781163, 1)
+theme_override_font_sizes/font_size = 32
+text = "
+"
+
+[node name="Description" type="Label" parent="CanvasLayer/Window/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.6162348, 0.37457964, 1)
+theme_override_font_sizes/font_size = 32
+
+[node name="HBox" type="HBoxContainer" parent="CanvasLayer/Window/VBoxContainer"]
+layout_mode = 2
+
+[node name="Option1" type="Button" parent="CanvasLayer/Window/VBoxContainer/HBox"]
+layout_mode = 2
+
+[node name="Option2" type="Button" parent="CanvasLayer/Window/VBoxContainer/HBox"]
+layout_mode = 2
+
+[node name="Option3" type="Button" parent="CanvasLayer/Window/VBoxContainer/HBox"]
+layout_mode = 2

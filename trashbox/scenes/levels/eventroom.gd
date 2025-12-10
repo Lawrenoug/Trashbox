@@ -11,11 +11,11 @@ extends Node2D
 @export var reward_pool: Array[PackedScene] 
 
 # --- 内部引用 ---
-@onready var title_label = $CanvasLayer/Window/Title
-@onready var desc_label = $CanvasLayer/Window/Description
-@onready var btn_1 = $CanvasLayer/Window/HBox/Option1
-@onready var btn_2 = $CanvasLayer/Window/HBox/Option2
-@onready var btn_3 = $CanvasLayer/Window/HBox/Option3
+@onready var title_label = $CanvasLayer/Window/VBoxContainer/Title
+@onready var desc_label = $CanvasLayer/Window/VBoxContainer/Description
+@onready var btn_1 = $CanvasLayer/Window/VBoxContainer/HBox/Option1
+@onready var btn_2 = $CanvasLayer/Window/VBoxContainer/HBox/Option2
+@onready var btn_3 = $CanvasLayer/Window/VBoxContainer/HBox/Option3
 @onready var hp_bar = $CanvasLayer/HUD/HPBar # 确保你把 HUD 复制过来了
 
 var player_ref = null

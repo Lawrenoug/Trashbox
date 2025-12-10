@@ -1,4 +1,4 @@
-extends "res://trashbox/scenes/levels/event_room.gd"
+extends "res://trashbox/scenes/levels/eventroom.gd"
 
 func _ready():
 	event_title = "系统警告：致命异常"

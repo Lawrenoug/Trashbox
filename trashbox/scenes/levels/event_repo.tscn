@@ -1,0 +1,107 @@
+[gd_scene load_steps=9 format=3 uid="uid://r2ouh57xktec"]
+
+[ext_resource type="Script" uid="uid://bkg8u81o2o6to" path="res://event_repo.gd" id="1_5g2ng"]
+[ext_resource type="PackedScene" uid="uid://dse68heddfkid" path="res://trashbox/战斗系统/Attack/Skills/Projectile/字符代码块.tscn" id="2_g21b7"]
+[ext_resource type="Script" uid="uid://08knfvnynesi" path="res://trashbox/战斗系统/Characters/Player/PlayerManager.cs" id="2_wlbki"]
+[ext_resource type="Texture2D" uid="uid://de5or7du4lccg" path="res://trashbox/战斗系统/UI/kenney_tiny-dungeon/Tiles/tile_0110.png" id="3_t5yrx"]
+[ext_resource type="PackedScene" uid="uid://c3mcrc6vgcsfb" path="res://trashbox/战斗系统/Attack/Skills/Projectile/内存剖析器代码块.tscn" id="3_uu40m"]
+[ext_resource type="PackedScene" uid="uid://c3ly5p5u0b24c" path="res://trashbox/战斗系统/Attack/Skills/Projectile/后期处理代码块.tscn" id="4_uwrcw"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_g21b7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_87pwu"]
+bg_color = Color(0.3469611, 0.72328484, 0.44457972, 1)
+
+[node name="Event_Repo" type="Node2D"]
+script = ExtResource("1_5g2ng")
+reward_pool = Array[PackedScene]([ExtResource("2_g21b7"), ExtResource("3_uu40m"), ExtResource("4_uwrcw")])
+
+[node name="Background" type="ColorRect" parent="."]
+offset_right = 1920.0
+offset_bottom = 1080.0
+color = Color(0.019607844, 0.0627451, 0.019607844, 1)
+
+[node name="Environment" type="Node2D" parent="."]
+
+[node name="Cables" type="Line2D" parent="Environment"]
+position = Vector2(-92.71535, -87.4054)
+scale = Vector2(1.1466259, 1.2162162)
+points = PackedVector2Array(124, 279, 568, 202, 352, 678, 1734, 641, 1294, 109, 899, 388, 1408, 878, 377, 940, 796, 368, 814, 365, 881, 437)
+default_color = Color(0.17186409, 0.38818085, 0.26058865, 1)
+
+[node name="Cables2" type="Line2D" parent="Environment"]
+position = Vector2(-20.190844, -163.79521)
+scale = Vector2(1.0283535, 1.1383442)
+points = PackedVector2Array(52, 1033, 751, 182, 1408, 577, 1866, 1080)
+default_color = Color(0.17186409, 0.38818085, 0.26058865, 1)
+
+[node name="OldMonitor" type="Sprite2D" parent="Environment"]
+
+[node name="Player" type="RigidBody2D" parent="." node_paths=PackedStringArray("startShootPosition", "BulletContainer")]
+position = Vector2(263, 123)
+gravity_scale = 0.0
+script = ExtResource("2_wlbki")
+startShootPosition = NodePath("发射点")
+BulletContainer = NodePath("")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("CircleShape2D_g21b7")
+
+[node name="Sprite2D" type="Sprite2D" parent="Player"]
+texture_filter = 1
+rotation = -1.5707964
+texture = ExtResource("3_t5yrx")
+
+[node name="发射点" type="Node2D" parent="Player"]
+position = Vector2(50, 0)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="HUD" type="CanvasLayer" parent="CanvasLayer"]
+
+[node name="HPBar" type="ProgressBar" parent="CanvasLayer/HUD"]
+offset_left = 17.0
+offset_top = 21.0
+offset_right = 96.0
+offset_bottom = 48.0
+theme_override_styles/background = SubResource("StyleBoxFlat_87pwu")
+
+[node name="Window" type="PanelContainer" parent="CanvasLayer"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -524.0
+offset_top = -261.0
+offset_right = 524.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Window"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="CanvasLayer/Window/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(7.797182e-06, 0.7964645, 0.48781163, 1)
+theme_override_font_sizes/font_size = 32
+text = "SYSTEM_REPO_V1.0"
+horizontal_alignment = 1
+
+[node name="Description" type="Label" parent="CanvasLayer/Window/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.6162348, 0.37457964, 1)
+theme_override_font_sizes/font_size = 32
+text = "\"（剧情文本会由代码自动填充）\""
+
+[node name="HBox" type="HBoxContainer" parent="CanvasLayer/Window/VBoxContainer"]
+layout_mode = 2
+
+[node name="Option1" type="Button" parent="CanvasLayer/Window/VBoxContainer/HBox"]
+layout_mode = 2
+
+[node name="Option2" type="Button" parent="CanvasLayer/Window/VBoxContainer/HBox"]
+layout_mode = 2
+
+[node name="Option3" type="Button" parent="CanvasLayer/Window/VBoxContainer/HBox"]
+layout_mode = 2
