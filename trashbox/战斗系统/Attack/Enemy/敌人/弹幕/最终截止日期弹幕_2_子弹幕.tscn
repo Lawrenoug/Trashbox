@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://dg41l7f4vr0jt"]
+
+[ext_resource type="Script" uid="uid://cp7c65add6q2t" path="res://trashbox/战斗系统/Attack/Enemy/敌人/弹幕/TheFinalDeadlineBullet_2_child.cs" id="1_mkvgr"]
+[ext_resource type="Texture2D" uid="uid://dibjw25l5fc3j" path="res://trashbox/战斗系统/UI/kenney_tiny-dungeon/Tiles/tile_0021.png" id="2_at7y1"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_fyao2"]
+
+[node name="最终截止日期弹幕_2_子弹幕" type="RigidBody2D"]
+collision_layer = 0
+collision_mask = 4
+gravity_scale = 0.0
+script = ExtResource("1_mkvgr")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_at7y1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_fyao2")

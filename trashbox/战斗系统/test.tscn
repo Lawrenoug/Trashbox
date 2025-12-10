@@ -7,8 +7,8 @@
 [ext_resource type="Texture2D" uid="uid://wu5u283uabfv" path="res://trashbox/战斗系统/UI/kenney_tiny-dungeon/Tiles/tile_0108.png" id="4_vbegm"]
 [ext_resource type="PackedScene" uid="uid://dk1ae2t3e6fi7" path="res://trashbox/战斗系统/技能战斗列表.tscn" id="5_ykrsh"]
 [ext_resource type="PackedScene" uid="uid://bj20pol0nbg0o" path="res://trashbox/战斗系统/技能组背包.tscn" id="6_g14j6"]
-[ext_resource type="PackedScene" uid="uid://bka7d3r5nvwxj" path="res://trashbox/战斗系统/Attack/Enemy/敌人/设定冲突.tscn" id="8_stln8"]
-[ext_resource type="PackedScene" uid="uid://o1g2yn4pe36c" path="res://trashbox/战斗系统/Attack/Enemy/敌人/弹幕/设定冲突弹幕_1.tscn" id="9_2g437"]
+[ext_resource type="PackedScene" uid="uid://co2ussswtoqtm" path="res://trashbox/战斗系统/Attack/Enemy/敌人/最终截止日期.tscn" id="8_fp85g"]
+[ext_resource type="PackedScene" uid="uid://dns026pgvcknd" path="res://trashbox/战斗系统/Attack/Enemy/敌人/弹幕/最终截止日期弹幕_3.tscn" id="9_stln8"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6uqi0"]
 
@@ -81,6 +81,6 @@ texture_filter = 1
 scale = Vector2(9, 9)
 texture = ExtResource("4_vbegm")
 
-[node name="设定冲突" parent="." instance=ExtResource("8_stln8")]
-position = Vector2(615, 303)
-bulletPrefab = ExtResource("9_2g437")
+[node name="最终截止日期" parent="." instance=ExtResource("8_fp85g")]
+position = Vector2(507, 259)
+bulletPrefab_3 = ExtResource("9_stln8")
