@@ -3,29 +3,53 @@ extends Node2D
 @onready var hp_bar = $HUD/HPBar
 
 func _ready():
-	# 等待一帧，确保 Player 已经生成（如果是动态生成的话）
-	# 如果 Player 是直接放在场景里的，可以直接获取
+	# --- 原有逻辑 ---
 	var player = get_node_or_null("Player") 
-	# 或者如果 Player 是由 Engine 生成并塞进来的，我们需要等 Engine 通知
-	
 	if player:
 		_connect_player(player)
+	
+	# --- 【新增】生成测试用的跳过按钮 ---
+	_create_debug_skip_button()
 
-# 这个函数供外部（Engine）调用，当它把 Player 放入场景后
+# --- 【新增】动态创建UI ---
+func _create_debug_skip_button():
+	# 创建一个独立的 CanvasLayer 确保按钮在最上层
+	var debug_layer = CanvasLayer.new()
+	debug_layer.name = "DebugLayer"
+	add_child(debug_layer)
+	
+	var btn = Button.new()
+	btn.text = "DEBUG: 强制通关 (返回地图)"
+	btn.global_position = Vector2(1600, 20) # 放在右上角
+	btn.custom_minimum_size = Vector2(300, 50)
+	btn.modulate = Color(1, 0, 1) # 紫色显眼一点
+	
+	# 连接点击信号
+	btn.pressed.connect(_on_skip_level_pressed)
+	debug_layer.add_child(btn)
+
+# --- 【新增】跳过逻辑 ---
+func _on_skip_level_pressed():
+	print("DEBUG: 强制通关！")
+	
+	# 1. 更新全局进度 (进度 +1)
+	GlobalGameState.current_level_progress += 1
+	
+	# 2. 【核心修改】设置标记：告诉桌面“回去后立刻打开引擎”
+	GlobalGameState.should_open_engine_automatically = true
+	
+	# 3. 切换回桌面
+	get_tree().change_scene_to_file(GlobalGameState.desktop_scene_path)
+
+# --- 原有逻辑保持不变 ---
 func setup_player(player_node):
 	_connect_player(player_node)
 
 func _connect_player(player):
-	# 连接 C# 信号 "HealthChanged"
-	# 注意：C# 的 [Signal] 在 GDScript 中连接时，名字通常保持原样
 	if player.has_signal("HealthChanged"):
 		player.connect("HealthChanged", _on_health_changed)
-		
-		# 初始化血条 (假设 player 有 CurrentHP 和 MaxHP 属性)
-		# 如果 C# 变量是 private，你需要 C# 提供 Get 方法或改为 public
-		# 这里假设你在 C# PlayerManager 里把 blood 改成了 public 或者有对应属性
-		hp_bar.value = player.get("blood") 
-		hp_bar.max_value = player.get("maxBlood") # 需要你在 C# 加上这个
+		hp_bar.value = player.get("blood") if player.get("blood") else 100
+		hp_bar.max_value = player.get("maxBlood") if player.get("maxBlood") else 100
 
 func _on_health_changed(current, max_hp):
 	hp_bar.value = current

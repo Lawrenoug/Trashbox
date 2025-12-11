@@ -16,6 +16,10 @@ config/features=PackedStringArray("4.5", "C#", "Forward Plus")
 config/icon="res://trashbox/战斗系统/icon.svg"
 <<<<<<<HEADrun/main_scene="uid://diioyhmevc7oj"
 
+[autoload]
+
+GlobalGameState="*res://trashbox/scripts/global_game_state.gd"
+
 [display]
 
 window/size/viewport_width=1920

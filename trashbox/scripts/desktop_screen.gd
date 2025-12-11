@@ -28,12 +28,20 @@ func _ready():
 	# 初始化：隐藏弹窗
 	if notification_popup:
 		notification_popup.visible = false
-
-	# 连接图标点击信号
+	# 连接图标点击信号 (保持不变)
 	if 文件夹: 文件夹.pressed.connect(open_window.bind(AppFolderScene))
 	if 回收站: 回收站.pressed.connect(open_window.bind(AppRecycleScene))
 	if chatbro: chatbro.pressed.connect(open_window.bind(AppChatScene))
 	if 引擎: 引擎.pressed.connect(open_window.bind(AppGodotScene))
+
+	# --- 【新增】检查全局标记，决定是否自动打开引擎 ---
+	if GlobalGameState.should_open_engine_automatically:
+		# 重置标记，防止下次正常登录时也打开
+		GlobalGameState.should_open_engine_automatically = false
+		
+		# 稍微延迟一帧，确保桌面 UI 初始化完毕后再打开窗口
+		# open_window 是你在 desktop_screen.gd 里定义的函数
+		call_deferred("open_window", AppGodotScene)
 
 # --- [修改后] 通用的打开窗口逻辑 ---
 func open_window(scene_to_open: PackedScene):

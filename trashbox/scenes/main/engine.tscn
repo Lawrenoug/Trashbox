@@ -1,10 +1,13 @@
-[gd_scene load_steps=12 format=3 uid="uid://deg0wronr46cw"]
+[gd_scene load_steps=15 format=3 uid="uid://deg0wronr46cw"]
 
 [ext_resource type="PackedScene" uid="uid://bv17lh6n2q5kb" path="res://trashbox/scenes/main/window_base.tscn" id="1_wavt3"]
 [ext_resource type="Script" uid="uid://bdg5phergyfhk" path="res://trashbox/scripts/engine.gd" id="2_em83p"]
+[ext_resource type="PackedScene" uid="uid://r7iq45uonsyw" path="res://trashbox/scenes/levels/event_bsod.tscn" id="4_v50wr"]
 [ext_resource type="PackedScene" uid="uid://cdm3a2td2r178" path="res://trashbox/scenes/main/mapsystem.tscn" id="5_58lqr"]
 [ext_resource type="PackedScene" uid="uid://cty56ew0kcqbu" path="res://trashbox/scenes/levels/level_base.tscn" id="5_iba87"]
+[ext_resource type="PackedScene" uid="uid://bcsvldvhgakuf" path="res://trashbox/scenes/levels/event_duck.tscn" id="5_rxoyf"]
 [ext_resource type="PackedScene" uid="uid://dk1ae2t3e6fi7" path="res://trashbox/战斗系统/技能战斗列表.tscn" id="5_t5267"]
+[ext_resource type="PackedScene" uid="uid://r2ouh57xktec" path="res://trashbox/scenes/levels/event_repo.tscn" id="6_d0w8n"]
 [ext_resource type="PackedScene" uid="uid://bj20pol0nbg0o" path="res://trashbox/战斗系统/技能组背包.tscn" id="6_ftt37"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_iba87"]
@@ -27,6 +30,7 @@ offset_right = 1920.0
 offset_bottom = 1080.0
 script = ExtResource("2_em83p")
 level_scenes = Array[PackedScene]([ExtResource("5_iba87")])
+event_scenes = Array[PackedScene]([ExtResource("4_v50wr"), ExtResource("5_rxoyf"), ExtResource("6_d0w8n")])
 
 [node name="CloseButton" parent="BgColor/MainLayout/TitleBar" index="1"]
 text = "X"

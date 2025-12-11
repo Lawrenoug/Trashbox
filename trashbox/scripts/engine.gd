@@ -10,6 +10,7 @@ extends "res://trashbox/scripts/window_base.gd"
 # --- 2. 接口 ---
 # 关卡场景列表 (地图跳转用)
 @export var level_scenes: Array[PackedScene]
+@export var event_scenes: Array[PackedScene]
 
 # 练功房场景
 const PreviewStageScene = preload("res://trashbox/scenes/main/skill_preview_stage.tscn")
@@ -36,41 +37,30 @@ var idle_messages = [
 var status_timer = 0.0
 
 func _ready():
-	super._ready() # 调用父类，保证窗口拖拽
-	
-	# 【关键修改 1】将自己加入 "EngineUI" 组
-	# 这样队友的 C# 脚本就能找到这个节点并调用函数
+	super._ready() 
 	add_to_group("EngineUI")
 	
-	# 初始化：加载中间的练功房
 	_load_preview_stage()
 	
-	# 设置默认文本
-	description_text.text = "[center]系统就绪。\n请点击左侧背包中的 [color=yellow]技能图标[/color] 查看详情。[/center]"
+	description_text.text = "[center]系统就绪。\n请点击左侧背包中的技能图标查看详情。[/center]"
 	
-	# 连接地图信号
 	if map_system and map_system.has_signal("level_selected"):
 		map_system.level_selected.connect(_on_level_selected)
 
 func _process(delta):
-	# 闲置文本逻辑
 	status_timer += delta
 	if status_timer > 3.0:
 		status_timer = 0
 		if status_label and not status_label.text.begins_with(">"): 
-			_show_random_idle_msg()
+			status_label.text = idle_messages.pick_random()
 
 # --- 加载练功房 ---
 func _load_preview_stage():
 	for child in preview_viewport.get_children():
 		child.queue_free()
-	
 	if PreviewStageScene:
 		current_preview_instance = PreviewStageScene.instantiate()
-		current_preview_instance.name = "SkillPreviewStage"
 		preview_viewport.add_child(current_preview_instance)
-	else:
-		print("错误：未找到练功房场景 skill_preview_stage.tscn")
 
 # --- 【关键修改 2】供 C# 脚本调用的新接口 ---
 # 当你在背包里点击图标时，Drapskill.cs 会调用这个函数
@@ -114,17 +104,41 @@ func preview_skill_instance(skill_node: Node):
 
 # --- 地图选择 -> 全屏跳转 ---
 func _on_level_selected(level_index, level_type):
-	print("Engine: 收到地图选择信号 -> 层数: ", level_index, ", 类型: ", level_type)
+	print("Engine: 收到地图信号 -> 层数: ", level_index, ", 类型: ", level_type)
 	
-	# 这里你可以根据 level_type (0=普通, 1=精英, 2=Boss, 3=事件) 做不同的逻辑
-	# 目前暂时保持原有的按索引跳转逻辑：
+	# 根据 mapsystem.gd 的定义：
+	# 0=普通战斗, 1=精英战斗, 2=Boss, 3=事件房
 	
-	var safe_index = 0
-	if level_scenes.size() > 0:
-		# 防止索引越界
-		safe_index = level_index % level_scenes.size()
-	
-	load_level_full_screen(safe_index)
+	if level_type == 3:
+		# === 进入事件房逻辑 ===
+		if event_scenes.size() > 0:
+			# 这里可以选择随机一个事件，或者按顺序
+			# 比如：随机抽一个事件房
+			var random_event = event_scenes.pick_random()
+			_perform_scene_change(random_event, "正在加载事件模块...")
+		else:
+			print("错误：你还没在 Engine 的 Inspector 里配置 Event Scenes 数组！")
+			set_status_log("Error: No Event Scenes configured!")
+			
+	else:
+		# === 进入战斗逻辑 (0, 1, 2) ===
+		if level_scenes.size() > 0:
+			# 简单的按索引取模，防止越界
+			var safe_index = level_index % level_scenes.size()
+			var combat_scene = level_scenes[safe_index]
+			_perform_scene_change(combat_scene, "正在部署战斗环境 (Level %d)..." % level_index)
+		else:
+			print("错误：你还没在 Engine 的 Inspector 里配置 Level Scenes 数组！")
+			set_status_log("Error: No Level Scenes configured!")
+			
+func _perform_scene_change(scene_res: PackedScene, log_msg: String):
+	if scene_res:
+		set_status_log(log_msg)
+		# 延迟一点点跳转，让玩家看到 Log 变化
+		await get_tree().create_timer(0.5).timeout
+		get_tree().change_scene_to_packed(scene_res)
+	else:
+		print("错误：目标场景资源为空")
 
 # --- 跳转函数 ---
 func load_level_full_screen(index: int):

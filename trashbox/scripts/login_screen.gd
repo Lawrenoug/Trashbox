@@ -22,7 +22,7 @@ func _ready():
 	# 当用户在输入框按回车时，会触发这个信号
 	password_input.text_submitted.connect(_on_password_enter)
 	
-func _on_password_enter(new_text: String):
+func _on_password_enter(_new_text: String):
 	_on_login_attempt()
 
 func _on_login_attempt():

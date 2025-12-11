@@ -61,13 +61,25 @@ func _on_option_3_clicked():
 	_leave_event()
 
 func _leave_event():
-	print("事件结束，返回地图或下一关")
-	# 这里通常调用 Engine 的逻辑返回地图，或者直接 finish
-	# 暂时先打印，实际整合时可能需要发信号给 Engine
-	# 比如: get_tree().call_group("EngineUI", "return_to_map")
+	print("事件结束，结算进度并返回...")
 	
-	# 简单处理：直接禁用所有按钮，显示“处理完成”
-	btn_1.disabled = true
-	btn_2.disabled = true
-	btn_3.disabled = true
-	desc_label.text += "\n\n[color=green]> 操作执行完毕。正在等待系统回收...[/color]"
+	# 1. 禁用按钮防止重复点击
+	if btn_1: btn_1.disabled = true
+	if btn_2: btn_2.disabled = true
+	if btn_3: btn_3.disabled = true
+	
+	# 2. 给一点点延迟让玩家看清结果文本 (可选，比如 1.5 秒)
+	if desc_label:
+		desc_label.text += "\n\n[color=yellow]>> 正在保存状态并退出...[/color]"
+	
+	await get_tree().create_timer(1.0).timeout
+	
+	# 3. 【核心逻辑】和 level_base 的强制通关一样
+	# 事件房通常也算作通过了一层，所以进度 +1
+	GlobalGameState.current_level_progress += 1
+	
+	# 4. 设置标记：回去自动开引擎
+	GlobalGameState.should_open_engine_automatically = true
+	
+	# 5. 切换回桌面
+	get_tree().change_scene_to_file(GlobalGameState.desktop_scene_path)

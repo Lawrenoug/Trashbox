@@ -15,18 +15,33 @@ const LAYER_COUNT = 10            # 关卡总数
 @onready var player_icon = $MapScroller/MapCanvas/PlayerIcon
 @onready var scroller = $MapScroller
 
-# 存储所有按钮的数组
 var map_nodes = []
-# 当前进度 (-1: 未开始, 0: 第一关...)
+# 当前进度 (这个变量现在由全局变量控制)
 var current_level_index = -1
 
 func _ready():
-	# 确保玩家图标别太大 (根据你的截图，它太大了)
+	# 确保玩家图标别太大
 	player_icon.scale = Vector2(0.6, 0.6) 
-	player_icon.z_index = 2 # 保证在最上面
+	player_icon.z_index = 2 
+	
+	# --- 【新增】从全局单例读取进度 ---
+	# 如果是第一次运行，GlobalGameState.current_level_progress 默认为 -1
+	# 我们把它同步过来
+	current_level_index = GlobalGameState.current_level_progress
 	
 	_generate_single_line_map()
 	_update_node_states()
+	
+	# --- 【新增】如果是刚打完回来，自动把玩家图标移动到最新关卡位置 ---
+	if current_level_index >= 0 and current_level_index < LAYER_COUNT:
+		# 等待一帧让节点生成完毕
+		await get_tree().process_frame 
+		if map_nodes.size() > current_level_index:
+			var btn = map_nodes[current_level_index]
+			# 简单的让玩家图标瞬移过去，表示"我在这里"
+			# 如果你想更精细，可以让它停在 current_level_index + 1 (下一关) 的位置
+			# 下面这个逻辑是停在"刚打完的这一关"
+			player_icon.position = btn.position + Vector2(NODE_SIZE.x/2, -30)
 
 # 生成单行地图
 func _generate_single_line_map():
