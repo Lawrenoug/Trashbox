@@ -9,7 +9,7 @@ const ICON_EVENT = preload("res://trashbox/assets/sprites/folder.png") # 【新�
 # --- 2. 布局配置 ---
 const NODE_SIZE = Vector2(128,128) # 【关键】强制按钮大小，不要太大
 const X_SPACING = 250             # 横向间距
-const LAYER_COUNT = 10            # 关卡总数
+const LAYER_COUNT = 8          # 关卡总数
 
 @onready var map_canvas = $MapScroller/MapCanvas
 @onready var player_icon = $MapScroller/MapCanvas/PlayerIcon

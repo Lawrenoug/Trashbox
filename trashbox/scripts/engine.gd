@@ -106,30 +106,29 @@ func preview_skill_instance(skill_node: Node):
 func _on_level_selected(level_index, level_type):
 	print("Engine: 收到地图信号 -> 层数: ", level_index, ", 类型: ", level_type)
 	
-	# 根据 mapsystem.gd 的定义：
-	# 0=普通战斗, 1=精英战斗, 2=Boss, 3=事件房
-	
 	if level_type == 3:
-		# === 进入事件房逻辑 ===
+		# 事件房逻辑 (保持不变)
 		if event_scenes.size() > 0:
-			# 这里可以选择随机一个事件，或者按顺序
-			# 比如：随机抽一个事件房
 			var random_event = event_scenes.pick_random()
 			_perform_scene_change(random_event, "正在加载事件模块...")
-		else:
-			print("错误：你还没在 Engine 的 Inspector 里配置 Event Scenes 数组！")
-			set_status_log("Error: No Event Scenes configured!")
+			
+	elif level_type == 2:
+		# --- 【新增】Boss 房逻辑 ---
+		# 如果你有专门的 Boss 场景 (比如 boss_level.tscn)
+		# 建议在 Inspector 里把 level_scenes 的最后一个元素设为 Boss 场景
+		# 或者专门加一个 @export var boss_scene: PackedScene 变量
+		
+		# 简单做法：去 level_scenes 数组里拿最后一个场景当 Boss 关
+		if level_scenes.size() > 0:
+			var boss_scene = level_scenes[level_scenes.size() - 1] 
+			_perform_scene_change(boss_scene, "警告：检测到高危漏洞 (Boss战)！")
 			
 	else:
-		# === 进入战斗逻辑 (0, 1, 2) ===
+		# 普通/精英战斗 (保持不变)
 		if level_scenes.size() > 0:
-			# 简单的按索引取模，防止越界
 			var safe_index = level_index % level_scenes.size()
 			var combat_scene = level_scenes[safe_index]
-			_perform_scene_change(combat_scene, "正在部署战斗环境 (Level %d)..." % level_index)
-		else:
-			print("错误：你还没在 Engine 的 Inspector 里配置 Level Scenes 数组！")
-			set_status_log("Error: No Level Scenes configured!")
+			_perform_scene_change(combat_scene, "正在部署战斗环境...")
 			
 func _perform_scene_change(scene_res: PackedScene, log_msg: String):
 	if scene_res:

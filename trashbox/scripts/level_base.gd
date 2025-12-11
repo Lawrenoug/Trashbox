@@ -101,27 +101,51 @@ func _save_player_data():
 
 # --- 离开逻辑 ---
 func _on_skip_level_pressed():
-	print("DEBUG: 结算...")
+	print("--- [DEBUG] 按钮被点击 ---")
 	
-	var room_mgr = get_node_or_null("/root/RoomManager")
-	var layer_index = GlobalGameState.current_level_progress + 1 
-	if room_mgr:
-		var rewards = room_mgr.GetSkills(layer_index)
-		if rewards:
-			room_mgr.SendSkillToBackpack(rewards)
-		room_mgr.ExitRoom()
+	# 1. 暂时屏蔽 C# 逻辑，先测跳转功能
+	# 如果这里报错，说明是队友的 C# 代码卡住了 GDScript
+	# var room_mgr = get_node_or_null("/root/RoomManager")
+	# var layer_index = GlobalGameState.current_level_progress + 1 
+	# if room_mgr:
+	# 	var rewards = room_mgr.GetSkills(layer_index)
+	# 	if rewards:
+	# 		room_mgr.SendSkillToBackpack(rewards)
+	# 	room_mgr.ExitRoom()
+	print("--- [DEBUG] 已跳过 C# 交互 (排查用) ---")
 	
-	# 保存数据
+	# 2. 存档 (这是纯 GDScript，应该没事)
 	_save_player_data()
+	print("--- [DEBUG] 存档完成 ---")
 	
-	# 销毁玩家
-	current_player.queue_free()
+	# 3. 销毁玩家
+	if current_player:
+		current_player.queue_free()
 	
-	# 跳转
+	# 4. 更新进度
+	print("--- [DEBUG] 当前进度: ", GlobalGameState.current_level_progress)
 	GlobalGameState.current_level_progress += 1
-	GlobalGameState.should_open_engine_automatically = true
-	get_tree().change_scene_to_file(GlobalGameState.desktop_scene_path)
-
+	print("--- [DEBUG] 更新后进度: ", GlobalGameState.current_level_progress)
+	
+	# 5. 通关判断 (假设总共8关，打完第8关索引变成7)
+	# 也就是: 0,1,2,3,4,5,6 (前7关) -> 7 (第8关通关)
+	if GlobalGameState.current_level_progress >= 7: 
+		print("--- [DEBUG] 判定：通关！尝试跳转结局 ---")
+		var end_scene_path = "res://trashbox/scenes/main/GameEnd.tscn"
+		
+		# 检查文件是否存在
+		if ResourceLoader.exists(end_scene_path):
+			var err = get_tree().change_scene_to_file(end_scene_path)
+			if err != OK:
+				print("--- [ERROR] 跳转失败，错误码: ", err)
+		else:
+			print("--- [ERROR] 找不到结局文件！请检查路径: ", end_scene_path)
+			
+	else:
+		print("--- [DEBUG] 判定：未通关，返回桌面 ---")
+		GlobalGameState.should_open_engine_automatically = true
+		get_tree().change_scene_to_file(GlobalGameState.desktop_scene_path)
+		
 # --- 辅助 UI ---
 func _create_debug_skip_button():
 	var layer = CanvasLayer.new()

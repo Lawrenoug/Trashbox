@@ -17,6 +17,7 @@ const AppGodotScene = preload("res://trashbox/scenes/main/engine.tscn")
 @onready var notification_anim = $NotificationPopup/AnimationPlayer
 @onready var notif_title = $NotificationPopup/HBoxContainer/VBoxContainer/Title
 @onready var notif_msg = $NotificationPopup/HBoxContainer/VBoxContainer/Message
+@onready var clock_label = $Taskbar/TaskbarItems/ClockLabel
 
 # --- 4. 全局聊天数据存储 ---
 var global_chat_data = {
@@ -124,3 +125,22 @@ func show_notification(title_text: String, msg_text: String):
 			await notification_anim.animation_finished
 		
 		notification_popup.visible = false
+
+func _process(delta):
+	_update_system_time()
+
+func _update_system_time():
+	if clock_label:
+		# 1. 获取系统时间字典 (包含年、月、日、时、分、秒)
+		var time = Time.get_datetime_dict_from_system()
+		
+		# 2. 格式化字符串
+		# %02d 的意思是：如果是1位数，前面自动补0 (例如 9:5 -> 09:05)
+		# 格式：小时:分钟
+		#var time_str = "%02d:%02d" % [time.hour, time.minute]
+		
+		# 如果你想显示日期，可以用下面这行：
+		var time_str = "%d/%02d\n%02d:%02d" % [time.month, time.day, time.hour, time.minute]
+		
+		# 3. 更新 UI
+		clock_label.text = time_str
