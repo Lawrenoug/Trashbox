@@ -127,7 +127,7 @@ func _on_locked_folder_clicked(item_data):
 	
 	# 创建输入框
 	var input = LineEdit.new()
-	input.placeholder_text = "提示: 默认密码是 admin"
+	input.placeholder_text = "默认密码是 admin"
 	input.secret = true # 隐藏字符
 	dialog.add_child(input)
 	dialog.register_text_enter(input) # 允许回车确认
@@ -181,12 +181,26 @@ func _create_icon_btn(text, icon):
 	var btn = Button.new()
 	btn.text = text
 	btn.icon = icon
+	
+	# 【关键修改 1】允许图标跟随按钮大小缩放
+	btn.expand_icon = true 
+	
+	# 【关键修改 2】设置图标尺寸限制 (让图标别撑满整个按钮，稍微留点空隙)
+	# 如果不加这个，图标可能会变形，但这取决于你的素材。
+	# 通常 icon_alignment 配合 expand_icon 就够了，或者你可以设置 icon_max_width
+	
 	btn.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	btn.vertical_icon_alignment = VERTICAL_ALIGNMENT_TOP
-	btn.custom_minimum_size = Vector2(80, 100)
+	
+	# 【关键修改 3】强制变大尺寸 (原 80,100 -> 改 160,200)
+	btn.custom_minimum_size = Vector2(160, 200)
+	
 	btn.flat = true
 	btn.clip_text = true
 	btn.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	# 鼠标悬停显示全名
 	btn.tooltip_text = text 
+	
+	# 增加字体覆盖，防止主题没生效
+	btn.add_theme_font_size_override("font_size", 24) 
+	
 	return btn

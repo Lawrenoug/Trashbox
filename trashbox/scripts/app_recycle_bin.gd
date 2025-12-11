@@ -48,14 +48,18 @@ func _create_file_btn(file_name, icon, type):
 	var btn = Button.new()
 	btn.text = file_name
 	btn.icon = icon
+	
+	# 【关键修改】
+	btn.expand_icon = true 
+	btn.custom_minimum_size = Vector2(160, 200) # 放大两倍
+	
 	btn.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	btn.vertical_icon_alignment = VERTICAL_ALIGNMENT_TOP
-	btn.custom_minimum_size = Vector2(80, 100)
 	btn.flat = true
 	btn.clip_text = true
 	btn.tooltip_text = file_name
 	
-	# 绑定点击事件，传入类型和按钮自身的引用
+	# 绑定点击事件
 	btn.pressed.connect(_on_file_clicked.bind(type, btn))
 	
 	file_grid.add_child(btn)

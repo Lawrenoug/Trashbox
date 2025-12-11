@@ -44,34 +44,39 @@ func open_window(scene_to_open: PackedScene):
 	var window_instance = scene_to_open.instantiate()
 	add_child(window_instance)
 	
-	# === 核心修改：如果是引擎，强制全屏 ===
+	# === 情况1：如果是引擎，强制全屏 ===
 	if scene_to_open == AppGodotScene:
-		# 获取屏幕大小 (1920x1080)
 		var screen_size = get_viewport_rect().size
-		# 设置位置为左上角 (0,0)
 		window_instance.position = Vector2.ZERO
-		# 设置大小为全屏
 		window_instance.size = screen_size
-		# (可选) 如果你想更彻底一点，也可以设置最小尺寸
 		window_instance.custom_minimum_size = screen_size
 		
 	else:
-		# === 其他应用：保持原来的小窗口逻辑 ===
+		# === 情况2：其他应用（文件夹、聊天等） ===
 		
-		# 如果是聊天窗口，传递数据
+		# 1. 传递数据 (如果是聊天窗口)
 		if window_instance.has_method("init_data"):
 			window_instance.init_data(self)
 		
-		# 随机偏移位置
+		# 2. 【核心修复】强制放大窗口尺寸
+		# 获取窗口原本设定的最小尺寸
+		var win_size = window_instance.custom_minimum_size
+		
+		# 如果尺寸太小(比如是0或者是旧的400)，给一个高清屏适合的默认值
+		if win_size.x < 100 or win_size == Vector2.ZERO: 
+			win_size = Vector2(800, 600) 
+		else:
+			pass
+			
+		# 应用尺寸
+		window_instance.size = win_size
+		# (可选) 更新最小尺寸防止被拖太小
+		window_instance.custom_minimum_size = win_size 
+		
+		# 3. 计算居中位置
 		var center_pos = get_viewport_rect().size / 2
 		var offset = Vector2(randf_range(-30, 30), randf_range(-30, 30))
 		
-		# 获取窗口默认大小
-		var win_size = window_instance.custom_minimum_size
-		if win_size == Vector2.ZERO: 
-			win_size = Vector2(400, 300)
-			
-		# 设置居中位置
 		window_instance.position = center_pos - (win_size / 2) + offset
 	
 	# 确保新窗口在最上层

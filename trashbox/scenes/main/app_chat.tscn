@@ -12,6 +12,7 @@ bg_color = Color(0.2, 0.2, 0.2, 1)
 bg_color = Color(0.26666668, 0.26666668, 0.26666668, 1)
 
 [node name="WindowBase" instance=ExtResource("1_4n1ku")]
+custom_minimum_size = Vector2(960, 720)
 script = ExtResource("2_haxvl")
 
 [node name="CloseButton" parent="BgColor/MainLayout/TitleBar" index="1"]
@@ -28,6 +29,7 @@ theme_override_constants/separation = 0
 split_offset = 150
 
 [node name="LeftSidebar" type="PanelContainer" parent="BgColor/MainLayout/ContentSlot/SplitView" index="0"]
+custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_tllig")
 
@@ -37,6 +39,7 @@ layout_mode = 2
 [node name="BtnBoss" type="Button" parent="BgColor/MainLayout/ContentSlot/SplitView/LeftSidebar/ContactList" index="0"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 text = "老板"
 icon = ExtResource("3_hvvjn")
 flat = true
@@ -45,6 +48,7 @@ alignment = 0
 [node name="BtnColleague" type="Button" parent="BgColor/MainLayout/ContentSlot/SplitView/LeftSidebar/ContactList" index="1"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 text = "华姐"
 icon = ExtResource("4_pesid")
 flat = true
@@ -66,6 +70,7 @@ layout_mode = 2
 
 [node name="CurrentContactLabel" type="Label" parent="BgColor/MainLayout/ContentSlot/SplitView/RightChatArea/ChatLayout/Header" index="0"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 text = "当前无会话"
 horizontal_alignment = 1
 

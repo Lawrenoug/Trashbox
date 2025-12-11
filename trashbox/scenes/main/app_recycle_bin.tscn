@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://lp5xa7sfd2vs" path="res://trashbox/scripts/app_recycle_bin.gd" id="2_q5pmc"]
 
 [node name="WindowBase" instance=ExtResource("1_p3f36")]
+custom_minimum_size = Vector2(900, 600)
 script = ExtResource("2_q5pmc")
 
 [node name="CloseButton" parent="BgColor/MainLayout/TitleBar" index="1"]

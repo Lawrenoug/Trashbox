@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://r7iq45uonsyw"]
 
-[ext_resource type="Script" uid="uid://x6lmubpr44kl" path="res://trashbox/scenes/levels/event_bsod.gd" id="1_shjl1"]
+[ext_resource type="Script" uid="uid://x6lmubpr44kl" path="res://trashbox/scripts/event_bsod.gd" id="1_shjl1"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_shjl1"]
 bg_color = Color(0.3469611, 0.72328484, 0.44457972, 1)

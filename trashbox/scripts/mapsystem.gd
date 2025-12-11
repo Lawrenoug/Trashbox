@@ -7,8 +7,8 @@ const ICON_ELITE = preload("res://trashbox/assets/sprites/boss.png")
 const ICON_BOSS = preload("res://trashbox/assets/sprites/boss.png")
 const ICON_EVENT = preload("res://trashbox/assets/sprites/folder.png") # 【新增】事件图标(暂用文件夹代替)
 # --- 2. 布局配置 ---
-const NODE_SIZE = Vector2(64, 64) # 【关键】强制按钮大小，不要太大
-const X_SPACING = 150             # 横向间距
+const NODE_SIZE = Vector2(128,128) # 【关键】强制按钮大小，不要太大
+const X_SPACING = 250             # 横向间距
 const LAYER_COUNT = 10            # 关卡总数
 
 @onready var map_canvas = $MapScroller/MapCanvas
@@ -22,7 +22,7 @@ var current_level_index = -1
 
 func _ready():
 	# 确保玩家图标别太大 (根据你的截图，它太大了)
-	player_icon.scale = Vector2(0.3, 0.3) 
+	player_icon.scale = Vector2(0.6, 0.6) 
 	player_icon.z_index = 2 # 保证在最上面
 	
 	_generate_single_line_map()
@@ -30,15 +30,14 @@ func _ready():
 
 # 生成单行地图
 func _generate_single_line_map():
-	# 1. 清理旧数据
-	for child in map_canvas.get_children():
-		if child != player_icon: # 保留玩家图标
-			child.queue_free()
-	map_nodes.clear()
-	
-	# 2. 计算垂直居中的 Y 坐标
-	# 画布高度的一半 - 按钮高度的一半
-	var center_y = (map_canvas.custom_minimum_size.y / 2) - (NODE_SIZE.y / 2)
+	# 1. 强行获取父容器的高度作为参考
+	var container_height = 250.0 
+	if get_parent() is Control:
+		container_height = get_parent().size.y
+	# 2. 重新计算 map_canvas 的高度，确保它够高
+	map_canvas.custom_minimum_size.y = container_height
+	# 3. 计算居中 (使用 container_height)
+	var center_y = (container_height / 2) - (NODE_SIZE.y / 2)
 	
 	# 3. 循环生成节点
 	for i in range(LAYER_COUNT):

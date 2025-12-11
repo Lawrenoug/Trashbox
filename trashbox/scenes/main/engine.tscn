@@ -23,6 +23,8 @@ bg_color = Color(0.3137255, 0.3137255, 0.3137255, 1)
 bg_color = Color(0.3137255, 0.3137255, 0.3137255, 1)
 
 [node name="WindowBase" instance=ExtResource("1_wavt3")]
+offset_right = 1920.0
+offset_bottom = 1080.0
 script = ExtResource("2_em83p")
 level_scenes = Array[PackedScene]([ExtResource("5_iba87")])
 
@@ -125,7 +127,7 @@ stretch = true
 [node name="GameViewport" type="SubViewport" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/PreviewViewport/GameViewContainer" index="0"]
 transparent_bg = true
 handle_input_locally = false
-size = Vector2i(126, 262)
+size = Vector2i(1048, 755)
 render_target_update_mode = 4
 
 [node name="DescriptionPanel" type="PanelContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub" index="1"]
@@ -141,7 +143,7 @@ bbcode_enabled = true
 text = "请在左侧选择一个技能以查看详细文档"
 
 [node name="TimelinePanel" type="PanelContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot" index="3"]
-custom_minimum_size = Vector2(0, 100)
+custom_minimum_size = Vector2(0, 250)
 layout_mode = 2
 
 [node name="MapSystem" parent="BgColor/MainLayout/ContentSlot/EditorRoot/TimelinePanel" index="0" instance=ExtResource("5_58lqr")]

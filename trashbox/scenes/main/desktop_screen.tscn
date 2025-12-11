@@ -68,26 +68,30 @@ text = "20：30
 
 [node name="DesktopIcons" type="GridContainer" parent="."]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 72.0
+offset_bottom = 318.0
 theme_override_constants/v_separation = 10
 
 [node name="文件夹" type="Button" parent="DesktopIcons"]
+custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
 icon = ExtResource("5_wa37d")
 flat = true
 
 [node name="回收站" type="Button" parent="DesktopIcons"]
+custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
 icon = ExtResource("6_fjr7a")
 flat = true
 
 [node name="Chatbro" type="Button" parent="DesktopIcons"]
+custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
 icon = ExtResource("7_on2mt")
 flat = true
 
 [node name="引擎" type="Button" parent="DesktopIcons"]
+custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
 icon = ExtResource("8_w12mn")
 flat = true

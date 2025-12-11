@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://bcsvldvhgakuf"]
 
-[ext_resource type="Script" uid="uid://cdsdphs23igav" path="res://trashbox/scenes/levels/event_duck.gd" id="1_g4kxu"]
+[ext_resource type="Script" uid="uid://cdsdphs23igav" path="res://trashbox/scripts/event_duck.gd" id="1_g4kxu"]
 [ext_resource type="Texture2D" uid="uid://d2jpwpfnp7ko4" path="res://trashbox/assets/sprites/duck.png" id="2_sfqtm"]
 [ext_resource type="Script" uid="uid://08knfvnynesi" path="res://trashbox/战斗系统/Characters/Player/PlayerManager.cs" id="3_mfw6c"]
 [ext_resource type="Texture2D" uid="uid://de5or7du4lccg" path="res://trashbox/战斗系统/UI/kenney_tiny-dungeon/Tiles/tile_0110.png" id="4_bpnpq"]
@@ -27,13 +27,12 @@ position = Vector2(947.99994, 134.00003)
 scale = Vector2(7.062498, 6.96875)
 texture = ExtResource("2_sfqtm")
 
-[node name="Player" type="RigidBody2D" parent="." node_paths=PackedStringArray("startShootPosition", "BulletContainer")]
+[node name="Player" type="RigidBody2D" parent="." node_paths=PackedStringArray("startShootPosition")]
 position = Vector2(932, 415)
 rotation = -1.5707964
 gravity_scale = 0.0
 script = ExtResource("3_mfw6c")
 startShootPosition = NodePath("发射点")
-BulletContainer = NodePath("")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
 shape = SubResource("CircleShape2D_4rh2w")

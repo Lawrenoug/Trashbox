@@ -22,7 +22,7 @@ bg_color = Color(0.7708395, 0.77083945, 0.7708394, 1)
 
 [resource]
 default_font = ExtResource("1_vtok1")
-default_font_size = 16
+default_font_size = 32
 Button/styles/hover = SubResource("StyleBoxFlat_vtok1")
 Button/styles/normal = SubResource("StyleBoxFlat_y1ptq")
 Button/styles/pressed = SubResource("StyleBoxFlat_vrmlt")

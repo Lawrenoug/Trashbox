@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://iawvicmvlkrq" path="res://trashbox/scripts/app_folder.gd" id="2_2cqje"]
 
 [node name="WindowBase" instance=ExtResource("1_t6xrs")]
-custom_minimum_size = Vector2(700, 400)
+custom_minimum_size = Vector2(900, 600)
 script = ExtResource("2_2cqje")
 
 [node name="TitleLabel" parent="BgColor/MainLayout/TitleBar" index="0"]

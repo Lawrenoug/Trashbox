@@ -17,6 +17,13 @@ func _ready():
 	# --- 连接信号 ---
 	login_button.pressed.connect(_on_login_attempt)
 	error_timer.timeout.connect(_on_error_timer_timeout)
+	
+	# 【新增】连接输入框的回车信号
+	# 当用户在输入框按回车时，会触发这个信号
+	password_input.text_submitted.connect(_on_password_enter)
+	
+func _on_password_enter(new_text: String):
+	_on_login_attempt()
 
 func _on_login_attempt():
 	var input_text = password_input.text
