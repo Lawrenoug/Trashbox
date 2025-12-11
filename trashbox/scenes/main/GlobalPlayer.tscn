@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://c2owx4serb720"]
+
+[ext_resource type="Script" uid="uid://08knfvnynesi" path="res://trashbox/战斗系统/Characters/Player/PlayerManager.cs" id="1_raflp"]
+[ext_resource type="Texture2D" uid="uid://de5or7du4lccg" path="res://trashbox/战斗系统/UI/kenney_tiny-dungeon/Tiles/tile_0110.png" id="2_4hag6"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6uqi0"]
+
+[node name="Player" type="RigidBody2D" node_paths=PackedStringArray("startShootPosition", "BulletContainer") groups=["player"]]
+visible = false
+gravity_scale = 0.0
+script = ExtResource("1_raflp")
+startShootPosition = NodePath("发射点")
+BulletContainer = NodePath(".")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_6uqi0")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+rotation = -1.5707964
+scale = Vector2(6, 6)
+texture = ExtResource("2_4hag6")
+
+[node name="发射点" type="Node2D" parent="."]
+position = Vector2(100, 0)

@@ -134,9 +134,19 @@ func _on_level_selected(level_index, level_type):
 func _perform_scene_change(scene_res: PackedScene, log_msg: String):
 	if scene_res:
 		set_status_log(log_msg)
-		# 延迟一点点跳转，让玩家看到 Log 变化
-		await get_tree().create_timer(0.5).timeout
-		get_tree().change_scene_to_packed(scene_res)
+		
+		# --- 【新增】安全检查 ---
+		# 只有当当前节点还在场景树里时，才使用计时器
+		if is_inside_tree():
+			await get_tree().create_timer(0.5).timeout
+			# 等待完再次检查，防止等待期间被销毁
+			if is_inside_tree():
+				get_tree().change_scene_to_packed(scene_res)
+		else:
+			# 如果不在树里（极其罕见），直接尝试跳转
+			var tree = Engine.get_main_loop() as SceneTree
+			if tree:
+				tree.change_scene_to_packed(scene_res)
 	else:
 		print("错误：目标场景资源为空")
 

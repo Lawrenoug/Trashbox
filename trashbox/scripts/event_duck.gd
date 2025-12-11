@@ -12,7 +12,7 @@ func _ready():
 func _on_option_1_clicked():
 	if player_ref:
 		var max_hp = player_ref.get("MaxBlood")
-		var current = player_ref.get("CurrentBlood")
+		var _current = player_ref.get("CurrentBlood")
 		
 		# 回满血或者回很多
 		player_ref.set("CurrentBlood", max_hp)

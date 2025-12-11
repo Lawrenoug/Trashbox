@@ -10,7 +10,7 @@ namespace Attack
 		public int roomIndex=0;//房间索引
 
 
-        //进入房间
+		//进入房间
 		public void EnterRoom(int _index)
 		{
 			if(_index<MaxRoomCount)

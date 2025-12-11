@@ -162,6 +162,15 @@ func _on_node_clicked(index, type):
 	print("地图通知：请求进入第 %d 关, 类型 %d" % [index, type])
 	await tween.finished
 	level_selected.emit(index, type) # 【修改】发出信号带类型
+	var room_mgr = get_node("/root/RoomManager")
+	if room_mgr:
+		print("MapSystem: 通知后端进入房间 ", index)
+		# 调用 C# 的 EnterRoom(int _index)
+		room_mgr.EnterRoom(index)
+	
+	# --- 原有逻辑: 发信号给 Engine 切换场景 ---
+	level_selected.emit(index, type)
+	
 
 # --- 动画工具 ---
 func _start_breathing(node):

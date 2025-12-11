@@ -1,12 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://r7iq45uonsyw"]
+[gd_scene load_steps=5 format=3 uid="uid://r7iq45uonsyw"]
 
 [ext_resource type="Script" uid="uid://x6lmubpr44kl" path="res://trashbox/scripts/event_bsod.gd" id="1_shjl1"]
+[ext_resource type="PackedScene" uid="uid://dk1ae2t3e6fi7" path="res://trashbox/战斗系统/技能战斗列表.tscn" id="2_5p67n"]
+[ext_resource type="PackedScene" uid="uid://bj20pol0nbg0o" path="res://trashbox/战斗系统/技能组背包.tscn" id="3_2wyu1"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_shjl1"]
 bg_color = Color(0.3469611, 0.72328484, 0.44457972, 1)
 
-[node name="Event_BSOD" type="Node2D"]
+[node name="Event_BSOD" type="Node2D" node_paths=PackedStringArray("battle_ui_node", "backpack_ui_node")]
 script = ExtResource("1_shjl1")
+battle_ui_node = NodePath("CanvasLayer/HUD/技能战斗列表")
+backpack_ui_node = NodePath("CanvasLayer/HUD/技能组背包")
 
 [node name="Background" type="ColorRect" parent="."]
 offset_right = 1920.0
@@ -30,6 +34,18 @@ STOP: 0x000000"
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="HUD" type="CanvasLayer" parent="CanvasLayer"]
+
+[node name="技能战斗列表" parent="CanvasLayer/HUD" instance=ExtResource("2_5p67n")]
+offset_left = 1.0
+offset_top = 56.0
+offset_right = 1.0
+offset_bottom = 56.0
+
+[node name="技能组背包" parent="CanvasLayer/HUD" instance=ExtResource("3_2wyu1")]
+offset_left = 2.0
+offset_top = 494.0
+offset_right = 2.0
+offset_bottom = 494.0
 
 [node name="HPBar" type="ProgressBar" parent="CanvasLayer/HUD"]
 offset_left = 17.0
