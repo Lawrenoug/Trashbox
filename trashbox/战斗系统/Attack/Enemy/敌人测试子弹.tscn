@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://58byyl645vjg"]
+
+[ext_resource type="Script" uid="uid://fqqjdd4cwijp" path="res://trashbox/战斗系统/Attack/Enemy/EnemyBullet.cs" id="1_4rlnk"]
+[ext_resource type="Texture2D" uid="uid://bx6cxalom4bc7" path="res://trashbox/战斗系统/UI/kenney_tiny-dungeon/Tiles/tile_0080.png" id="1_pr4on"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hsl8x"]
+
+[node name="敌人测试子弹" type="RigidBody2D"]
+collision_layer = 4
+collision_mask = 0
+gravity_scale = 0.0
+script = ExtResource("1_4rlnk")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+scale = Vector2(3, 3)
+texture = ExtResource("1_pr4on")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(3, 3)
+shape = SubResource("CircleShape2D_hsl8x")

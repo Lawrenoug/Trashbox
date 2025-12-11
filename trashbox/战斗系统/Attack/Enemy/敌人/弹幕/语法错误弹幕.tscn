@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://c1oyhdi4j8ar6"]
+
+[ext_resource type="Texture2D" uid="uid://ct6v8r4wbhlvv" path="res://trashbox/战斗系统/UI/kenney_tiny-dungeon/Tiles/tile_0019.png" id="1_3dbbj"]
+[ext_resource type="Script" uid="uid://11qo4pd11h6p" path="res://trashbox/战斗系统/Attack/Enemy/敌人/弹幕/SyntaxErrorBullet.cs" id="1_lkmpi"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_lkmpi"]
+
+[node name="语法错误弹幕" type="RigidBody2D"]
+gravity_scale = 0.0
+script = ExtResource("1_lkmpi")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("1_3dbbj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_lkmpi")

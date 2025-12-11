@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://dmgmsw5sq46f5"]
+
+[ext_resource type="Script" uid="uid://dc3u6bs2l0kk7" path="res://trashbox/战斗系统/Attack/Enemy/敌人/SpaghettiCodeEnemy.cs" id="1_30a0h"]
+[ext_resource type="Texture2D" uid="uid://drj0v0ccyn1sy" path="res://trashbox/战斗系统/UI/kenney_tiny-dungeon/Tiles/tile_0111.png" id="1_wdhwe"]
+[ext_resource type="PackedScene" uid="uid://djdqsbxbs80n6" path="res://trashbox/战斗系统/Attack/Enemy/敌人/弹幕/屎山代码弹幕.tscn" id="2_hcn3d"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_30a0h"]
+
+[node name="屎山代码" type="RigidBody2D"]
+collision_layer = 4
+collision_mask = 0
+gravity_scale = 0.0
+script = ExtResource("1_30a0h")
+bulletPrefab = ExtResource("2_hcn3d")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(9, 9)
+shape = SubResource("CircleShape2D_30a0h")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+scale = Vector2(9, 9)
+texture = ExtResource("1_wdhwe")
+
+[node name="BulletContainer" type="Node2D" parent="."]
+position = Vector2(-10, 0)
+
+[node name="发射点" type="Node2D" parent="."]
+position = Vector2(-100, 0)

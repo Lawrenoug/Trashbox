@@ -54,53 +54,47 @@ namespace Attack
 					}
 					else
 					{
-						// 放置或交换
+						
+						
 						if (item == null)
 						{
-							PlaceItem(seltItem, this);
+							seltItem.Reparent(this);
+							seltItem.ZIndex = 0;
+							seltItem.Position = new Godot.Vector2(16, 16);
+							seltItem.RemoveFromGroup(groupName);
+
+
+							var parent = GetNode<Control>("/root/DesktopScreen/WindowBase/BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillLogPanel/技能战斗列表");
+							var skillGroupsUIManager = parent.GetChild<SkillGroupsUIManager>(0);
+							skillGroupsUIManager.RequestUpdate();
+
+							var player = GetNode<PlayerManager>("/root/DesktopScreen/WindowBase/BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/PreviewViewport/GameViewContainer/GameViewport/SkillPreviewStage/Player");
+							player.attackManager.InsertSkill(skillGroupsUIManager.GetSkillList());
+
 						}
 						else
 						{
-							SwapItems(item, seltItem);
-						}
-						
-						// --- 【修复2：拖拽完成后，通知引擎更新战斗演示】 ---
-						if (engineNode != null)
-						{
-							// 我们延迟一帧调用，确保 UI 节点层级已经更新完毕
-							engineNode.CallDeferred("scan_and_update_sequence");
+							var seltItemParent = seltItem.GetParentOrNull<TextureRect>();
+							seltItem.Reparent(this);
+							seltItem.ZIndex = 0;
+							seltItem.Position = new Godot.Vector2(16, 16);
+
+							item.Reparent(seltItemParent);
+							item.ZIndex = 0;
+							item.Position = new Godot.Vector2(16, 16);
+
+							seltItem.RemoveFromGroup(groupName);
+
+							var parent = GetNode<Control>("/root/DesktopScreen/WindowBase/BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillLogPanel/技能战斗列表");
+							var skillGroupsUIManager = parent.GetChild<SkillGroupsUIManager>(0);
+							skillGroupsUIManager.RequestUpdate();
+
+							var player = GetNode<PlayerManager>("/root/DesktopScreen/WindowBase/BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/PreviewViewport/GameViewContainer/GameViewport/SkillPreviewStage/Player");
+							//player.attackManager.InsertSkill(skillGroupsUIManager.GetSkillList());
 						}
 					}
 				}
 			} 
-		}
-
-		// 封装放置逻辑
-		private void PlaceItem(Sprite2D item, Node newParent)
-		{
-			item.Reparent(newParent);
-			item.ZIndex = 0;
-			item.Position = new Vector2(16, 16);
-			item.RemoveFromGroup(groupName);
-		}
-
-		// 封装交换逻辑
-		private void SwapItems(Sprite2D currentItem, Sprite2D draggedItem)
-		{
-			var draggedItemParent = draggedItem.GetParentOrNull<TextureRect>();
-			
-			draggedItem.Reparent(this);
-			draggedItem.ZIndex = 0;
-			draggedItem.Position = new Vector2(16, 16);
-
-			if (draggedItemParent != null)
-			{
-				currentItem.Reparent(draggedItemParent);
-				currentItem.ZIndex = 0;
-				currentItem.Position = new Vector2(16, 16);
-			}
-			
-			draggedItem.RemoveFromGroup(groupName);
 		}
 
 		// 【安全更新】防止在 Engine 预览时因为找不到 Player 而报错
@@ -108,7 +102,7 @@ namespace Attack
 		{
 			// 尝试寻找技能列表 UI
 			// 注意：这里还是用的绝对路径，如果在 Engine 里没有这个路径，GetNodeOrNull 会返回空，不会崩
-			var parent = GetNodeOrNull<Control>("/root/Node2D/技能战斗列表");
+			var parent = GetNodeOrNull<Control>("/root/DesktopScreen/WindowBase/BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillLogPanel/技能战斗列表");
 			if (parent != null)
 			{
 				// 这里假设 SkillGroupsUIManager 存在
@@ -120,7 +114,7 @@ namespace Attack
 			}
 
 			// 尝试寻找 Player
-			var player = GetNodeOrNull<PlayerManager>("/root/Node2D/Player");
+			var player = GetNodeOrNull<PlayerManager>("/root/DesktopScreen/WindowBase/BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/PreviewViewport/GameViewContainer/GameViewport/SkillPreviewStage/Player");
 			if (player != null)
 			{
 				// player.attackManager.InsertSkill(...) 
