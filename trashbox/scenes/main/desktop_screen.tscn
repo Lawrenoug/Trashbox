@@ -38,6 +38,29 @@ mouse_filter = 2
 texture = ExtResource("2_tagyk")
 expand_mode = 1
 
+[node name="StartMenu" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -108.0
+offset_right = 212.0
+offset_bottom = -42.0
+grow_vertical = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="StartMenu"]
+layout_mode = 2
+
+[node name="BtnShutdown" type="Button" parent="StartMenu/VBoxContainer"]
+layout_mode = 2
+text = "关机"
+
+[node name="BtnReboot" type="Button" parent="StartMenu/VBoxContainer"]
+layout_mode = 2
+text = "重启
+"
+
 [node name="Taskbar" type="PanelContainer" parent="."]
 layout_mode = 1
 anchors_preset = 12
