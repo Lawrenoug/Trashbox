@@ -8,34 +8,13 @@
 [ext_resource type="PackedScene" uid="uid://dk1ae2t3e6fi7" path="res://trashbox/战斗系统/技能战斗列表.tscn" id="5_ykrsh"]
 [ext_resource type="PackedScene" uid="uid://bj20pol0nbg0o" path="res://trashbox/战斗系统/技能组背包.tscn" id="6_g14j6"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_6uqi0"]
-
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8uh7m"]
 radius = 68.0
 height = 136.0
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_6uqi0"]
+
 [node name="Node2D" type="Node2D"]
-
-[node name="Player" type="RigidBody2D" parent="." node_paths=PackedStringArray("startShootPosition", "UIControl")]
-position = Vector2(167, 315)
-gravity_scale = 0.0
-script = ExtResource("1_37kl0")
-startShootPosition = NodePath("发射点")
-UIControl = NodePath("../技能战斗列表")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
-shape = SubResource("CircleShape2D_6uqi0")
-
-[node name="Sprite2D" type="Sprite2D" parent="Player"]
-texture_filter = 1
-rotation = -1.5707964
-scale = Vector2(6, 6)
-texture = ExtResource("2_ykrsh")
-
-[node name="发射点" type="Node2D" parent="Player"]
-position = Vector2(100, 0)
-
-[node name="玩家子弹" type="Node2D" parent="."]
 
 [node name="敌人" type="RigidBody2D" parent="." groups=["enemy"]]
 position = Vector2(819, 189)
@@ -57,7 +36,7 @@ texture = ExtResource("3_g14j6")
 
 [node name="技能战斗列表" parent="." instance=ExtResource("5_ykrsh")]
 
-[node name="技能组背包" parent="." instance=ExtResource("6_g14j6")]
+[node name="技能组背包" parent="." groups=["技能列表"] instance=ExtResource("6_g14j6")]
 offset_left = 600.0
 offset_right = 600.0
 
@@ -78,3 +57,26 @@ shape = SubResource("CapsuleShape2D_8uh7m")
 texture_filter = 1
 scale = Vector2(9, 9)
 texture = ExtResource("4_vbegm")
+
+[node name="玩家节点" type="Node" parent="."]
+
+[node name="Player" type="RigidBody2D" parent="玩家节点" node_paths=PackedStringArray("startShootPosition", "UIControl") groups=["player"]]
+position = Vector2(167, 315)
+gravity_scale = 0.0
+script = ExtResource("1_37kl0")
+startShootPosition = NodePath("发射点")
+UIControl = NodePath("../../技能战斗列表")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="玩家节点/Player"]
+shape = SubResource("CircleShape2D_6uqi0")
+
+[node name="Sprite2D" type="Sprite2D" parent="玩家节点/Player"]
+texture_filter = 1
+rotation = -1.5707964
+scale = Vector2(6, 6)
+texture = ExtResource("2_ykrsh")
+
+[node name="发射点" type="Node2D" parent="玩家节点/Player"]
+position = Vector2(100, 0)
+
+[node name="玩家子弹" type="Node2D" parent="玩家节点" groups=["玩家子弹"]]

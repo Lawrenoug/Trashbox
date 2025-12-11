@@ -71,6 +71,7 @@ layout_mode = 2
 [node name="SkillLogPanel" type="PanelContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn" index="0"]
 custom_minimum_size = Vector2(50, 150)
 layout_mode = 2
+size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_wavt3")
 
 [node name="技能战斗列表" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillLogPanel" index="0" instance=ExtResource("5_t5267")]
@@ -85,7 +86,6 @@ offset_right = 0.0
 offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
-columns = 2
 
 [node name="SkillDeckPanel" type="PanelContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn" index="1"]
 custom_minimum_size = Vector2(50, 100)

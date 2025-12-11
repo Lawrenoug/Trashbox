@@ -29,6 +29,8 @@ script = ExtResource("1_allmg")
 
 [node name="DummyEnemy" type="RigidBody2D" parent="." groups=["enemy"]]
 position = Vector2(-1, -54)
+collision_layer = 4
+collision_mask = 4
 gravity_scale = 0.0
 freeze = true
 script = ExtResource("2_gwh2e")
@@ -47,22 +49,24 @@ libraries = {
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0
 
-[node name="Player" type="RigidBody2D" parent="." node_paths=PackedStringArray("startShootPosition", "BulletContainer")]
+[node name="玩家节点" type="Node" parent="."]
+
+[node name="Player" type="RigidBody2D" parent="玩家节点" node_paths=PackedStringArray("startShootPosition", "BulletContainer") groups=["player"]]
 position = Vector2(-124, -55)
 gravity_scale = 0.0
 script = ExtResource("3_ngxx7")
 startShootPosition = NodePath("发射点")
 BulletContainer = NodePath("../玩家子弹")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="玩家节点/Player"]
 shape = SubResource("CircleShape2D_ngxx7")
 
-[node name="Sprite2D" type="Sprite2D" parent="Player"]
+[node name="Sprite2D" type="Sprite2D" parent="玩家节点/Player"]
 texture_filter = 1
 rotation = -1.5707964
 texture = ExtResource("4_gwh2e")
 
-[node name="发射点" type="Node2D" parent="Player"]
+[node name="发射点" type="Node2D" parent="玩家节点/Player"]
 position = Vector2(50, 0)
 
-[node name="玩家子弹" type="Node2D" parent="."]
+[node name="玩家子弹" type="Node2D" parent="玩家节点" groups=["玩家子弹"]]
