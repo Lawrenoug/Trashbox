@@ -10,7 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://ifqffn2m742v" path="res://trashbox/战斗系统/Attack/Skills/Projectile/材质球代码块.tscn" id="8_ee6ub"]
 [ext_resource type="PackedScene" uid="uid://bvex383v2qd8o" path="res://trashbox/战斗系统/Attack/Skills/Projectile/着色器优化器代码块.tscn" id="9_am2y4"]
 
-[node name="技能组背包" type="Control"]
+[node name="技能组背包" type="Control" groups=["技能背包"]]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

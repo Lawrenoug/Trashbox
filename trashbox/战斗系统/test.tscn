@@ -1,18 +1,15 @@
-[gd_scene load_steps=10 format=3 uid="uid://diioyhmevc7oj"]
+[gd_scene load_steps=8 format=3 uid="uid://diioyhmevc7oj"]
 
-[ext_resource type="Script" uid="uid://08knfvnynesi" path="res://trashbox/战斗系统/Characters/Player/PlayerManager.cs" id="1_37kl0"]
-[ext_resource type="Texture2D" uid="uid://de5or7du4lccg" path="res://trashbox/战斗系统/UI/kenney_tiny-dungeon/Tiles/tile_0110.png" id="2_ykrsh"]
 [ext_resource type="Script" uid="uid://jtmfbnrs8tf" path="res://trashbox/战斗系统/Attack/Enemy/Enemytest.cs" id="3_cymgf"]
 [ext_resource type="Texture2D" uid="uid://xaephtyrw2fv" path="res://trashbox/战斗系统/UI/kenney_tiny-dungeon/Tiles/tile_0109.png" id="3_g14j6"]
 [ext_resource type="Texture2D" uid="uid://wu5u283uabfv" path="res://trashbox/战斗系统/UI/kenney_tiny-dungeon/Tiles/tile_0108.png" id="4_vbegm"]
 [ext_resource type="PackedScene" uid="uid://dk1ae2t3e6fi7" path="res://trashbox/战斗系统/技能战斗列表.tscn" id="5_ykrsh"]
+[ext_resource type="PackedScene" uid="uid://hqnftrbqicsu" path="res://trashbox/战斗系统/Characters/Player/玩家节点.tscn" id="6_8nwl2"]
 [ext_resource type="PackedScene" uid="uid://bj20pol0nbg0o" path="res://trashbox/战斗系统/技能组背包.tscn" id="6_g14j6"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8uh7m"]
 radius = 68.0
 height = 136.0
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_6uqi0"]
 
 [node name="Node2D" type="Node2D"]
 
@@ -58,25 +55,4 @@ texture_filter = 1
 scale = Vector2(9, 9)
 texture = ExtResource("4_vbegm")
 
-[node name="玩家节点" type="Node" parent="."]
-
-[node name="Player" type="RigidBody2D" parent="玩家节点" node_paths=PackedStringArray("startShootPosition", "UIControl") groups=["player"]]
-position = Vector2(167, 315)
-gravity_scale = 0.0
-script = ExtResource("1_37kl0")
-startShootPosition = NodePath("发射点")
-UIControl = NodePath("../../技能战斗列表")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="玩家节点/Player"]
-shape = SubResource("CircleShape2D_6uqi0")
-
-[node name="Sprite2D" type="Sprite2D" parent="玩家节点/Player"]
-texture_filter = 1
-rotation = -1.5707964
-scale = Vector2(6, 6)
-texture = ExtResource("2_ykrsh")
-
-[node name="发射点" type="Node2D" parent="玩家节点/Player"]
-position = Vector2(100, 0)
-
-[node name="玩家子弹" type="Node2D" parent="玩家节点" groups=["玩家子弹"]]
+[node name="玩家节点" parent="." instance=ExtResource("6_8nwl2")]

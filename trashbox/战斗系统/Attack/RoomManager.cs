@@ -36,15 +36,34 @@ namespace Attack
 			
 		}
 		//胜利随机得到技能
-		public Skill[] GetSkills(int _index)
+		public PackedScene[] GetSkills(int _count)
 		{
-			return null;
+			PackedScene[] skills=new PackedScene[_count];
+			for(int i=0;i<skills.Length; i++)
+			{
+				skills[i]=AttackTools.GetSkill();
+			}
+			return skills;
 		}
 		//传输技能到背包
-		public void SendSkillToBackpack(Skill[] _skills)
+		public void SendSkillToBackpack(PackedScene[] _skills)
 		{
-			
+			var node=GetTree().GetFirstNodeInGroup("技能背包").FindChild("技能组背包");
+			int skillIndex = 0;
+			foreach(var child in node.GetChildren())
+			{
+				// 检查child是否有子节点
+				if (((Node)child).GetChildCount() == 0 && skillIndex < _skills.Length)
+				{
+					// 如果没有子节点且还有技能可以添加，则添加一个技能作为子节点
+					Node skillNode = _skills[skillIndex].Instantiate<Node>();
+					((Node)child).AddChild(skillNode);
+					skillIndex++;
+				}
+			}
 		}
+
+		
 
 	}
 }
