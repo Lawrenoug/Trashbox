@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://da461y6f1ohh3" path="res://trashbox/战斗系统/UI/kenney_ui-pack-pixel-adventure/Tiles/Large tiles/Thick outline/tile_0000.png" id="2_oedc3"]
 [ext_resource type="Script" uid="uid://d2svyilukyext" path="res://trashbox/战斗系统/Drapskill.cs" id="3_0h65p"]
 
-[node name="技能战斗列表" type="Control"]
+[node name="技能战斗列表" type="Control" groups=["技能列表"]]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

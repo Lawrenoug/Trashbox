@@ -49,7 +49,10 @@ namespace CharacterManager
 			}
 			else 
 			{
-				var node = GetNodeOrNull<Node>("/root/DesktopScreen/WindowBase/BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/PreviewViewport/GameViewContainer/GameViewport/SkillPreviewStage/玩家子弹");
+				var node=GetTree().GetFirstNodeInGroup("玩家子弹") as Node;
+				// NodePath nodePath = new NodePath("*/玩家子弹");
+				// var node = GetNode(nodePath) as Node;
+				//var node = GetNodeOrNull<Node>("/root/DesktopScreen/WindowBase/BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/PreviewViewport/GameViewContainer/GameViewport/SkillPreviewStage/玩家子弹");
 				if (node != null)
 				{
 					attackManager = new AttackManager(node);

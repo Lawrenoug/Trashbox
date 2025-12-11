@@ -63,12 +63,19 @@ namespace Attack
 							seltItem.Position = new Godot.Vector2(16, 16);
 							seltItem.RemoveFromGroup(groupName);
 
+							// NodePath ControlnodePath=new NodePath("*/技能战斗列表");
+							// var parent = GetNode(ControlnodePath) as Control;
 
-							var parent = GetNode<Control>("/root/DesktopScreen/WindowBase/BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillLogPanel/技能战斗列表");
+							var parent =GetTree().GetFirstNodeInGroup("技能列表") as Control;
+							//var parent = GetNode<Control>("/root/DesktopScreen/WindowBase/BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillLogPanel/技能战斗列表");
 							var skillGroupsUIManager = parent.GetChild<SkillGroupsUIManager>(0);
 							skillGroupsUIManager.RequestUpdate();
 
-							var player = GetNode<PlayerManager>("/root/DesktopScreen/WindowBase/BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/PreviewViewport/GameViewContainer/GameViewport/SkillPreviewStage/Player");
+							// NodePath PlayManagerPath=new NodePath("*/Player");
+							// var player=GetNode(PlayManagerPath) as PlayerManager;
+
+							var player =GetTree().GetFirstNodeInGroup("player") as PlayerManager;
+							//var player = GetNode<PlayerManager>("/root/DesktopScreen/WindowBase/BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/PreviewViewport/GameViewContainer/GameViewport/SkillPreviewStage/Player");
 							player.attackManager.InsertSkill(skillGroupsUIManager.GetSkillList());
 
 						}
@@ -85,45 +92,26 @@ namespace Attack
 
 							seltItem.RemoveFromGroup(groupName);
 
-							var parent = GetNode<Control>("/root/DesktopScreen/WindowBase/BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillLogPanel/技能战斗列表");
+							// NodePath ControlnodePath=new NodePath("*/技能战斗列表");
+							// var parent = GetNode(ControlnodePath) as Control;
+
+							var parent =GetTree().GetFirstNodeInGroup("技能列表") as Control;
+							//var parent = GetNode<Control>("/root/DesktopScreen/WindowBase/BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillLogPanel/技能战斗列表");
 							var skillGroupsUIManager = parent.GetChild<SkillGroupsUIManager>(0);
 							skillGroupsUIManager.RequestUpdate();
 
-							var player = GetNode<PlayerManager>("/root/DesktopScreen/WindowBase/BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/PreviewViewport/GameViewContainer/GameViewport/SkillPreviewStage/Player");
-							//player.attackManager.InsertSkill(skillGroupsUIManager.GetSkillList());
+						    // NodePath PlayManagerPath=new NodePath("*/Player");
+							// var player=GetNode(PlayManagerPath) as PlayerManager;
+
+							var player =GetTree().GetFirstNodeInGroup("player") as PlayerManager;
+							//var player = GetNode<PlayerManager>("/root/DesktopScreen/WindowBase/BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/PreviewViewport/GameViewContainer/GameViewport/SkillPreviewStage/Player");
+							player.attackManager.InsertSkill(skillGroupsUIManager.GetSkillList());
 						}
 					}
 				}
 			} 
 		}
 
-		// 【安全更新】防止在 Engine 预览时因为找不到 Player 而报错
-		private void UpdateSkillListSafe()
-		{
-			// 尝试寻找技能列表 UI
-			// 注意：这里还是用的绝对路径，如果在 Engine 里没有这个路径，GetNodeOrNull 会返回空，不会崩
-			var parent = GetNodeOrNull<Control>("/root/DesktopScreen/WindowBase/BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillLogPanel/技能战斗列表");
-			if (parent != null)
-			{
-				// 这里假设 SkillGroupsUIManager 存在
-				// var skillGroupsUIManager = parent.GetChild<SkillGroupsUIManager>(0);
-				// skillGroupsUIManager.RequestUpdate();
-				
-				// 既然是 C# 调用 GDScript/C# 方法，最好用 Call 或强转
-				// 为了稳妥，这里先注释掉，或者你需要确保 Engine 里也有这个结构
-			}
-
-			// 尝试寻找 Player
-			var player = GetNodeOrNull<PlayerManager>("/root/DesktopScreen/WindowBase/BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/PreviewViewport/GameViewContainer/GameViewport/SkillPreviewStage/Player");
-			if (player != null)
-			{
-				// player.attackManager.InsertSkill(...) 
-			}
-			else
-			{
-				// 在 Engine 预览模式下，找不到 Player 是正常的，不需要打印错误
-				// GD.Print("预览模式：未连接实际 Player");
-			}
-		}
+		
 	}
 }
