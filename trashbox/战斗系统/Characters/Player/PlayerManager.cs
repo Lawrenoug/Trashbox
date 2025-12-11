@@ -79,16 +79,16 @@ namespace CharacterManager
 			if(attackManager != null)
 			{
 				attackManager.AttackLoop((float)delta,startShootPosition.GlobalPosition);
-                
-            }
+				
+			}
 			if(speed>=0)
 			{
 				SpeedCutTime--;
 			}
 			else
-            {
-                SpeedRestore();
-            }
+			{
+				SpeedRestore();
+			}
 		}
 
 		private void Move(double delta)
@@ -211,15 +211,15 @@ namespace CharacterManager
 		// }
 
 		public void SpeedCut()
-        {
-            speed *= 0.5f;
+		{
+			speed *= 0.5f;
 			SpeedCutTime = 3;
-        }
+		}
 
 		public void SpeedRestore()
-        {
-            speed *= 2f;
-        }
+		{
+			speed *= 2f;
+		}
 		
 	}
 }

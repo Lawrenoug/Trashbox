@@ -55,17 +55,17 @@ namespace Attack
 			if (_attackDelay <= _timeDelay)
 			{
 				if(!enableAttack)
-                {
+				{
 					return;
-                }
+				}
 				if (BulletNode == null)
 				{
 					return;
 				}
 				if(skills.Length<=0)
-                {
+				{
 					return;
-                }
+				}
 				if (skillsIndex < skillCount)
 				{
 					while (skillsIndex < skillCount && skills[skillsIndex].skillType == "amendment")
@@ -88,7 +88,7 @@ namespace Attack
 				{
 					skillsIndex = 0;
 					ClearSkillData();
-                }
+				}
 			}
 		}
 
@@ -103,7 +103,7 @@ namespace Attack
 		}
 		
 		private void AddSkillData(SkillData _skillData)
-        {
+		{
 			skillData.ATK += _skillData.ATK;
 			skillData.ATS += _skillData.ATS;
 			skillData.RNG += _skillData.RNG;
@@ -113,6 +113,6 @@ namespace Attack
 			{
 				skillData.BuffTypes.Add(buffType);
 			}
-        }
+		}
 	}
 }
