@@ -22,7 +22,7 @@ bg_color = Color(0.3137255, 0.3137255, 0.3137255, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wrolx"]
 bg_color = Color(0.3137255, 0.3137255, 0.3137255, 1)
 
-[node name="WindowBase" instance=ExtResource("1_wavt3")]
+[node name="WindowBase2" instance=ExtResource("1_wavt3")]
 offset_right = 1920.0
 offset_bottom = 1080.0
 script = ExtResource("2_em83p")
@@ -138,7 +138,6 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_wrolx")
 
 [node name="DescriptionText" type="RichTextLabel" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/DescriptionPanel" index="0"]
 layout_mode = 2
-theme_override_font_sizes/normal_font_size = 8
 bbcode_enabled = true
 text = "请在左侧选择一个技能以查看详细文档"
 
