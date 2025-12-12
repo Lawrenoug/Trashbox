@@ -24,7 +24,11 @@ namespace Attack
 				{
 					
 				}
-				else//进入战斗房间
+				else if(_index==4||_index==5)//精英怪
+				{
+					
+				}
+				else if(_index==0||_index==1||_index==2)
 				{
 					
 				}
@@ -63,7 +67,7 @@ namespace Attack
 			}
 		}
 
-		
+
 
 	}
 }
