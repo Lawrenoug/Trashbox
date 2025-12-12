@@ -2,7 +2,7 @@ extends Control
 signal level_selected(level_index, level_type)
 
 # --- 1. 素材配置 (请替换为你实际的头像/图标路径) ---
-const ICON_NORMAL = preload("res://trashbox/assets/sprites/boss.png")
+const ICON_NORMAL = preload("res://trashbox/assets/sprites/小怪关卡.png")
 const ICON_ELITE = preload("res://trashbox/assets/sprites/boss.png")
 const ICON_BOSS = preload("res://trashbox/assets/sprites/boss.png")
 const ICON_EVENT = preload("res://trashbox/assets/sprites/folder.png") # 【新增】事件图标(暂用文件夹代替)
