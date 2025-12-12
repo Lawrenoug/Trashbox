@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using Enemy;
 
 namespace Attack
 {
@@ -74,15 +75,46 @@ namespace Attack
 
 		private void EnterNormalRoom()
 		{
-			
+			int _index = new Random().Next(0, 6);
+			PackedScene[] enemy=EnemyTools.GetNormalEnemy(_index);
+			for(int i=0;i<enemy.Length;i++)
+			{
+				EnemyBase enemyInstance = enemy[i].Instantiate<EnemyBase>();
+				room.AddChild(enemyInstance);
+				enemyInstance.GlobalPosition =EnemyTools.startPosition[i];
+				enemyInstance.MoveTo(EnemyTools.endPosition[i]);
+				enemyInstance.state=EnemyState.Moving;
+			}
 		}
 		private void EnterEliteRoom()
 		{
-			
+			if(roomIndex==4)
+			{
+				PackedScene enemy=EnemyTools.GetEliteEnemy(0);
+				EnemyBase enemyInstance = enemy.Instantiate<EnemyBase>();
+				room.AddChild(enemyInstance);
+				enemyInstance.GlobalPosition=EnemyTools.EliteenemyPosition[0];
+				enemyInstance.MoveTo(EnemyTools.EliteenemyPosition[1]);
+				enemyInstance.state=EnemyState.Moving;
+			}
+			else if(roomIndex==5)
+			{
+				PackedScene enemy=EnemyTools.GetEliteEnemy(1);
+				EnemyBase enemyInstance = enemy.Instantiate<EnemyBase>();
+				room.AddChild(enemyInstance);
+				enemyInstance.GlobalPosition=EnemyTools.EliteenemyPosition[0];
+				enemyInstance.MoveTo(EnemyTools.EliteenemyPosition[1]);
+				enemyInstance.state=EnemyState.Moving;
+			}
 		}
 		private void EnterBossRoom()
 		{
-			
+			PackedScene enemy = EnemyTools.GetBossEnemy();
+			EnemyBase enemyInstance = enemy.Instantiate<EnemyBase>();
+			room.AddChild(enemyInstance);
+			enemyInstance.GlobalPosition = EnemyTools.EliteenemyPosition[0];
+			enemyInstance.MoveTo(EnemyTools.EliteenemyPosition[1]);
+			enemyInstance.state = EnemyState.Moving;
 		}
 	}
 }
