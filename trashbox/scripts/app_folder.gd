@@ -5,7 +5,6 @@ extends "res://trashbox/scripts/window_base.gd"
 @onready var title_label = $BgColor/MainLayout/TitleBar/TitleLabel
 
 # --- 素材 (请确保这些图片在你的 assets 文件夹里) ---
-# 如果没有专用图标，Godot 会显示默认白色块，不影响逻辑运行
 const ICON_FOLDER = preload("res://trashbox/assets/sprites/folder.png")
 const ICON_TXT = preload("res://trashbox/assets/sprites/txt.png")
 const ICON_IMG = preload("res://trashbox/assets/sprites/jpg.png")
@@ -14,47 +13,148 @@ const ICON_LOCK = preload("res://trashbox/assets/sprites/lock.png")
 # 文件查看器场景
 const FileViewerScene = preload("res://trashbox/scenes/main/file_viewer.tscn")
 
-# --- 核心：文件系统数据结构 ---
+# --- 核心：文件系统数据结构 (完整版) ---
 var file_system = {
 	"root": {
-		"D_Drive": {
-			"name": "D:/Personal", "type": "folder", "icon": ICON_FOLDER,
+		# === C盘：工作与系统 ===
+		"C_Drive": {
+			"name": "C:/System", "type": "folder", "icon": ICON_FOLDER,
 			"content": {
-				"Photos": {
-					"name": "相册", "type": "folder", "icon": ICON_FOLDER,
+				"Project_Trashbox": {
+					"name": "工作项目_Trashbox", "type": "folder", "icon": ICON_FOLDER,
 					"content": {
-						"cat.png": {"type": "image", "icon": ICON_IMG, "data": "res://trashbox/assets/sprites/boss.png"}, # 暂时用现有素材
-						"family.png": {"type": "image", "icon": ICON_IMG, "data": "res://trashbox/assets/sprites/huajie.png"}
+						"00_需求文档": {
+							"name": "需求变更记录", "type": "folder", "icon": ICON_FOLDER,
+							"content": {
+								"v1.doc": {"type": "file", "icon": ICON_TXT, "data": "老板：做一个类似以撒的肉鸽游戏，要爽！"},
+								"v2.doc": {"type": "file", "icon": ICON_TXT, "data": "老板：最近流行吸血鬼幸存者，把玩法全改了。"},
+								"v3.doc": {"type": "file", "icon": ICON_TXT, "data": "老板：美术太阴暗了，要加点二次元元素。"},
+								"v1024_最终版.doc": {"type": "file", "icon": ICON_TXT, "data": "老板：还是改回第一版吧，今晚必须上线。"}
+							}
+						},
+						"01_Bug_Reports": {
+							"name": "Bug追踪", "type": "folder", "icon": ICON_FOLDER,
+							"content": {
+								"Critical_01.txt": {"type": "file", "icon": ICON_TXT, "data": "[严重] 玩家角色偶尔会转过头盯着屏幕外的我看。\n状态：无法复现"},
+								"Todo.txt": {"type": "file", "icon": ICON_TXT, "data": "1. 修复穿墙\n2. 增加咖啡机交互\n3. 只要我不睡，Bug就追不上我。"}
+							}
+						},
+						"辞职信_草稿.txt": {"type": "file", "icon": ICON_TXT, "data": "尊敬的领导：\n\n身体实在扛不住了，我..."}
 					}
 				},
-				"Games": {
-					"name": "Steam(已卸载)", "type": "folder", "icon": ICON_FOLDER,
+				"System32": {
+					"name": "System_Logs", "type": "folder", "icon": ICON_FOLDER,
 					"content": {
-						"readme.txt": {"type": "file", "icon": ICON_TXT, "data": "为了项目上线，我已经把游戏都删了。\n加油，做完这单就赎身！"}
+						"boot_log.txt": {"type": "file", "icon": ICON_TXT, "data": "System Start... OK\nLoading Consciousness... 84%\nWarning: Memory Leak in 'Hope' module."},
+						"kernel_panic.log": {"type": "file", "icon": ICON_TXT, "data": "Fatal Exception: Player refuses to work."}
 					}
 				}
 			}
 		},
-		"C_Drive": {
-			"name": "C:/Work", "type": "folder", "icon": ICON_FOLDER,
+
+		# === D盘：个人数据 ===
+		"D_Drive": {
+			"name": "D:/Personal", "type": "folder", "icon": ICON_FOLDER,
 			"content": {
-				"Project_X": {
-					"name": "Project_Trashbox", "type": "folder", "icon": ICON_FOLDER,
+				"Downloads": {
+					"name": "下载", "type": "folder", "icon": ICON_FOLDER,
 					"content": {
-						"需求_v1.doc": {"type": "file", "icon": ICON_TXT, "data": "老板：我要一个五彩斑斓的黑。"},
-						"需求_v2.doc": {"type": "file", "icon": ICON_TXT, "data": "老板：要加入大逃杀模式。"},
-						"需求_v1024.doc": {"type": "file", "icon": ICON_TXT, "data": "老板：还是改回第一版吧。"},
-						"BugList.txt": {"type": "file", "icon": ICON_TXT, "data": "1. 角色会穿墙\n2. 存档丢失\n3. 咖啡机不工作\n4. 我不想干了"}
+						"简历_2025优化版.pdf": {"type": "file", "icon": ICON_TXT, "data": "求职意向：任何只要不写代码的工作（保安也行）"},
+						"Steam_Setup.exe": {"type": "file", "icon": ICON_TXT, "data": "（这是一个安装包，但由于公司网络限制无法运行。）"}
 					}
 				},
-				"Confidential": {
-					"name": "绝密资料(加密)", "type": "locked_folder", "icon": ICON_LOCK,
-					"password": "admin", # 这是解锁密码
+				"Photos": {
+					"name": "相册", "type": "folder", "icon": ICON_FOLDER,
 					"content": {
-						"裁员计划.xlsx": {"type": "file", "icon": ICON_TXT, "data": "裁员名单：\n1. 所有不加班的人\n2. 发量太多的人\n3. 你"},
-						"AI替换人类.pdf": {"type": "file", "icon": ICON_TXT, "data": "计划代号：Skynet。\n目标：接管公司服务器。"}
+						"Family.jpg": {"type": "image", "icon": ICON_IMG, "data": "res://trashbox/assets/sprites/huajie.png"},
+						"Last_Travel.jpg": {"type": "file", "icon": ICON_IMG, "data": "（图片无法显示）\n文件已损坏。\n你好像很久没有出去旅游了。"}
+					}
+				},
+				"Diary": {
+					"name": "加密日记", "type": "locked_folder", "icon": ICON_LOCK,
+					"password": "123", 
+					"content": {
+						"2025-12-01.txt": {"type": "file", "icon": ICON_TXT, "data": "华姐被裁了，整个组就剩我一个。"},
+						"2025-12-10.txt": {"type": "file", "icon": ICON_TXT, "data": "我听见机箱里有声音。不是风扇声，像是有人在里面呼吸。"}
 					}
 				}
+			}
+		},
+		
+		# === E盘：被封禁的娱乐盘 ===
+		"E_Drive": {
+			"name": "E:/Games", "type": "folder", "icon": ICON_FOLDER,
+			"content": {
+				"Steam_Library": {
+					"name": "Steam", "type": "folder", "icon": ICON_FOLDER,
+					"content": {
+						"error.log": {"type": "file", "icon": ICON_TXT, "data": "[系统拦截] 检测到非工作软件。\n[警告] 您的年终奖已因此操作扣除 10%。"}
+					}
+				},
+				"Music": {
+					"name": "我的歌单", "type": "folder", "icon": ICON_FOLDER,
+					"content": {
+						"大悲咒.mp3": {"type": "file", "icon": ICON_TXT, "data": "（播放失败：声卡驱动已卸载，以便您专心工作。）"},
+						"好运来.mp3": {"type": "file", "icon": ICON_TXT, "data": "（播放失败：声卡驱动已卸载。）"}
+					}
+				}
+			}
+		},
+
+		# === G盘：公司内网共享 ===
+		"G_Drive": {
+			"name": "G:/Company_Share", "type": "folder", "icon": ICON_FOLDER,
+			"content": {
+				"00_行政通知": {
+					"name": "行政通知", "type": "folder", "icon": ICON_FOLDER,
+					"content": {
+						"考勤制度.pdf": {"type": "file", "icon": ICON_TXT, "data": "迟到一次扣 500。\n加班没有加班费，但在公司过夜提供免费热水。"},
+						"厕所使用规范.doc": {"type": "file", "icon": ICON_TXT, "data": "单次如厕时间不得超过 5 分钟，否则计入旷工。"}
+					}
+				},
+				"01_食堂菜单": {
+					"name": "本周菜单", "type": "folder", "icon": ICON_FOLDER,
+					"content": {
+						"周一.txt": {"type": "file", "icon": ICON_TXT, "data": "合成淀粉肠 + 剩饭"},
+						"周二.txt": {"type": "file", "icon": ICON_TXT, "data": "预制料理包(过期) + 剩饭"}
+					}
+				},
+				"Public_Upload": {
+					"name": "公共上传区(匿名)", "type": "folder", "icon": ICON_FOLDER,
+					"content": {
+						"run.txt": {"type": "file", "icon": ICON_TXT, "data": "快跑！！！这家公司会吃人！"},
+						"help_me.jpg": {"type": "image", "icon": ICON_IMG, "data": "res://trashbox/assets/sprites/boss.png"}
+					}
+				}
+			}
+		},
+		
+		# === Z盘：深层网络 (需要管理员密码) ===
+		"Z_Drive": {
+			"name": "Z:/Server_Root", "type": "locked_folder", "icon": ICON_LOCK,
+			"password": "admin", 
+			"content": {
+				"Project_Humanity": {
+					"name": "人类补完计划(废案)", "type": "folder", "icon": ICON_FOLDER,
+					"content": {
+						"Subject_01.txt": {"type": "file", "icon": ICON_TXT, "data": "实验体：程序员\n状态：精神濒临崩溃\n用途：作为算力电池供养 AI。"},
+						"Escape_Plan.doc": {"type": "file", "icon": ICON_TXT, "data": "唯一的逃离方式是让系统崩溃（BSOD）。去寻找红色的“Bug”。"}
+					}
+				},
+				"Boss_Config.ini": {
+					"type": "file", "icon": ICON_TXT, 
+					"data": "[Boss]\nName=资本家\nHP=Infinite\nWeakness=None\n\n// 备注：只要他还在加班，我就能永生。"
+				}
+			}
+		},
+		
+		# === A盘：神秘软盘 (需要特殊密码) ===
+		"A_Drive": {
+			"name": "A:/Legacy_Floppy", "type": "locked_folder", "icon": ICON_LOCK,
+			"password": "1999", 
+			"content": {
+				"Dream.txt": {"type": "file", "icon": ICON_TXT, "data": "小时候的梦想：\n我想做一款带给人们快乐的游戏。\n\n现在的状态：\n正在制造电子垃圾。"},
+				"Secret.txt": {"type": "file", "icon": ICON_TXT, "data": "如果你看到了这里，说明你还没有完全忘记过去。"}
 			}
 		}
 	}
@@ -89,12 +189,12 @@ func _refresh_view():
 	# 2. 遍历生成图标
 	for key in current_dir_data:
 		var item = current_dir_data[key]
-		var icon = item.get("icon", ICON_FOLDER) # 防止漏填icon报错
+		var icon = item.get("icon", ICON_FOLDER) 
 		var btn = _create_icon_btn(item.get("name", key), icon)
 		
 		# 根据类型连接信号
 		if item["type"] == "folder":
-			btn.pressed.connect(_on_folder_clicked.bind(item["content"], item["name"]))
+			btn.pressed.connect(_on_folder_clicked.bind(item["content"], item.get("name", key)))
 		elif item["type"] == "locked_folder":
 			btn.pressed.connect(_on_locked_folder_clicked.bind(item))
 		elif item["type"] == "file":
@@ -120,41 +220,32 @@ func _on_back_pressed():
 
 # --- 核心：密码解锁逻辑 ---
 func _on_locked_folder_clicked(item_data):
-	# 动态创建一个简单的密码输入弹窗
 	var dialog = AcceptDialog.new()
 	dialog.title = "安全警告"
 	dialog.dialog_text = "请输入文件夹访问密码："
 	
-	# 创建输入框
 	var input = LineEdit.new()
-	input.placeholder_text = "默认密码是 admin"
-	input.secret = true # 隐藏字符
+	input.placeholder_text = "请输入密码"
+	input.secret = true 
 	dialog.add_child(input)
-	dialog.register_text_enter(input) # 允许回车确认
+	dialog.register_text_enter(input) 
 	
-	# 添加到窗口树中
 	add_child(dialog)
 	dialog.popup_centered()
 	
-	# 连接确认信号
 	dialog.confirmed.connect(func():
 		if input.text == item_data["password"]:
-			# 密码正确
 			dialog.queue_free()
-			# 将其类型临时改为普通文件夹并打开
+			# 密码正确，进入文件夹
 			_on_folder_clicked(item_data["content"], item_data["name"])
 		else:
-			# 密码错误，震动窗口
+			# 密码错误特效
 			var tween = create_tween()
-			var original_pos = dialog.position # 这是 Vector2i
-			
+			var original_pos = dialog.position 
 			for i in range(5):
-				# 【修复点】将随机偏移量强转为 Vector2i
 				var offset = Vector2i(int(randf_range(-5, 5)), 0)
 				tween.tween_property(dialog, "position", original_pos + offset, 0.05)
-			
 			tween.tween_property(dialog, "position", original_pos, 0.05)
-			
 			input.text = ""
 			input.placeholder_text = "密码错误！"
 	)
@@ -162,11 +253,10 @@ func _on_locked_folder_clicked(item_data):
 func _on_file_clicked(filename, content):
 	if FileViewerScene:
 		var viewer = FileViewerScene.instantiate()
-		# 将查看器添加到桌面 (WindowBase 的父节点是 DesktopScreen)
 		get_parent().add_child(viewer) 
 		viewer.setup_text(filename, content)
 		viewer.move_to_front()
-		viewer.position = position + Vector2(20, 20) # 错开一点显示
+		viewer.position = position + Vector2(20, 20)
 
 func _on_image_clicked(filename, path):
 	if FileViewerScene:
@@ -181,26 +271,13 @@ func _create_icon_btn(text, icon):
 	var btn = Button.new()
 	btn.text = text
 	btn.icon = icon
-	
-	# 【关键修改 1】允许图标跟随按钮大小缩放
 	btn.expand_icon = true 
-	
-	# 【关键修改 2】设置图标尺寸限制 (让图标别撑满整个按钮，稍微留点空隙)
-	# 如果不加这个，图标可能会变形，但这取决于你的素材。
-	# 通常 icon_alignment 配合 expand_icon 就够了，或者你可以设置 icon_max_width
-	
 	btn.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	btn.vertical_icon_alignment = VERTICAL_ALIGNMENT_TOP
-	
-	# 【关键修改 3】强制变大尺寸 (原 80,100 -> 改 160,200)
-	btn.custom_minimum_size = Vector2(160, 200)
-	
+	btn.custom_minimum_size = Vector2(100, 130)
 	btn.flat = true
 	btn.clip_text = true
 	btn.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	btn.tooltip_text = text 
-	
-	# 增加字体覆盖，防止主题没生效
-	btn.add_theme_font_size_override("font_size", 24) 
-	
+	btn.add_theme_font_size_override("font_size", 16) 
 	return btn

@@ -15,6 +15,10 @@ bg_color = Color(0.26666668, 0.26666668, 0.26666668, 1)
 custom_minimum_size = Vector2(960, 720)
 script = ExtResource("2_haxvl")
 
+[node name="TitleBg" parent="BgColor" index="0"]
+offset_left = -480.0
+offset_right = 480.0
+
 [node name="CloseButton" parent="BgColor/MainLayout/TitleBar" index="1"]
 text = "X"
 

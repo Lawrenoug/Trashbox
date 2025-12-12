@@ -2,10 +2,10 @@ extends "res://trashbox/scripts/window_base.gd"
 
 # --- 1. 节点引用 ---
 # (路径保持你之前的设置)
-@onready var preview_viewport = $BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/PreviewViewport/GameViewContainer/GameViewport
-@onready var description_text: RichTextLabel = $BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/DescriptionPanel/DescriptionText
-@onready var map_system = $BgColor/MainLayout/ContentSlot/EditorRoot/TimelinePanel/MapSystem
-@onready var status_label: Label = $BgColor/MainLayout/ContentSlot/EditorRoot/MenuBar/Status
+@onready var preview_viewport = $BgColor/MainLayout/ContentSlot/SplitMain/SplitSub/PreviewViewport/GameViewContainer/GameViewport
+@onready var description_text: RichTextLabel = $BgColor/MainLayout/ContentSlot/SplitMain/SplitSub/DescriptionPanel/DescriptionText
+@onready var map_system = $BgColor/MainLayout/ContentSlot/TimelinePanel/MapSystem
+@onready var status_label: Label = $BgColor/MainLayout/ContentSlot/MenuBar/Status
 
 # --- 2. 接口 ---
 # 关卡场景列表 (地图跳转用)

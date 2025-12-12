@@ -11,7 +11,8 @@ const AppGodotScene = preload("res://trashbox/scenes/main/engine.tscn")
 @onready var 回收站: Button = $DesktopIcons/回收站
 @onready var chatbro: Button = $DesktopIcons/Chatbro
 @onready var 引擎: Button = $DesktopIcons/引擎
-# --- 3. 获取弹窗通知节点 ---
+
+# --- 3. 获取其他组件 ---
 @onready var notification_popup = $NotificationPopup
 @onready var notification_anim = $NotificationPopup/AnimationPlayer
 @onready var notif_title = $NotificationPopup/HBoxContainer/VBoxContainer/Title
@@ -20,58 +21,108 @@ const AppGodotScene = preload("res://trashbox/scenes/main/engine.tscn")
 @onready var start_button = $Taskbar/TaskbarItems/StartButton
 @onready var start_menu = $StartMenu
 @onready var btn_shutdown = $StartMenu/VBoxContainer/BtnShutdown
-# --- 4. 全局聊天数据存储 ---
+
+# --- 【新增】音效播放器 ---
+# 请在 _ready 里动态创建，或者你在场景里加一个 AudioStreamPlayer 并引用
+var sfx_player: AudioStreamPlayer
+
+# --- 4. 全局聊天数据存储 (初始历史记录) ---
 var global_chat_data = {
-	"老板": "[color=#888888]系统: 已经是好友了，开始聊天吧。[/color]\n",
-	"华姐": "[color=#888888]系统: 已经是好友了，开始聊天吧。[/color]\n"
+	"老板": "[color=#888888]--- 历史记录 ---[/color]\n[color=#e74c3c][b]老板:[/b][/color] 上周的进度太慢了。\n[color=#e74c3c][b]老板:[/b][/color] 周末记得加班赶一下。\n[color=#4a90e2][b]我:[/b][/color] 好的收到。\n",
+	"华姐": """[color=#888888]--- 历史记录 ---[/color]
+[color=#2ecc71][b]华姐:[/b][/color] 听说隔壁组全被裁了，吓死我了。
+[color=#4a90e2][b]我:[/b][/color] 唉，希望能挺过这一波。
+[color=#2ecc71][b]华姐:[/b][/color] 有空帮我看个 Bug 呗？
+[color=#2ecc71][b]华姐:[/b][/color] 对了，听说服务器的后门密码还没改，还是默认的 [b]admin[/b]，这群运维真是太草率了。
+"""
 }
 var is_recycle_bin_cleared = false 
+
 func _ready():
-	# 初始化：隐藏弹窗
-	if notification_popup:
-		notification_popup.visible = false
-	# 连接图标点击信号 (保持不变)
+	# 初始化：隐藏弹窗和菜单
+	if notification_popup: notification_popup.visible = false
+	if start_menu: start_menu.visible = false
+	
+	# 连接图标点击信号
 	if 文件夹: 文件夹.pressed.connect(open_window.bind(AppFolderScene))
 	if 回收站: 回收站.pressed.connect(open_window.bind(AppRecycleScene))
 	if chatbro: chatbro.pressed.connect(open_window.bind(AppChatScene))
 	if 引擎: 引擎.pressed.connect(open_window.bind(AppGodotScene))
-	if start_menu:
-		start_menu.visible = false # 确保游戏刚开始是关着的
 	
-	# --- 3. 连接信号 ---
+	# 连接开始菜单信号
+	if start_button: start_button.pressed.connect(_on_start_button_clicked)
+	if btn_shutdown: btn_shutdown.pressed.connect(_on_shutdown_clicked)
 	
-	# 点击左下角图标 -> 切换菜单开关
-	if start_button:
-		start_button.pressed.connect(_on_start_button_clicked)
+	# 连接背景点击 (关闭菜单)
+	var wallpaper = get_node_or_null("Wallpaper")
+	if wallpaper: wallpaper.gui_input.connect(_on_wallpaper_input)
+
+	# --- 【新增】初始化音效组件 ---
+	sfx_player = AudioStreamPlayer.new()
+	add_child(sfx_player)
+	# 简单的提示音资源 (Godot 默认没有，你可以拖一个 wav 进来，或者用代码生成简单的波形)
+	# 这里假设你之后会设置流，或者我们仅仅依靠视觉效果
+	
+	# --- 【核心】如果是从登录界面刚进来，触发剧情 ---
+	# 我们通过判断是否自动打开引擎来区分（或者加个全局标记）
+	# 这里简单处理：每次进入桌面都触发（方便测试），实际可加 GlobalGameState 标记
+	if not GlobalGameState.should_open_engine_automatically:
+		_play_intro_story()
 	else:
-		print("错误：找不到 StartButton，请检查路径 Taskbar/TaskbarItems/StartButton")
-		
-	# 点击“关闭系统” -> 退出游戏
-	if btn_shutdown:
-		btn_shutdown.pressed.connect(_on_shutdown_clicked)
-	# --- 【新增】检查全局标记，决定是否自动打开引擎 ---
-	if GlobalGameState.should_open_engine_automatically:
-		# 重置标记，防止下次正常登录时也打开
+		# 如果是打完关卡回来，直接打开引擎
 		GlobalGameState.should_open_engine_automatically = false
-		
-		# 稍微延迟一帧，确保桌面 UI 初始化完毕后再打开窗口
-		# open_window 是你在 desktop_screen.gd 里定义的函数
 		call_deferred("open_window", AppGodotScene)
 
+# --- 剧情脚本 ---
+func _play_intro_story():
+	# 1. 等待 1 秒，让玩家看一眼桌面
+	await get_tree().create_timer(1.0).timeout
+	
+	# 2. 播放提示音 (如果你有音频文件，请在这里 load)
+	# var sound = load("res://trashbox/assets/audio/message.wav")
+	# if sound: 
+	# 	sfx_player.stream = sound
+	# 	sfx_player.play()
+	
+	# 3. 图标抖动特效 (Tween)
+	if chatbro:
+		var tween = create_tween()
+		var original_pos = chatbro.position
+		# 左右快速抖动 5 次
+		for i in range(5):
+			tween.tween_property(chatbro, "position", original_pos + Vector2(5, 0), 0.05)
+			tween.tween_property(chatbro, "position", original_pos - Vector2(5, 0), 0.05)
+		tween.tween_property(chatbro, "position", original_pos, 0.05)
+		
+		# 等待抖动结束
+		await tween.finished
+	
+	# 4. 自动打开聊天窗口
+	open_window(AppChatScene)
+	
+	# 5. 等待窗口打开动画
+	await get_tree().create_timer(0.5).timeout
+	
+	# 6. 生成老板的新消息 (推动剧情)
+	incoming_message("老板", "那个垃圾清理系统做好了吗？")
+	await get_tree().create_timer(1.5).timeout
+	incoming_message("老板", "客户已经在催了，今天必须上线！")
+	await get_tree().create_timer(1.0).timeout
+	incoming_message("老板", "别磨蹭，赶紧打开引擎开始工作。")
+
+# --- 原有函数保持不变 ---
 func _on_start_button_clicked():
 	if start_menu:
-		# 切换显示状态：如果是开的就关，关的就开
 		start_menu.visible = not start_menu.visible
-		
-		# 【重要】把菜单提到最上层，防止被打开的文件夹窗口挡住
-		if start_menu.visible:
-			start_menu.move_to_front()
+		if start_menu.visible: start_menu.move_to_front()
 
 func _on_shutdown_clicked():
-	print("系统正在关机...")
-	# 退出游戏
 	get_tree().quit()
-# --- [修改后] 通用的打开窗口逻辑 ---
+
+func _on_wallpaper_input(event):
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		if start_menu and start_menu.visible: start_menu.visible = false
+
 func open_window(scene_to_open: PackedScene):
 	if scene_to_open == null:
 		print("错误：场景为空！")
@@ -80,7 +131,7 @@ func open_window(scene_to_open: PackedScene):
 	var window_instance = scene_to_open.instantiate()
 	add_child(window_instance)
 	
-	# === 情况1：如果是引擎，强制全屏 ===
+	# 如果是引擎，强制全屏 (保持不变)
 	if scene_to_open == AppGodotScene:
 		var screen_size = get_viewport_rect().size
 		window_instance.position = Vector2.ZERO
@@ -88,45 +139,33 @@ func open_window(scene_to_open: PackedScene):
 		window_instance.custom_minimum_size = screen_size
 		
 	else:
-		# === 情况2：其他应用（文件夹、聊天等） ===
-		
-		# 1. 传递数据 (如果是聊天窗口)
+		# 其他应用（文件夹、聊天等）
 		if window_instance.has_method("init_data"):
 			window_instance.init_data(self)
 		
-		# 2. 【核心修复】强制放大窗口尺寸
-		# 获取窗口原本设定的最小尺寸
 		var win_size = window_instance.custom_minimum_size
 		
-		# 如果尺寸太小(比如是0或者是旧的400)，给一个高清屏适合的默认值
-		if win_size.x < 100 or win_size == Vector2.ZERO: 
-			win_size = Vector2(800, 600) 
-		else:
-			pass
+		# --- 【修改】调大默认窗口尺寸 ---
+		# 原来是 800, 600。你的屏幕是 1920x1080，这个尺寸有点显小。
+		# 建议改为 1100, 750 左右，这样看起来更像一个正经的工作窗口。
+		if win_size.x < 100: 
+			win_size = Vector2(1100, 750) 
 			
-		# 应用尺寸
 		window_instance.size = win_size
-		# (可选) 更新最小尺寸防止被拖太小
-		window_instance.custom_minimum_size = win_size 
 		
-		# 3. 计算居中位置
+		# 计算居中位置 (保持不变)
 		var center_pos = get_viewport_rect().size / 2
 		var offset = Vector2(randf_range(-30, 30), randf_range(-30, 30))
-		
 		window_instance.position = center_pos - (win_size / 2) + offset
 	
-	# 确保新窗口在最上层
 	window_instance.move_to_front()
 
-# --- 剧情系统调用接口 ---
 func incoming_message(sender: String, msg: String):
 	var color = "#e74c3c" if sender == "老板" else "#2ecc71"
 	var formatted = "[color=" + color + "][b]" + sender + ":[/b][/color] " + msg + "\n"
 	
-	if global_chat_data.has(sender):
-		global_chat_data[sender] += formatted
-	else:
-		global_chat_data[sender] = formatted
+	if global_chat_data.has(sender): global_chat_data[sender] += formatted
+	else: global_chat_data[sender] = formatted
 	
 	show_notification("新消息: " + sender, msg)
 	get_tree().call_group("ChatApps", "receive_message", sender, msg)
@@ -136,38 +175,15 @@ func show_notification(title_text: String, msg_text: String):
 		notification_popup.visible = true
 		notif_title.text = title_text
 		notif_msg.text = msg_text
-		
-		# 播放弹出
 		notification_anim.play("popup")
-		
-		# 【修复】创建一个计时器，等待 3 秒
-		# 使用 create_timer 是最稳妥的，不受其他帧逻辑影响
 		var timer = get_tree().create_timer(3.0)
 		await timer.timeout
-		
-		# 播放消失 (倒放 popup 动画，或者是直接隐藏)
-		# 如果你没有做消失动画，可以直接 notification_popup.visible = false
 		if notification_anim.has_animation("popup"):
 			notification_anim.play_backwards("popup")
 			await notification_anim.animation_finished
-		
 		notification_popup.visible = false
 
 func _process(delta):
-	_update_system_time()
-
-func _update_system_time():
 	if clock_label:
-		# 1. 获取系统时间字典 (包含年、月、日、时、分、秒)
 		var time = Time.get_datetime_dict_from_system()
-		
-		# 2. 格式化字符串
-		# %02d 的意思是：如果是1位数，前面自动补0 (例如 9:5 -> 09:05)
-		# 格式：小时:分钟
-		#var time_str = "%02d:%02d" % [time.hour, time.minute]
-		
-		# 如果你想显示日期，可以用下面这行：
-		var time_str = "%d/%02d\n%02d:%02d" % [time.month, time.day, time.hour, time.minute]
-		
-		# 3. 更新 UI
-		clock_label.text = time_str
+		clock_label.text = "%d/%02d\n%02d:%02d" % [time.month, time.day, time.hour, time.minute]

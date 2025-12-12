@@ -32,125 +32,109 @@ script = ExtResource("2_em83p")
 level_scenes = Array[PackedScene]([ExtResource("5_iba87")])
 event_scenes = Array[PackedScene]([ExtResource("4_v50wr"), ExtResource("5_rxoyf"), ExtResource("6_d0w8n")])
 
-[node name="CloseButton" parent="BgColor/MainLayout/TitleBar" index="1"]
-text = "X"
+[node name="TitleBg" parent="BgColor" index="0"]
+offset_left = -960.0
+offset_right = 960.0
 
-[node name="EditorRoot" type="VBoxContainer" parent="BgColor/MainLayout/ContentSlot" index="0"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="MenuBar" type="HBoxContainer" parent="BgColor/MainLayout/ContentSlot" index="0"]
+layout_mode = 0
+offset_top = -32.0
+offset_right = 1888.0
+offset_bottom = -1.0
 
-[node name="MenuBar" type="HBoxContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot" index="0"]
-layout_mode = 2
-
-[node name="File" type="Button" parent="BgColor/MainLayout/ContentSlot/EditorRoot/MenuBar" index="0"]
+[node name="File" type="Button" parent="BgColor/MainLayout/ContentSlot/MenuBar" index="0"]
 layout_mode = 2
 text = "文件"
 
-[node name="Debug" type="Button" parent="BgColor/MainLayout/ContentSlot/EditorRoot/MenuBar" index="1"]
+[node name="Debug" type="Button" parent="BgColor/MainLayout/ContentSlot/MenuBar" index="1"]
 layout_mode = 2
 text = "调试"
 
-[node name="Status" type="Label" parent="BgColor/MainLayout/ContentSlot/EditorRoot/MenuBar" index="2"]
+[node name="Status" type="Label" parent="BgColor/MainLayout/ContentSlot/MenuBar" index="2"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 32
 text = "IDLE"
 label_settings = SubResource("LabelSettings_iba87")
-horizontal_alignment = 2
+horizontal_alignment = 1
 
-[node name="PanelContainer" type="PanelContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot" index="1"]
-layout_mode = 2
+[node name="PanelContainer" type="PanelContainer" parent="BgColor/MainLayout/ContentSlot" index="1"]
+layout_mode = 0
+offset_top = 3.0
+offset_right = 1920.0
+offset_bottom = 3.0
 
-[node name="SplitMain" type="HSplitContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot" index="2"]
-layout_mode = 2
+[node name="SplitMain" type="HSplitContainer" parent="BgColor/MainLayout/ContentSlot" index="2"]
+layout_mode = 0
+offset_top = 7.0
+offset_right = 1920.0
+offset_bottom = 762.0
 size_flags_vertical = 3
 split_offset = 200
 
-[node name="LeftColumn" type="VSplitContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain" index="0"]
+[node name="LeftColumn" type="VSplitContainer" parent="BgColor/MainLayout/ContentSlot/SplitMain" index="0"]
 layout_mode = 2
 
-[node name="SkillLogPanel" type="PanelContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn" index="0"]
+[node name="SkillLogPanel" type="PanelContainer" parent="BgColor/MainLayout/ContentSlot/SplitMain/LeftColumn" index="0"]
 custom_minimum_size = Vector2(50, 150)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_wavt3")
 
-[node name="技能战斗列表" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillLogPanel" index="0" instance=ExtResource("5_t5267")]
+[node name="技能战斗列表" parent="BgColor/MainLayout/ContentSlot/SplitMain/LeftColumn/SkillLogPanel" index="0" instance=ExtResource("5_t5267")]
 layout_mode = 2
 
-[node name="GridContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillLogPanel/技能战斗列表" index="0"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = 0.0
-offset_bottom = 0.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="SkillDeckPanel" type="PanelContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn" index="1"]
+[node name="SkillDeckPanel" type="PanelContainer" parent="BgColor/MainLayout/ContentSlot/SplitMain/LeftColumn" index="1"]
 custom_minimum_size = Vector2(50, 100)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_em83p")
 
-[node name="技能组背包" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillDeckPanel" index="0" instance=ExtResource("6_ftt37")]
+[node name="技能组背包" parent="BgColor/MainLayout/ContentSlot/SplitMain/LeftColumn/SkillDeckPanel" index="0" instance=ExtResource("6_ftt37")]
 layout_mode = 2
 
-[node name="GridContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillDeckPanel/技能组背包" index="0"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = 0.0
-offset_bottom = 0.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="SplitSub" type="HSplitContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain" index="1"]
+[node name="SplitSub" type="HSplitContainer" parent="BgColor/MainLayout/ContentSlot/SplitMain" index="1"]
 layout_mode = 2
 size_flags_horizontal = 3
 split_offset = 200
 
-[node name="PreviewViewport" type="PanelContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub" index="0"]
+[node name="PreviewViewport" type="PanelContainer" parent="BgColor/MainLayout/ContentSlot/SplitMain/SplitSub" index="0"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_bvc11")
 
-[node name="Placeholder" type="Label" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/PreviewViewport" index="0"]
+[node name="Placeholder" type="Label" parent="BgColor/MainLayout/ContentSlot/SplitMain/SplitSub/PreviewViewport" index="0"]
 layout_mode = 2
 
-[node name="GameViewContainer" type="SubViewportContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/PreviewViewport" index="1"]
+[node name="GameViewContainer" type="SubViewportContainer" parent="BgColor/MainLayout/ContentSlot/SplitMain/SplitSub/PreviewViewport" index="1"]
 layout_mode = 2
 mouse_filter = 0
 stretch = true
 
-[node name="GameViewport" type="SubViewport" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/PreviewViewport/GameViewContainer" index="0"]
+[node name="GameViewport" type="SubViewport" parent="BgColor/MainLayout/ContentSlot/SplitMain/SplitSub/PreviewViewport/GameViewContainer" index="0"]
 transparent_bg = true
 handle_input_locally = false
 size = Vector2i(1048, 755)
 render_target_update_mode = 4
 
-[node name="DescriptionPanel" type="PanelContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub" index="1"]
+[node name="DescriptionPanel" type="PanelContainer" parent="BgColor/MainLayout/ContentSlot/SplitMain/SplitSub" index="1"]
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_wrolx")
 
-[node name="DescriptionText" type="RichTextLabel" parent="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/SplitSub/DescriptionPanel" index="0"]
+[node name="DescriptionText" type="RichTextLabel" parent="BgColor/MainLayout/ContentSlot/SplitMain/SplitSub/DescriptionPanel" index="0"]
 layout_mode = 2
+theme_override_font_sizes/normal_font_size = 32
 bbcode_enabled = true
 text = "请在左侧选择一个技能以查看详细文档"
 
-[node name="TimelinePanel" type="PanelContainer" parent="BgColor/MainLayout/ContentSlot/EditorRoot" index="3"]
+[node name="TimelinePanel" type="PanelContainer" parent="BgColor/MainLayout/ContentSlot" index="3"]
 custom_minimum_size = Vector2(0, 250)
-layout_mode = 2
+layout_mode = 0
+offset_top = 766.0
+offset_right = 1920.0
+offset_bottom = 1016.0
 
-[node name="MapSystem" parent="BgColor/MainLayout/ContentSlot/EditorRoot/TimelinePanel" index="0" instance=ExtResource("5_58lqr")]
+[node name="MapSystem" parent="BgColor/MainLayout/ContentSlot/TimelinePanel" index="0" instance=ExtResource("5_58lqr")]
 layout_mode = 2
-
-[editable path="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillLogPanel/技能战斗列表"]
-[editable path="BgColor/MainLayout/ContentSlot/EditorRoot/SplitMain/LeftColumn/SkillDeckPanel/技能组背包"]

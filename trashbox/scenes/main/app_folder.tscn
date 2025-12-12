@@ -7,6 +7,11 @@
 custom_minimum_size = Vector2(900, 600)
 script = ExtResource("2_2cqje")
 
+[node name="TitleBg" parent="BgColor" index="0"]
+custom_minimum_size = Vector2(0, 30)
+offset_left = -450.0
+offset_right = 450.0
+
 [node name="TitleLabel" parent="BgColor/MainLayout/TitleBar" index="0"]
 theme_override_colors/font_color = Color(0.28118682, 0.28118688, 0.28118682, 1)
 text = "我的电脑"
@@ -19,8 +24,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = 9.0
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="GridContainer" type="GridContainer" parent="BgColor/MainLayout/ContentSlot/ScrollContainer" index="0"]
 layout_mode = 2
+columns = 6

@@ -7,6 +7,10 @@
 custom_minimum_size = Vector2(900, 600)
 script = ExtResource("2_q5pmc")
 
+[node name="TitleBg" parent="BgColor" index="0"]
+offset_left = -450.0
+offset_right = 450.0
+
 [node name="CloseButton" parent="BgColor/MainLayout/TitleBar" index="1"]
 text = "X"
 
