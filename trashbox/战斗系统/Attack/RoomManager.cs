@@ -80,7 +80,8 @@ namespace Attack
 		//离开房间
 		public void ExitRoom()
 		{
-			if (room != null)
+			// 添加对room对象的有效性检查
+			if (room != null && GodotObject.IsInstanceValid(room) && !room.IsQueuedForDeletion())
 			{
 				// 创建子节点列表的副本以避免在迭代时修改集合
 				var children = new Godot.Collections.Array<Node>(room.GetChildren());
@@ -124,7 +125,8 @@ namespace Attack
 
 		private void EnterNormalRoom()
 		{
-			int _index = new Random().Next(0, 6);
+			// 修复：确保随机数范围不超过EnemySet的大小
+			int _index = new Random().Next(0, EnemyTools.EnemySet.Count);
 			PackedScene[] enemies = EnemyTools.GetNormalEnemy(_index);
 			for(int i=0;i<enemies.Length;i++)
 			{
