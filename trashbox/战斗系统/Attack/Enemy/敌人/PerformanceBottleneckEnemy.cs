@@ -82,7 +82,7 @@ namespace Enemy
 			if (index)
 			{
 				// 发射奇数位置的弹幕 (-170度到170度，步长20度，共18颗)
-				for (int i = 0; i < 18; i+=2)
+				for (int i = 0; i < 36; i+=2)
 				{
 					var BulletContainer = GetNode<Node2D>("BulletContainer");
 					if (BulletContainer == null)
@@ -102,7 +102,7 @@ namespace Enemy
 					BulletContainer.AddChild(prefab);
 					//GD.Print($"{enemyName} 发射子弹，位置: {GlobalPosition}");
 					// 角度从-170度开始，每隔20度发射一颗
-					prefab.init(GetNode<Node2D>("发射点").GlobalPosition, -170 + 20 * i, ATK);
+					prefab.init(GetNode<Node2D>("发射点").GlobalPosition, 10 * i, ATK);
 				}
 			}
 			else
@@ -135,7 +135,7 @@ namespace Enemy
 
 		private void Attack_2(int index)
 		{
-			for (int i = 1; i < 36; i++)
+			for (int i = 0; i < 36; i++)
 			{
 				var BulletContainer = GetNode<Node2D>("BulletContainer");
 				if (BulletContainer == null)

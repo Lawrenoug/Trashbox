@@ -26,7 +26,7 @@ namespace CharacterManager
 
 		public float CurrentBlood;   // 当前血量 (Public 让 GDScript 能 get)
 
-		private float speed = 300;
+		private float speed = 600;
 		private float SpeedCutTime=3;
 		public AttackManager attackManager;
 		private SkillGroupsUIManager skillGroupsUIManager;

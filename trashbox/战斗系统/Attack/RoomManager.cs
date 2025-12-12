@@ -11,9 +11,42 @@ namespace Attack
 		public int roomIndex=0;//房间索引
 		public Node2D room;
 
+		public bool isInAttack=false;
+		private float attackDelay=0;
+		private int flow=0;
+
+		public override void _Process(double delta)
+		{
+			if(room!=null)
+			{
+				if(isInAttack)
+				{
+					if(room.GetChildCount()==0&&flow==0)
+					{
+						attackDelay+=(float)delta;
+						if (attackDelay > 2)
+						{
+							attackDelay = 0;
+							if (roomIndex == 4 || roomIndex == 5)
+							{
+								EnterEliteRoom();
+								flow = 1;
+							}
+							if (roomIndex == 7)
+							{
+								EnterBossRoom();
+								flow = 1;
+							}
+						}
+					}
+				}
+			}
+		}
+
 		//进入房间
 		public void EnterRoom(int _index)
 		{
+
 			room=GetTree().GetFirstNodeInGroup("战斗房间") as Node2D;
 			if(_index<MaxRoomCount)
 			{
@@ -24,21 +57,35 @@ namespace Attack
 				}
 				else if(_index==7)//进入boss
 				{
-					EnterBossRoom();
+					EnterNormalRoom();
+					isInAttack=true;
+					flow=0;
 				}
 				else if(_index==4||_index==5)//精英怪
 				{
-					EnterEliteRoom();
+					EnterNormalRoom();
+					isInAttack=true;
+					flow=0;
 				}
 				else if(_index==0||_index==1||_index==2)//小怪
 				{
 					EnterNormalRoom();
+					isInAttack=true;
+					flow=0;
 				}
 			}
 		}
 		//离开房间
 		public void ExitRoom()
 		{
+			if (room != null)
+			{
+				foreach (Node child in room.GetChildren())
+				{
+					room.RemoveChild(child);
+					child.QueueFree();
+				}
+			}
 			if (room != null)
 			{
 				foreach (Node child in room.GetChildren())
@@ -79,45 +126,36 @@ namespace Attack
 		private void EnterNormalRoom()
 		{
 			int _index = new Random().Next(0, 6);
-			PackedScene[] enemy=EnemyTools.GetNormalEnemy(_index);
-			for(int i=0;i<enemy.Length;i++)
+			PackedScene[] enemies = EnemyTools.GetNormalEnemy(_index);
+			for(int i=0;i<enemies.Length;i++)
 			{
-				EnemyBase enemyInstance = enemy[i].Instantiate<EnemyBase>();
-				room.AddChild(enemyInstance);
-				enemyInstance.GlobalPosition =EnemyTools.startPosition[i];
-				enemyInstance.MoveTo(EnemyTools.endPosition[i]);
-				enemyInstance.state=EnemyState.Moving;
+				if(enemies[i] != null)
+				{
+					Node enemyInstance = enemies[i].Instantiate();
+					room.AddChild(enemyInstance);
+				}
 			}
 		}
 		private void EnterEliteRoom()
 		{
 			if(roomIndex==4)
 			{
-				PackedScene enemy=EnemyTools.GetEliteEnemy(0);
-				EnemyBase enemyInstance = enemy.Instantiate<EnemyBase>();
+				PackedScene enemy=EnemyTools.GetEliteEnemy(5);
+				Node enemyInstance = enemy.Instantiate();
 				room.AddChild(enemyInstance);
-				enemyInstance.GlobalPosition=EnemyTools.EliteenemyPosition[0];
-				enemyInstance.MoveTo(EnemyTools.EliteenemyPosition[1]);
-				enemyInstance.state=EnemyState.Moving;
 			}
 			else if(roomIndex==5)
 			{
-				PackedScene enemy=EnemyTools.GetEliteEnemy(1);
-				EnemyBase enemyInstance = enemy.Instantiate<EnemyBase>();
+				PackedScene enemy=EnemyTools.GetEliteEnemy(6);
+				Node enemyInstance = enemy.Instantiate();
 				room.AddChild(enemyInstance);
-				enemyInstance.GlobalPosition=EnemyTools.EliteenemyPosition[0];
-				enemyInstance.MoveTo(EnemyTools.EliteenemyPosition[1]);
-				enemyInstance.state=EnemyState.Moving;
 			}
 		}
 		private void EnterBossRoom()
 		{
 			PackedScene enemy = EnemyTools.GetBossEnemy();
-			EnemyBase enemyInstance = enemy.Instantiate<EnemyBase>();
+			Node enemyInstance = enemy.Instantiate();
 			room.AddChild(enemyInstance);
-			enemyInstance.GlobalPosition = EnemyTools.EliteenemyPosition[0];
-			enemyInstance.MoveTo(EnemyTools.EliteenemyPosition[1]);
-			enemyInstance.state = EnemyState.Moving;
 		}
 	}
 }

@@ -5,9 +5,8 @@ namespace Enemy
 {
 	public partial class LoreConflictBullet_2 : EnemyBullet
 	{
-		public partial class LoreConflictBullet_1 : EnemyBullet
-		{
-			public override float speed { get; set; } = 100f;
+		
+			public override float speed { get; set; } = 300f;
 			public override float angle { get; set; } = 0f;
 
 			public override float ATK { get; set; } = 5f;
@@ -45,6 +44,6 @@ namespace Enemy
 				Vector2 direction = new Vector2(-Mathf.Cos(angleInRadians), Mathf.Sin(angleInRadians));
 				GlobalPosition += direction * speed * (float)delta;
 			}
-		}
+		
 	}
 }
