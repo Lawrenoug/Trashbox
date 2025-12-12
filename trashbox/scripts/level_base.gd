@@ -3,7 +3,8 @@ extends Node2D
 @onready var hp_bar = $HUD/HPBar
 @onready var start_pos = get_node_or_null("StartPos")
 
-const PlayerScene = preload("res://trashbox/scenes/main/GlobalPlayer.tscn")
+# 删除了 PlayerScene 预加载
+# const PlayerScene = preload("res://trashbox/scenes/main/GlobalPlayer.tscn")
 
 # --- 【关键】这里定义了你报错缺少的变量 ---
 # 请在编辑器里把 "技能战斗列表" 节点拖给 Battle Ui Node
@@ -14,34 +15,26 @@ const PlayerScene = preload("res://trashbox/scenes/main/GlobalPlayer.tscn")
 var current_player = null
 
 func _ready():
-	# --- 1. 生成玩家逻辑 (必须有这段！) ---
-	# 如果场景里自带一个旧的 Player 节点，先清理掉
-	if has_node("Player"): 
-		get_node("Player").queue_free()
+	# --- 删除了玩家生成逻辑 ---
 	
-	# 实例化新玩家
-	if PlayerScene:
-		current_player = PlayerScene.instantiate()
-		add_child(current_player)
-		
-		# === 【核心修复】强制让玩家显示 ===
+	# --- 1. 查找现有玩家节点 ---
+	# 假设场景中已经有一个名为 "Player" 的节点
+	current_player = get_node_or_null("Player")
+	
+	if current_player:
+		# === 【核心修复】确保玩家显示 ===
 		current_player.visible = true 
 		current_player.modulate.a = 1.0 # 防止透明度是0
 		# ================================
-		
-		# 强制把名字改成 Player
-		current_player.name = "Player" 
 	else:
-		print("严重错误：PlayerScene 未加载！")
+		print("警告：未找到名为 'Player' 的节点")
 		return
-	# --- 2. 设置位置 ---
+	
+	# --- 2. 设置位置（如果场景中有 StartPos 节点）---
 	if start_pos: 
 		current_player.global_position = start_pos.global_position
-	else: 
-		# 如果没找到 StartPos 节点，给一个默认坐标防止它飞到 (0,0) 墙里去
-		current_player.global_position = Vector2(300, 300) 
 	
-	# --- 3. 读档和UI连接 (后续代码...) ---
+	# --- 3. 读档和UI连接 ---
 	_load_player_data()
 	_connect_player(current_player)
 	
@@ -72,6 +65,7 @@ func _ready():
 		print("LevelBase: 已成功连接 C# 攻击管理器")
 	else:
 		print("LevelBase 错误: 无法在 Player 子节点上找到 attackManager！")
+
 # --- 读档逻辑 ---
 # trashbox/scripts/level_base.gd
 
