@@ -183,7 +183,7 @@ func show_notification(title_text: String, msg_text: String):
 			await notification_anim.animation_finished
 		notification_popup.visible = false
 
-func _process(delta):
+func _process(_delta):
 	if clock_label:
 		var time = Time.get_datetime_dict_from_system()
 		clock_label.text = "%d/%02d\n%02d:%02d" % [time.month, time.day, time.hour, time.minute]

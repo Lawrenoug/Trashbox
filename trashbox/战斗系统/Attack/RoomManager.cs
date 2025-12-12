@@ -11,14 +11,10 @@ namespace Attack
 		public int roomIndex=0;//房间索引
 		public Node2D room;
 
-		public void init()
-		{
-			room=GetTree().GetFirstNodeInGroup("战斗房间") as Node2D;
-		}
-
 		//进入房间
 		public void EnterRoom(int _index)
 		{
+			room=GetTree().GetFirstNodeInGroup("战斗房间") as Node2D;
 			if(_index<MaxRoomCount)
 			{
 				//进入事件房
@@ -43,7 +39,14 @@ namespace Attack
 		//离开房间
 		public void ExitRoom()
 		{
-			
+			if (room != null)
+			{
+				foreach (Node child in room.GetChildren())
+				{
+					room.RemoveChild(child);
+					child.QueueFree();
+				}
+			}
 		}
 		//胜利随机得到技能
 		public PackedScene[] GetSkills(int _count)

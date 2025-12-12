@@ -1,15 +1,14 @@
-[gd_scene load_steps=7 format=3 uid="uid://cty56ew0kcqbu"]
+[gd_scene load_steps=6 format=3 uid="uid://cty56ew0kcqbu"]
 
 [ext_resource type="Texture2D" uid="uid://d3l0n6prpflv5" path="res://trashbox/assets/sprites/grid_bg.png" id="1_ge182"]
 [ext_resource type="Script" uid="uid://dijip1xmh300q" path="res://trashbox/scripts/level_base.gd" id="1_w6qvd"]
-[ext_resource type="PackedScene" uid="uid://bjbyfll3hjoba" path="res://trashbox/战斗系统/Attack/Enemy/敌人/完美主义.tscn" id="3_w6qvd"]
 [ext_resource type="PackedScene" uid="uid://dk1ae2t3e6fi7" path="res://trashbox/战斗系统/技能战斗列表.tscn" id="5_w6qvd"]
 [ext_resource type="PackedScene" uid="uid://bj20pol0nbg0o" path="res://trashbox/战斗系统/技能组背包.tscn" id="6_xl61d"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p3va8"]
 bg_color = Color(0.3469611, 0.72328484, 0.44457972, 1)
 
-[node name="LevelBase" type="Node2D" node_paths=PackedStringArray("battle_ui_node", "backpack_ui_node")]
+[node name="LevelBase" type="Node2D" node_paths=PackedStringArray("battle_ui_node", "backpack_ui_node") groups=["战斗房间"]]
 script = ExtResource("1_w6qvd")
 battle_ui_node = NodePath("HUD/技能战斗列表")
 backpack_ui_node = NodePath("HUD/技能组背包")
@@ -30,25 +29,10 @@ centered = false
 
 [node name="Spawn1" type="Marker2D" parent="EnemySpawnPoints" groups=["战斗房间"]]
 
-[node name="完美主义" parent="EnemySpawnPoints/Spawn1" instance=ExtResource("3_w6qvd")]
-position = Vector2(1200, 540)
-
-[node name="完美主义2" parent="EnemySpawnPoints/Spawn1" instance=ExtResource("3_w6qvd")]
-position = Vector2(1400, 320)
-
-[node name="完美主义3" parent="EnemySpawnPoints/Spawn1" instance=ExtResource("3_w6qvd")]
-position = Vector2(1400, 760)
-
-[node name="完美主义4" parent="EnemySpawnPoints/Spawn1" instance=ExtResource("3_w6qvd")]
-position = Vector2(1600, 100)
-
-[node name="完美主义5" parent="EnemySpawnPoints/Spawn1" instance=ExtResource("3_w6qvd")]
-position = Vector2(1600, 980)
-
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(960, 540)
 
-[node name="HUD" type="CanvasLayer" parent="."]
+[node name="HUD" type="CanvasLayer" parent="." groups=["技能背包"]]
 
 [node name="HPBar" type="ProgressBar" parent="HUD"]
 offset_left = 17.0

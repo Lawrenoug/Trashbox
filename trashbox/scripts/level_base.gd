@@ -50,25 +50,40 @@ func _ready():
 		current_player.attackManager.set("BulletNode", self)
 		current_player.attackManager.set("enableAttack", true)
 	
-	# 4. 生成测试按钮
 	_create_debug_skip_button()
-
-	# --- 【UI 显示控制：战斗只显示战斗列表】---
-	if battle_ui_node:
-		battle_ui_node.visible = false
-		
-	if backpack_ui_node:
-		backpack_ui_node.visible = false # 战斗时隐藏背包
-
+	if battle_ui_node: battle_ui_node.visible = false
+	if backpack_ui_node: backpack_ui_node.visible = false
+	
+	# === 【新增】场景加载完毕，通知 C# 生成敌人 ===
+	var room_mgr = get_node_or_null("/root/RoomManager")
+	if room_mgr:
+		# 告诉 C#：我已经准备好了，我是第 X 层，请刷怪
+		# 这里的 target_level_index 是刚才在地图里存下的
+		print("LevelBase: 呼叫 RoomManager 生成第 %d 层敌人" % GlobalGameState.target_level_index)
+		room_mgr.EnterRoom(GlobalGameState.target_level_index)
+	else:
+		print("错误：找不到 RoomManager 单例！")
+	var real_player_node = current_player.get_node("Player")
+	
+	if real_player_node and real_player_node.get("attackManager"):
+		# 将 LevelBase (self) 设为子弹的父节点，这样子弹才会出现在关卡里
+		real_player_node.attackManager.set("BulletNode", self)
+		real_player_node.attackManager.set("enableAttack", true)
+		print("LevelBase: 已成功连接 C# 攻击管理器")
+	else:
+		print("LevelBase 错误: 无法在 Player 子节点上找到 attackManager！")
 # --- 读档逻辑 ---
 # trashbox/scripts/level_base.gd
 
 func _load_player_data():
 	if not current_player: return
 	
-	# 恢复血量
-	current_player.set("MaxBlood", GlobalGameState.player_max_hp)
-	current_player.set("CurrentBlood", GlobalGameState.player_current_hp)
+	# === 【修改】设置真正的 Player 子节点 ===
+	var real_player = current_player.get_node_or_null("Player")
+	
+	if real_player:
+		real_player.set("MaxBlood", GlobalGameState.player_max_hp)
+		real_player.set("CurrentBlood", GlobalGameState.player_current_hp)
 	
 	# --- 核心：恢复战斗技能 ---
 	# 只要 battle_ui_node 引用还在（哪怕 visible=false），这个逻辑就能跑
@@ -116,9 +131,23 @@ func _load_player_data():
 func _save_player_data():
 	if not current_player: return
 	
-	# 保存血量
-	GlobalGameState.player_current_hp = current_player.get("CurrentBlood")
-	GlobalGameState.player_max_hp = current_player.get("MaxBlood")
+	# === 【修改】获取真正的 Player 子节点 ===
+	var real_player = current_player.get_node_or_null("Player")
+	
+	if real_player:
+		# 从子节点读取血量
+		var current_hp = real_player.get("CurrentBlood")
+		var max_hp = real_player.get("MaxBlood")
+		
+		# 安全检查：防止 C# 尚未初始化导致获取为 null
+		if current_hp == null: current_hp = 100.0
+		if max_hp == null: max_hp = 100.0
+			
+		GlobalGameState.player_current_hp = current_hp
+		GlobalGameState.player_max_hp = max_hp
+		print("已保存血量: %s / %s" % [current_hp, max_hp])
+	else:
+		print("错误：无法找到 Player 子节点，存档失败！")
 	
 	# 保存战斗列表里的技能
 	if battle_ui_node:
@@ -193,10 +222,23 @@ func _create_debug_skip_button():
 
 # --- 辅助 Player ---
 func setup_player(p): _connect_player(p)
-func _connect_player(p):
-	if p.has_signal("HealthChanged"):
-		p.connect("HealthChanged", _on_health_changed)
-		_on_health_changed(p.get("CurrentBlood"), p.get("MaxBlood"))
+
+func _connect_player(p): # 注意：这里的 p 传进来的是根节点
+	# === 【修改】连接真正的 Player 子节点 ===
+	var real_player = p.get_node_or_null("Player")
+	
+	if real_player and real_player.has_signal("HealthChanged"):
+		# 先断开旧的（如果有），防止重复连接报错
+		if real_player.is_connected("HealthChanged", _on_health_changed):
+			real_player.disconnect("HealthChanged", _on_health_changed)
+			
+		real_player.connect("HealthChanged", _on_health_changed)
+		
+		# 立即更新一次 UI
+		_on_health_changed(real_player.get("CurrentBlood"), real_player.get("MaxBlood"))
+	else:
+		print("警告：无法连接血条信号，找不到 Player 子节点或信号缺失")
+		
 func _on_health_changed(c, m):
 	if hp_bar:
 		hp_bar.value = c

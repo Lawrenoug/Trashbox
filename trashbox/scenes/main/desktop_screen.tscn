@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://pwwp08nxemy2"]
+[gd_scene load_steps=15 format=3 uid="uid://pwwp08nxemy2"]
 
 [ext_resource type="Script" uid="uid://cplhjjnf0p3j6" path="res://trashbox/scripts/desktop_screen.gd" id="1_1m4g2"]
 [ext_resource type="Texture2D" uid="uid://b2ag8neelt1je" path="res://trashbox/assets/sprites/菜单.png" id="1_xm50m"]
@@ -17,6 +17,42 @@ bg_color = Color(0.6, 0.6, 0.6, 0)
 [sub_resource type="LabelSettings" id="LabelSettings_wa37d"]
 font_size = 32
 font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Animation" id="Animation_wa37d"]
+resource_name = "popup"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_fjr7a"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_on2mt"]
+_data = {
+&"RESET": SubResource("Animation_fjr7a"),
+&"popup": SubResource("Animation_wa37d")
+}
 
 [node name="DesktopScreen" type="Control"]
 layout_mode = 3
@@ -126,12 +162,16 @@ icon = ExtResource("8_w12mn")
 flat = true
 
 [node name="NotificationPopup" type="PanelContainer" parent="."]
+modulate = Color(1, 1, 1, 0)
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 mouse_filter = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="NotificationPopup"]
+libraries = {
+&"": SubResource("AnimationLibrary_on2mt")
+}
 
 [node name="HBoxContainer" type="HBoxContainer" parent="NotificationPopup"]
 layout_mode = 2
