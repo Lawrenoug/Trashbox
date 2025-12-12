@@ -1,9 +1,12 @@
-[gd_scene load_steps=7 format=3 uid="uid://cxyrsu1dkmcwm"]
+[gd_scene load_steps=10 format=3 uid="uid://cxyrsu1dkmcwm"]
 
 [ext_resource type="PackedScene" uid="uid://bv17lh6n2q5kb" path="res://trashbox/scenes/main/window_base.tscn" id="1_4n1ku"]
 [ext_resource type="Script" uid="uid://c62clhokls37r" path="res://trashbox/scripts/app_chat.gd" id="2_haxvl"]
 [ext_resource type="Texture2D" uid="uid://cjdg85bipgjd1" path="res://trashbox/assets/sprites/boss.png" id="3_hvvjn"]
 [ext_resource type="Texture2D" uid="uid://vlm1d562dul" path="res://trashbox/assets/sprites/huajie.png" id="4_pesid"]
+[ext_resource type="Texture2D" uid="uid://c5ns0nky6smky" path="res://trashbox/assets/sprites/company.png" id="4_tllig"]
+[ext_resource type="Texture2D" uid="uid://w4hxj1j4och" path="res://trashbox/assets/sprites/HR.png" id="5_jcn1p"]
+[ext_resource type="Texture2D" uid="uid://bltm0k36rb7vm" path="res://trashbox/assets/sprites/mom.png" id="7_g7ixg"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tllig"]
 bg_color = Color(0.2, 0.2, 0.2, 1)
@@ -40,7 +43,25 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_tllig")
 [node name="ContactList" type="VBoxContainer" parent="BgColor/MainLayout/ContentSlot/SplitView/LeftSidebar" index="0"]
 layout_mode = 2
 
-[node name="BtnBoss" type="Button" parent="BgColor/MainLayout/ContentSlot/SplitView/LeftSidebar/ContactList" index="0"]
+[node name="BtnMom" type="Button" parent="BgColor/MainLayout/ContentSlot/SplitView/LeftSidebar/ContactList" index="0"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "妈妈"
+icon = ExtResource("7_g7ixg")
+flat = true
+alignment = 0
+
+[node name="BtnGroup" type="Button" parent="BgColor/MainLayout/ContentSlot/SplitView/LeftSidebar/ContactList" index="1"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "公司全员群"
+icon = ExtResource("4_tllig")
+flat = true
+alignment = 0
+
+[node name="BtnBoss" type="Button" parent="BgColor/MainLayout/ContentSlot/SplitView/LeftSidebar/ContactList" index="2"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
@@ -49,7 +70,16 @@ icon = ExtResource("3_hvvjn")
 flat = true
 alignment = 0
 
-[node name="BtnColleague" type="Button" parent="BgColor/MainLayout/ContentSlot/SplitView/LeftSidebar/ContactList" index="1"]
+[node name="BtnHR" type="Button" parent="BgColor/MainLayout/ContentSlot/SplitView/LeftSidebar/ContactList" index="3"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "HR-Linda"
+icon = ExtResource("5_jcn1p")
+flat = true
+alignment = 0
+
+[node name="BtnColleague" type="Button" parent="BgColor/MainLayout/ContentSlot/SplitView/LeftSidebar/ContactList" index="4"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
@@ -58,7 +88,7 @@ icon = ExtResource("4_pesid")
 flat = true
 alignment = 0
 
-[node name="Spacer" type="Control" parent="BgColor/MainLayout/ContentSlot/SplitView/LeftSidebar/ContactList" index="2"]
+[node name="Spacer" type="Control" parent="BgColor/MainLayout/ContentSlot/SplitView/LeftSidebar/ContactList" index="5"]
 layout_mode = 2
 size_flags_vertical = 3
 

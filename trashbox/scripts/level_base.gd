@@ -14,21 +14,35 @@ const PlayerScene = preload("res://trashbox/scenes/main/GlobalPlayer.tscn")
 var current_player = null
 
 func _ready():
-	# 1. 清理旧玩家
-	if has_node("Player"): get_node("Player").queue_free()
+	# --- 1. 生成玩家逻辑 (必须有这段！) ---
+	# 如果场景里自带一个旧的 Player 节点，先清理掉
+	if has_node("Player"): 
+		get_node("Player").queue_free()
 	
-	# 2. 生成新玩家
-	current_player = PlayerScene.instantiate()
-	add_child(current_player)
+	# 实例化新玩家
+	if PlayerScene:
+		current_player = PlayerScene.instantiate()
+		add_child(current_player)
+		
+		# === 【核心修复】强制让玩家显示 ===
+		current_player.visible = true 
+		current_player.modulate.a = 1.0 # 防止透明度是0
+		# ================================
+		
+		# 强制把名字改成 Player
+		current_player.name = "Player" 
+	else:
+		print("严重错误：PlayerScene 未加载！")
+		return
+	# --- 2. 设置位置 ---
+	if start_pos: 
+		current_player.global_position = start_pos.global_position
+	else: 
+		# 如果没找到 StartPos 节点，给一个默认坐标防止它飞到 (0,0) 墙里去
+		current_player.global_position = Vector2(300, 300) 
 	
-	# 设置位置
-	if start_pos: current_player.global_position = start_pos.global_position
-	else: current_player.global_position = Vector2(300, 300)
-	
-	# --- 读档 ---
+	# --- 3. 读档和UI连接 (后续代码...) ---
 	_load_player_data()
-	
-	# 连接血条
 	_connect_player(current_player)
 	
 	# 3. 修复 C# 引用 (让玩家能攻击)
@@ -36,56 +50,104 @@ func _ready():
 		current_player.attackManager.set("BulletNode", self)
 		current_player.attackManager.set("enableAttack", true)
 	
-	# 4. 生成测试按钮
 	_create_debug_skip_button()
-
-	# --- 【UI 显示控制：战斗只显示战斗列表】---
-	if battle_ui_node:
-		battle_ui_node.visible = true
-		
-	if backpack_ui_node:
-		backpack_ui_node.visible = false # 战斗时隐藏背包
-
+	if battle_ui_node: battle_ui_node.visible = false
+	if backpack_ui_node: backpack_ui_node.visible = false
+	
+	# === 【新增】场景加载完毕，通知 C# 生成敌人 ===
+	var room_mgr = get_node_or_null("/root/RoomManager")
+	if room_mgr:
+		# 告诉 C#：我已经准备好了，我是第 X 层，请刷怪
+		# 这里的 target_level_index 是刚才在地图里存下的
+		print("LevelBase: 呼叫 RoomManager 生成第 %d 层敌人" % GlobalGameState.target_level_index)
+		room_mgr.EnterRoom(GlobalGameState.target_level_index)
+	else:
+		print("错误：找不到 RoomManager 单例！")
+	var real_player_node = current_player.get_node("Player")
+	
+	if real_player_node and real_player_node.get("attackManager"):
+		# 将 LevelBase (self) 设为子弹的父节点，这样子弹才会出现在关卡里
+		real_player_node.attackManager.set("BulletNode", self)
+		real_player_node.attackManager.set("enableAttack", true)
+		print("LevelBase: 已成功连接 C# 攻击管理器")
+	else:
+		print("LevelBase 错误: 无法在 Player 子节点上找到 attackManager！")
 # --- 读档逻辑 ---
+# trashbox/scripts/level_base.gd
+
 func _load_player_data():
 	if not current_player: return
 	
-	# 恢复血量
-	current_player.set("MaxBlood", GlobalGameState.player_max_hp)
-	current_player.set("CurrentBlood", GlobalGameState.player_current_hp)
+	# === 【修改】设置真正的 Player 子节点 ===
+	var real_player = current_player.get_node_or_null("Player")
 	
-	# 恢复战斗列表技能 (如果UI节点存在)
+	if real_player:
+		real_player.set("MaxBlood", GlobalGameState.player_max_hp)
+		real_player.set("CurrentBlood", GlobalGameState.player_current_hp)
+	
+	# --- 核心：恢复战斗技能 ---
+	# 只要 battle_ui_node 引用还在（哪怕 visible=false），这个逻辑就能跑
 	if battle_ui_node and GlobalGameState.saved_skill_paths.size() > 0:
-		var grid = battle_ui_node.get_node("GridContainer")
+		
+		# 1. 获取隐藏的 GridContainer
+		var grid = battle_ui_node.get_node("GridContainer") 
+		# 如果找不到，尝试用 find_child
+		if not grid: grid = battle_ui_node.find_child("GridContainer", true, false)
+			
 		if grid:
-			# 清空旧图标
+			# 2. 清空旧图标 (如果有的话)
 			for slot in grid.get_children():
 				for child in slot.get_children(): child.queue_free()
 			
-			# 填入新图标
+			# 3. 填入新技能 (在后台实例化)
 			var slots = grid.get_children()
 			var paths = GlobalGameState.saved_skill_paths
+			
 			for i in range(paths.size()):
 				if i >= slots.size(): break
 				var path = paths[i]
 				if path != "":
 					var skill_scene = load(path)
 					if skill_scene:
-						slots[i].add_child(skill_scene.instantiate())
+						var skill_instance = skill_scene.instantiate()
+						slots[i].add_child(skill_instance)
 			
-			# 通知 C# 更新
+			# 4. 【关键】通知 C# 脚本读取这些技能
+			# grid 节点上必须挂载了 SkillGroupsUIManager.cs
+			if grid.has_method("UpdateSkillList"):
+				grid.UpdateSkillList() # 让 C# 更新内部列表
+			
 			if grid.has_method("GetSkillList"):
-				var list = grid.GetSkillList()
-				current_player.attackManager.InsertSkill(list)
-				print("LevelBase: 已恢复技能 -> ", list.size())
+				var csharp_skill_list = grid.GetSkillList() # 获取 C# List<Skill>
+				
+				# 5. 注入给玩家的 AttackManager
+				if current_player.get("attackManager"):
+					current_player.attackManager.InsertSkill(csharp_skill_list)
+					print("LevelBase: 成功将 %d 个技能注入给玩家 C#" % csharp_skill_list.size())
+				else:
+					print("LevelBase: 玩家缺少 AttackManager，无法注入技能")
 
 # --- 存档逻辑 ---
 func _save_player_data():
 	if not current_player: return
 	
-	# 保存血量
-	GlobalGameState.player_current_hp = current_player.get("CurrentBlood")
-	GlobalGameState.player_max_hp = current_player.get("MaxBlood")
+	# === 【修改】获取真正的 Player 子节点 ===
+	var real_player = current_player.get_node_or_null("Player")
+	
+	if real_player:
+		# 从子节点读取血量
+		var current_hp = real_player.get("CurrentBlood")
+		var max_hp = real_player.get("MaxBlood")
+		
+		# 安全检查：防止 C# 尚未初始化导致获取为 null
+		if current_hp == null: current_hp = 100.0
+		if max_hp == null: max_hp = 100.0
+			
+		GlobalGameState.player_current_hp = current_hp
+		GlobalGameState.player_max_hp = max_hp
+		print("已保存血量: %s / %s" % [current_hp, max_hp])
+	else:
+		print("错误：无法找到 Player 子节点，存档失败！")
 	
 	# 保存战斗列表里的技能
 	if battle_ui_node:
@@ -101,51 +163,55 @@ func _save_player_data():
 
 # --- 离开逻辑 ---
 func _on_skip_level_pressed():
-	print("--- [DEBUG] 按钮被点击 ---")
+	print("--- [流程] 1. 玩家请求离开关卡 ---")
 	
-	# 1. 暂时屏蔽 C# 逻辑，先测跳转功能
-	# 如果这里报错，说明是队友的 C# 代码卡住了 GDScript
-	# var room_mgr = get_node_or_null("/root/RoomManager")
-	# var layer_index = GlobalGameState.current_level_progress + 1 
-	# if room_mgr:
-	# 	var rewards = room_mgr.GetSkills(layer_index)
-	# 	if rewards:
-	# 		room_mgr.SendSkillToBackpack(rewards)
-	# 	room_mgr.ExitRoom()
-	print("--- [DEBUG] 已跳过 C# 交互 (排查用) ---")
+	# === 第一步：立刻停火 ===
+	# 防止在清理过程中还有新子弹生成，导致报错
+	if current_player:
+		var real_player = current_player.get_node_or_null("Player")
+		if real_player and real_player.get("attackManager"):
+			real_player.attackManager.set("enableAttack", false)
 	
-	# 2. 存档 (这是纯 GDScript，应该没事)
+	# === 第二步：优先调用 C# ExitRoom ===
+	# 必须在场景销毁前调用，否则 C# 会报 ObjectDisposedException
+	var room_mgr = get_node_or_null("/root/RoomManager")
+	if room_mgr:
+		print("--- [流程] 2. 通知 C# 清理引用 ---")
+		room_mgr.ExitRoom()
+	
+	# === 第三步：【关键】强制等待 ===
+	# 等待 2 帧。
+	# 第1帧：让 C# 的逻辑跑完。
+	# 第2帧：让 Godot 的 QueueFree 生效，确保节点真的从内存中断开了。
+	await get_tree().process_frame
+	await get_tree().process_frame
+	
+	print("--- [流程] 3. C# 清理完毕，开始存档和切换 ---")
+	
+	# === 第四步：存档 (GDScript 逻辑) ===
 	_save_player_data()
-	print("--- [DEBUG] 存档完成 ---")
 	
-	# 3. 销毁玩家
+	# === 第五步：清理玩家节点 ===
 	if current_player:
 		current_player.queue_free()
 	
-	# 4. 更新进度
-	print("--- [DEBUG] 当前进度: ", GlobalGameState.current_level_progress)
+	# === 第六步：计算进度并跳转 ===
 	GlobalGameState.current_level_progress += 1
-	print("--- [DEBUG] 更新后进度: ", GlobalGameState.current_level_progress)
 	
-	# 5. 通关判断 (假设总共8关，打完第8关索引变成7)
-	# 也就是: 0,1,2,3,4,5,6 (前7关) -> 7 (第8关通关)
+	# 通关判断 (假设总共8关: 0~7)
 	if GlobalGameState.current_level_progress >= 7: 
-		print("--- [DEBUG] 判定：通关！尝试跳转结局 ---")
+		print("--- [流程] 判定：通关 ---")
 		var end_scene_path = "res://trashbox/scenes/main/GameEnd.tscn"
-		
-		# 检查文件是否存在
 		if ResourceLoader.exists(end_scene_path):
-			var err = get_tree().change_scene_to_file(end_scene_path)
-			if err != OK:
-				print("--- [ERROR] 跳转失败，错误码: ", err)
+			get_tree().change_scene_to_file(end_scene_path)
 		else:
-			print("--- [ERROR] 找不到结局文件！请检查路径: ", end_scene_path)
-			
+			print("错误：找不到结局文件")
 	else:
-		print("--- [DEBUG] 判定：未通关，返回桌面 ---")
+		print("--- [流程] 判定：返回桌面 ---")
 		GlobalGameState.should_open_engine_automatically = true
+		# 最后一步才是切换场景，这时候 C# 早就完事了，不会报错
 		get_tree().change_scene_to_file(GlobalGameState.desktop_scene_path)
-		
+
 # --- 辅助 UI ---
 func _create_debug_skip_button():
 	var layer = CanvasLayer.new()
@@ -160,10 +226,23 @@ func _create_debug_skip_button():
 
 # --- 辅助 Player ---
 func setup_player(p): _connect_player(p)
-func _connect_player(p):
-	if p.has_signal("HealthChanged"):
-		p.connect("HealthChanged", _on_health_changed)
-		_on_health_changed(p.get("CurrentBlood"), p.get("MaxBlood"))
+
+func _connect_player(p): # 注意：这里的 p 传进来的是根节点
+	# === 【修改】连接真正的 Player 子节点 ===
+	var real_player = p.get_node_or_null("Player")
+	
+	if real_player and real_player.has_signal("HealthChanged"):
+		# 先断开旧的（如果有），防止重复连接报错
+		if real_player.is_connected("HealthChanged", _on_health_changed):
+			real_player.disconnect("HealthChanged", _on_health_changed)
+			
+		real_player.connect("HealthChanged", _on_health_changed)
+		
+		# 立即更新一次 UI
+		_on_health_changed(real_player.get("CurrentBlood"), real_player.get("MaxBlood"))
+	else:
+		print("警告：无法连接血条信号，找不到 Player 子节点或信号缺失")
+		
 func _on_health_changed(c, m):
 	if hp_bar:
 		hp_bar.value = c

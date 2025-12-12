@@ -43,7 +43,7 @@ namespace Attack
 			}
 		}
 
-        //进入房间
+		//进入房间
 		public void EnterRoom(int _index)
 		{
 
@@ -86,6 +86,14 @@ namespace Attack
 					child.QueueFree();
 				}
 			}
+			if (room != null)
+			{
+				foreach (Node child in room.GetChildren())
+				{
+					room.RemoveChild(child);
+					child.QueueFree();
+				}
+			}
 		}
 		//胜利随机得到技能
 		public PackedScene[] GetSkills(int _count)
@@ -115,7 +123,7 @@ namespace Attack
 			}
 		}
 
-        private void EnterNormalRoom()
+		private void EnterNormalRoom()
 		{
 			int _index = new Random().Next(0, 6);
 			PackedScene[] enemies = EnemyTools.GetNormalEnemy(_index);

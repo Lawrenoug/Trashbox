@@ -14,3 +14,5 @@ var saved_skill_paths: Array[String] = []
 
 # 2. 【新增】背包技能存档 (仓库里的)
 var saved_backpack_paths: Array[String] = []
+
+var target_level_index: int = 0

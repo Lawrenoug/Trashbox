@@ -5,21 +5,24 @@
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6uqi0"]
 
-[node name="Player" type="RigidBody2D" node_paths=PackedStringArray("startShootPosition", "BulletContainer") groups=["player"]]
-visible = false
+[node name="玩家节点" type="Node2D"]
+
+[node name="Player" type="RigidBody2D" parent="." node_paths=PackedStringArray("startShootPosition") groups=["player"]]
+position = Vector2(167, 315)
 gravity_scale = 0.0
 script = ExtResource("1_raflp")
 startShootPosition = NodePath("发射点")
-BulletContainer = NodePath(".")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
 shape = SubResource("CircleShape2D_6uqi0")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="Player"]
 texture_filter = 1
 rotation = -1.5707964
 scale = Vector2(6, 6)
 texture = ExtResource("2_4hag6")
 
-[node name="发射点" type="Node2D" parent="."]
+[node name="发射点" type="Node2D" parent="Player"]
 position = Vector2(100, 0)
+
+[node name="玩家子弹" type="Node2D" parent="." groups=["玩家子弹"]]

@@ -161,14 +161,17 @@ func _on_node_clicked(index, type):
 	
 	print("地图通知：请求进入第 %d 关, 类型 %d" % [index, type])
 	await tween.finished
-	level_selected.emit(index, type) # 【修改】发出信号带类型
-	var room_mgr = get_node("/root/RoomManager")
-	if room_mgr:
-		print("MapSystem: 通知后端进入房间 ", index)
-		# 调用 C# 的 EnterRoom(int _index)
-		room_mgr.EnterRoom(index)
 	
-	# --- 原有逻辑: 发信号给 Engine 切换场景 ---
+	# === 【修改开始】 ===
+	
+	# 1. 把目标层数存入全局变量
+	GlobalGameState.target_level_index = index
+	
+	# 2. 发送信号让 Engine 切换场景 (不要在这里调用 RoomManager!)
+	# 之前你写的 room_mgr.EnterRoom(index) 删掉或注释掉
+	# var room_mgr = get_node("/root/RoomManager") 
+	# if room_mgr: room_mgr.EnterRoom(index) <-- 删掉这行，时机不对
+	
 	level_selected.emit(index, type)
 	
 
