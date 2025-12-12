@@ -28,6 +28,7 @@ func _ready():
 		# ================================
 	else:
 		print("警告：未找到名为 'Player' 的节点")
+		# 提前返回，避免后续代码出错
 		return
 	
 	# --- 2. 设置位置（如果场景中有 StartPos 节点）---
@@ -38,10 +39,11 @@ func _ready():
 	_load_player_data()
 	_connect_player(current_player)
 	
-	# 3. 修复 C# 引用 (让玩家能攻击)
-	if current_player.get("attackManager"):
+	# 3. 修复 C# 引用 (让玩家能攻击) - 添加安全检查
+	if current_player and current_player.get("attackManager"):
 		current_player.attackManager.set("BulletNode", self)
 		current_player.attackManager.set("enableAttack", true)
+		print("LevelBase: 已连接玩家的攻击管理器")
 	
 	_create_debug_skip_button()
 	if battle_ui_node: battle_ui_node.visible = false
@@ -50,25 +52,78 @@ func _ready():
 	# === 【新增】场景加载完毕，通知 C# 生成敌人 ===
 	var room_mgr = get_node_or_null("/root/RoomManager")
 	if room_mgr:
-		# 告诉 C#：我已经准备好了，我是第 X 层，请刷怪
-		# 这里的 target_level_index 是刚才在地图里存下的
-		print("LevelBase: 呼叫 RoomManager 生成第 %d 层敌人" % GlobalGameState.target_level_index)
+		# 调用 EnterRoom 开始战斗
+		print("LevelBase: 呼叫 RoomManager EnterRoom 生成第 %d 层敌人" % GlobalGameState.target_level_index)
 		room_mgr.EnterRoom(GlobalGameState.target_level_index)
 	else:
-		print("错误：找不到 RoomManager 单例！")
-	var real_player_node = current_player.get_node("Player")
+		print("错误：找不到 RoomManager 单例！可能未在进入关卡前创建")
 	
+	# 连接玩家的攻击管理器 - 添加安全检查
+	var real_player_node = current_player.get_node("Player") if current_player else null
 	if real_player_node and real_player_node.get("attackManager"):
 		# 将 LevelBase (self) 设为子弹的父节点，这样子弹才会出现在关卡里
 		real_player_node.attackManager.set("BulletNode", self)
 		real_player_node.attackManager.set("enableAttack", true)
 		print("LevelBase: 已成功连接 C# 攻击管理器")
 	else:
-		print("LevelBase 错误: 无法在 Player 子节点上找到 attackManager！")
+		print("LevelBase: 无法在 Player 子节点上找到 attackManager")
+
+# --- 离开逻辑 ---
+func _on_skip_level_pressed():
+	print("--- [流程] 1. 玩家请求离开关卡 ---")
+	
+	# === 第一步：立刻停火 ===
+	# 防止在清理过程中还有新子弹生成，导致报错
+	if current_player:
+		var real_player = current_player.get_node_or_null("Player")
+		if real_player and real_player.get("attackManager"):
+			real_player.attackManager.set("enableAttack", false)
+	
+	# === 第二步：调用 C# ExitRoom 清理敌人 ===
+	var room_mgr = get_node_or_null("/root/RoomManager")
+	if room_mgr:
+		print("--- [流程] 2. 调用 RoomManager.ExitRoom() 清理敌人 ---")
+		room_mgr.ExitRoom()
+	
+	# === 第三步：【关键】强制等待 ===
+	# 等待 2 帧。
+	# 第1帧：让 C# 的逻辑跑完。
+	# 第2帧：让 Godot 的 QueueFree 生效，确保节点真的从内存中断开了。
+	await get_tree().process_frame
+	await get_tree().process_frame
+	
+	print("--- [流程] 3. 调用 RoomManager.endAttack() 恢复节点关系 ---")
+	# 调用 endAttack 将玩家和UI节点恢复原位
+	if room_mgr:
+		room_mgr.endAttack()
+	
+	print("--- [流程] 4. C# 清理完毕，开始存档和切换 ---")
+	
+	# === 第四步：存档 (GDScript 逻辑) ===
+	_save_player_data()
+	
+	# === 第五步：清理玩家节点 ===
+	if current_player:
+		current_player.queue_free()
+	
+	# === 第六步：计算进度并跳转 ===
+	GlobalGameState.current_level_progress += 1
+	
+	# 通关判断 (假设总共8关: 0~7)
+	if GlobalGameState.current_level_progress >= 7: 
+		print("--- [流程] 判定：通关 ---")
+		var end_scene_path = "res://trashbox/scenes/main/GameEnd.tscn"
+		if ResourceLoader.exists(end_scene_path):
+			get_tree().change_scene_to_file(end_scene_path)
+		else:
+			print("错误：找不到结局文件")
+	else:
+		print("--- [流程] 判定：返回桌面 ---")
+		GlobalGameState.should_open_engine_automatically = true
+		# 最后一步才是切换场景，这时候 C# 早就完事了，不会报错
+		get_tree().change_scene_to_file(GlobalGameState.desktop_scene_path)
 
 # --- 读档逻辑 ---
-# trashbox/scripts/level_base.gd
-
 func _load_player_data():
 	if not current_player: return
 	
@@ -155,68 +210,23 @@ func _save_player_data():
 						paths.append(skill_node.scene_file_path)
 			GlobalGameState.saved_skill_paths = paths
 
-# --- 离开逻辑 ---
-func _on_skip_level_pressed():
-	print("--- [流程] 1. 玩家请求离开关卡 ---")
-	
-	# === 第一步：立刻停火 ===
-	# 防止在清理过程中还有新子弹生成，导致报错
-	if current_player:
-		var real_player = current_player.get_node_or_null("Player")
-		if real_player and real_player.get("attackManager"):
-			real_player.attackManager.set("enableAttack", false)
-	
-	# === 第二步：优先调用 C# ExitRoom ===
-	# 必须在场景销毁前调用，否则 C# 会报 ObjectDisposedException
-	var room_mgr = get_node_or_null("/root/RoomManager")
-	if room_mgr:
-		print("--- [流程] 2. 通知 C# 清理引用 ---")
-		room_mgr.ExitRoom()
-	
-	# === 第三步：【关键】强制等待 ===
-	# 等待 2 帧。
-	# 第1帧：让 C# 的逻辑跑完。
-	# 第2帧：让 Godot 的 QueueFree 生效，确保节点真的从内存中断开了。
-	await get_tree().process_frame
-	await get_tree().process_frame
-	
-	print("--- [流程] 3. C# 清理完毕，开始存档和切换 ---")
-	
-	# === 第四步：存档 (GDScript 逻辑) ===
-	_save_player_data()
-	
-	# === 第五步：清理玩家节点 ===
-	if current_player:
-		current_player.queue_free()
-	
-	# === 第六步：计算进度并跳转 ===
-	GlobalGameState.current_level_progress += 1
-	
-	# 通关判断 (假设总共8关: 0~7)
-	if GlobalGameState.current_level_progress >= 7: 
-		print("--- [流程] 判定：通关 ---")
-		var end_scene_path = "res://trashbox/scenes/main/GameEnd.tscn"
-		if ResourceLoader.exists(end_scene_path):
-			get_tree().change_scene_to_file(end_scene_path)
-		else:
-			print("错误：找不到结局文件")
-	else:
-		print("--- [流程] 判定：返回桌面 ---")
-		GlobalGameState.should_open_engine_automatically = true
-		# 最后一步才是切换场景，这时候 C# 早就完事了，不会报错
-		get_tree().change_scene_to_file(GlobalGameState.desktop_scene_path)
-
 # --- 辅助 UI ---
 func _create_debug_skip_button():
 	var layer = CanvasLayer.new()
+	layer.name = "DebugCanvasLayer"
+	layer.layer = 100  # 设置高图层确保在最前面
 	add_child(layer)
+	
 	var btn = Button.new()
 	btn.text = "DEBUG: 强制通关"
-	btn.global_position = Vector2(1600, 20)
+	# 调整到屏幕右下角更合适的位置
+	btn.position = Vector2(get_viewport().size.x - 320, 20)
 	btn.custom_minimum_size = Vector2(300, 50)
-	btn.modulate = Color(1, 0, 1)
+	btn.modulate = Color(1, 0, 1, 1)  # 确保完全不透明
 	btn.pressed.connect(_on_skip_level_pressed)
 	layer.add_child(btn)
+	
+	print("调试按钮已创建，位置:", btn.position)
 
 # --- 辅助 Player ---
 func setup_player(p): _connect_player(p)

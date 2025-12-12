@@ -15,6 +15,9 @@ extends "res://trashbox/scripts/window_base.gd"
 # 练功房场景
 const PreviewStageScene = preload("res://trashbox/scenes/main/skill_preview_stage.tscn")
 
+# RoomManager 类引用 (C# 脚本)
+const RoomManagerClass = preload("res://trashbox/战斗系统/Attack/RoomManager.cs")
+
 # 当前练功房实例
 var current_preview_instance = null
 
@@ -62,15 +65,80 @@ func _load_preview_stage():
 		current_preview_instance = PreviewStageScene.instantiate()
 		preview_viewport.add_child(current_preview_instance)
 
-# --- 【关键修改 2】供 C# 脚本调用的新接口 ---
-# 当你在背包里点击图标时，Drapskill.cs 会调用这个函数
-# 参数 skill_node: 是背包格子里那个实际存在的节点 (挂载了 Skill C# 脚本)
+# --- 【关键修改】地图选择 -> 全屏跳转 ---
+func _on_level_selected(level_index, level_type):
+	print("Engine: 收到地图信号 -> 层数: ", level_index, ", 类型: ", level_type)
+	
+	# === 【新增】在进入关卡前创建 RoomManager 并调用 startAttack ===
+	if level_type != 3:  # 如果不是事件房（事件房不需要战斗）
+		# 1. 保存关卡索引到全局状态
+		GlobalGameState.target_level_index = level_index
+		
+		# 2. 检查并创建/重新创建 RoomManager
+		_ensure_room_manager_exists()
+			
+	if level_type == 3:
+		# 事件房逻辑 (保持不变)
+		if event_scenes.size() > 0:
+			var random_event = event_scenes.pick_random()
+			_perform_scene_change(random_event, "正在加载事件模块...")
+			
+	elif level_type == 2:
+		# Boss 房逻辑
+		if level_scenes.size() > 0:
+			var boss_scene = level_scenes[level_scenes.size() - 1] 
+			_perform_scene_change(boss_scene, "警告：检测到高危漏洞 (Boss战)！")
+			
+	else:
+		# 普通/精英战斗
+		if level_scenes.size() > 0:
+			var safe_index = level_index % level_scenes.size()
+			var combat_scene = level_scenes[safe_index]
+			_perform_scene_change(combat_scene, "正在部署战斗环境...")
+
+# --- 确保 RoomManager 存在 ---
+func _ensure_room_manager_exists():
+	# 检查是否已存在 RoomManager
+	var room_mgr = get_node_or_null("/root/RoomManager")
+	
+	if not room_mgr:
+		# 创建新的 RoomManager 节点
+		room_mgr = RoomManagerClass.new()
+		room_mgr.name = "RoomManager"
+		get_tree().root.add_child(room_mgr)
+		print("Engine: 已创建新的 RoomManager 节点")
+	
+	# 确保 RoomManager 存在后调用 startAttack
+	if room_mgr.has_method("startAttack"):
+		room_mgr.startAttack()
+		print("Engine: 已调用 RoomManager.startAttack()")
+	else:
+		print("警告：RoomManager 没有 startAttack 方法")
+
+func _perform_scene_change(scene_res: PackedScene, log_msg: String):
+	if scene_res:
+		set_status_log(log_msg)
+		
+		# --- 【新增】安全检查 ---
+		# 只有当当前节点还在场景树里时，才使用计时器
+		if is_inside_tree():
+			await get_tree().create_timer(0.5).timeout
+			# 等待完再次检查，防止等待期间被销毁
+			if is_inside_tree():
+				get_tree().change_scene_to_packed(scene_res)
+		else:
+			# 如果不在树里（极其罕见），直接尝试跳转
+			var tree = Engine.get_main_loop() as SceneTree
+			if tree:
+				tree.change_scene_to_packed(scene_res)
+	else:
+		print("错误：目标场景资源为空")
+
+# --- 当 Drapskill.cs 点击技能图标时调用 ---
 func preview_skill_instance(skill_node: Node):
 	if skill_node == null: return
 	
 	# 1. 读取 C# 脚本中的变量
-	# 使用 get() 是安全的，如果 C# 里没写这个变量，会返回 null 而不是报错
-	# 注意：这里的属性名必须和你队友 C# 代码里写的一模一样 (区分大小写)
 	var s_name = skill_node.get("skillName") if skill_node.get("skillName") else "未知模块"
 	var s_desc = skill_node.get("skillDescription") if skill_node.get("skillDescription") else "暂无描述"
 	var s_quote = skill_node.get("skillQuote") if skill_node.get("skillQuote") else ""
@@ -93,61 +161,12 @@ func preview_skill_instance(skill_node: Node):
 	set_status_log("选中模块: " + s_name)
 	
 	# 3. 尝试在中间演示技能
-	# 因为传进来的是一个实例，我们需要获取它的源文件路径(scene_file_path)
-	# 重新加载一个 PackedScene 给练功房去实例化演示
 	if skill_node.scene_file_path != "":
 		var skill_packed = load(skill_node.scene_file_path)
 		if current_preview_instance and current_preview_instance.has_method("play_demo_with_scene"):
 			current_preview_instance.play_demo_with_scene(skill_packed)
 	else:
 		print("警告：该技能节点没有对应的场景文件路径，无法在练功房演示。")
-
-# --- 地图选择 -> 全屏跳转 ---
-func _on_level_selected(level_index, level_type):
-	print("Engine: 收到地图信号 -> 层数: ", level_index, ", 类型: ", level_type)
-	
-	if level_type == 3:
-		# 事件房逻辑 (保持不变)
-		if event_scenes.size() > 0:
-			var random_event = event_scenes.pick_random()
-			_perform_scene_change(random_event, "正在加载事件模块...")
-			
-	elif level_type == 2:
-		# --- 【新增】Boss 房逻辑 ---
-		# 如果你有专门的 Boss 场景 (比如 boss_level.tscn)
-		# 建议在 Inspector 里把 level_scenes 的最后一个元素设为 Boss 场景
-		# 或者专门加一个 @export var boss_scene: PackedScene 变量
-		
-		# 简单做法：去 level_scenes 数组里拿最后一个场景当 Boss 关
-		if level_scenes.size() > 0:
-			var boss_scene = level_scenes[level_scenes.size() - 1] 
-			_perform_scene_change(boss_scene, "警告：检测到高危漏洞 (Boss战)！")
-			
-	else:
-		# 普通/精英战斗 (保持不变)
-		if level_scenes.size() > 0:
-			var safe_index = level_index % level_scenes.size()
-			var combat_scene = level_scenes[safe_index]
-			_perform_scene_change(combat_scene, "正在部署战斗环境...")
-			
-func _perform_scene_change(scene_res: PackedScene, log_msg: String):
-	if scene_res:
-		set_status_log(log_msg)
-		
-		# --- 【新增】安全检查 ---
-		# 只有当当前节点还在场景树里时，才使用计时器
-		if is_inside_tree():
-			await get_tree().create_timer(0.5).timeout
-			# 等待完再次检查，防止等待期间被销毁
-			if is_inside_tree():
-				get_tree().change_scene_to_packed(scene_res)
-		else:
-			# 如果不在树里（极其罕见），直接尝试跳转
-			var tree = Engine.get_main_loop() as SceneTree
-			if tree:
-				tree.change_scene_to_packed(scene_res)
-	else:
-		print("错误：目标场景资源为空")
 
 # --- 跳转函数 ---
 func load_level_full_screen(index: int):
@@ -180,8 +199,6 @@ func scan_and_update_sequence():
 	set_status_log("正在同步战斗序列...")
 	
 	# 1. 寻找背包里的 GridContainer (存放格子的容器)
-	# 根据你的场景结构，我们需要在 engine 场景里找到它
-	# 你的 engine.tscn 结构有点深，使用 find_child 递归查找是最稳妥的
 	var grid_container = find_child("GridContainer", true, false)
 	
 	if not grid_container:
