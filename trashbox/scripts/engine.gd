@@ -43,6 +43,11 @@ func _ready():
 	super._ready() 
 	add_to_group("EngineUI")
 	
+	# 【新增】检查是否从关卡返回，如果是则调用RoomManager的endAttack函数
+	if GlobalGameState.has_returned_from_level:
+		_call_end_attack_if_needed()
+		GlobalGameState.has_returned_from_level = false  # 重置标志
+	
 	_load_preview_stage()
 	
 	description_text.text = "[center]系统就绪。\n请点击左侧背包中的技能图标查看详情。[/center]"
@@ -233,3 +238,12 @@ func scan_and_update_sequence():
 		print("同步序列: ", debug_names)
 		current_preview_instance.update_sequence(sequence_array)
 		set_status_log("序列更新: " + str(sequence_array.size()) + " 个模块")
+
+# 【新增】调用RoomManager的endAttack函数
+func _call_end_attack_if_needed():
+	var room_mgr = get_node_or_null("/root/RoomManager")
+	if room_mgr and room_mgr.has_method("endAttack"):
+		room_mgr.endAttack()
+		print("Engine: 已调用 RoomManager.endAttack()")
+	else:
+		print("Engine: RoomManager不存在或没有endAttack方法")

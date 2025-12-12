@@ -81,8 +81,21 @@ namespace CharacterManager
 			
 			if(attackManager != null)
 			{
-				attackManager.AttackLoop((float)delta,startShootPosition.GlobalPosition);
 				
+				// 添加对BulletContainer的有效性检查
+				if (BulletContainer != null && GodotObject.IsInstanceValid(BulletContainer) && !BulletContainer.IsQueuedForDeletion())
+				{
+					attackManager.AttackLoop((float)delta,startShootPosition.GlobalPosition);
+					//GD.Print("BulletContainer is valid");
+				}
+				else
+				{
+					BulletContainer=GetTree().GetFirstNodeInGroup("玩家子弹");
+				}
+			}
+			else
+			{
+				GD.Print("attackManager is null");
 			}
 			if(speed>=0)
 			{

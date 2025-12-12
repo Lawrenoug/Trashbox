@@ -62,4 +62,3 @@ texture = ExtResource("4_vbegm")
 
 [node name="语法错误" parent="." instance=ExtResource("9_q5uap")]
 position = Vector2(1310, 184)
-contact_monitor = false

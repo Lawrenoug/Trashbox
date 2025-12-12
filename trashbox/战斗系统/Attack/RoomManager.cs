@@ -56,24 +56,25 @@ namespace Attack
 		public void startAttack()
 		{
 			contion=GetTree().GetFirstNodeInGroup("移动列表节点") as Control;
-			GD.Print(contion.GetPath());
+			//GD.Print(contion.GetPath());
 			contionParent=contion.GetParent() as Control;
 			//UIpath=contion.GetParent().GetPath();
 			contion.Reparent(GetTree().Root,true);
-			GD.Print("contion修改后"+contion.GetPath());
+			//GD.Print("contion修改后"+contion.GetPath());
+			contion.Visible=false;
 
 			player=GetTree().GetFirstNodeInGroup("player") as RigidBody2D;
-			GD.Print(player.GetPath());
+			//GD.Print(player.GetPath());
 			playerParent=player.GetParent() as Node2D;
 			player.Reparent(GetTree().Root,true);
-			GD.Print("player修改后1"+player.GetPath());
+			//GD.Print("player修改后1"+player.GetPath());
 
 
-			playerBulletContainer=GetTree().GetFirstNodeInGroup("player") as Node2D;
-			GD.Print(playerBulletContainer.GetPath());
+			playerBulletContainer=GetTree().GetFirstNodeInGroup("玩家子弹") as Node2D;
+			//GD.Print(playerBulletContainer.GetPath());
 			playerBulletContainerParent=playerBulletContainer.GetParent() as Node2D;
 			playerBulletContainer.Reparent(GetTree().Root,true);
-			GD.Print("playerBulletContainer修改后1"+playerBulletContainer.GetPath());
+			//GD.Print("playerBulletContainer修改后1"+playerBulletContainer.GetPath());
 
 			
 		}
@@ -87,7 +88,7 @@ namespace Attack
 			player.Reparent(playerparent,true);
 			GD.Print("player修改后2"+player.GetPath());
 			playerBulletContainer.Reparent(playerparent,true);
-			GD.Print("playerBulletContainer修改后3"+playerBulletContainer.GetPath());
+			GD.Print("playerBulletContainer修改后2"+playerBulletContainer.GetPath());
 			
 			if(_index<MaxRoomCount)
 			{
@@ -119,6 +120,7 @@ namespace Attack
 		//离开房间
 		public void ExitRoom()
 		{
+
 			player.Reparent(GetTree().Root,true);
 			playerBulletContainer.Reparent(GetTree().Root,true);
 			contion.Reparent(GetTree().Root,true);
@@ -140,9 +142,14 @@ namespace Attack
 		}
 		public void endAttack()
 		{
+			contion=GetTree().GetFirstNodeInGroup("移动列表节点") as Control;
+			playerBulletContainer=GetTree().GetFirstNodeInGroup("玩家子弹") as Node2D;
+			player=GetTree().GetFirstNodeInGroup("player") as RigidBody2D;
+
 			player.Reparent(playerParent,true);
 			playerBulletContainer.Reparent(playerBulletContainerParent,true);
 			contion.Reparent(contionParent,true);
+			contion.Visible=true;
 		}
 		//胜利随机得到技能
 		public PackedScene[] GetSkills(int _count)

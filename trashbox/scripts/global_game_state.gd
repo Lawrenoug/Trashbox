@@ -1,7 +1,7 @@
 extends Node
 
 # --- 关卡进度 ---
-var current_level_progress: int = -1 
+var current_level_progress: int = -1
 var desktop_scene_path: String = "res://trashbox/scenes/main/desktop_screen.tscn"
 var should_open_engine_automatically: bool = false
 
@@ -16,3 +16,6 @@ var saved_skill_paths: Array[String] = []
 var saved_backpack_paths: Array[String] = []
 
 var target_level_index: int = 0
+
+# 3. 【新增】关卡返回状态跟踪
+var has_returned_from_level: bool = false

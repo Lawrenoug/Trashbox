@@ -28,6 +28,12 @@ namespace Attack
 
 		public override void Projectile(SkillData skillData, Godot.Vector2 startPosiition, Node BulletNode)//发射
 		{
+			// 添加对BulletNode的有效性检查
+			if (BulletNode == null || !GodotObject.IsInstanceValid(BulletNode) || BulletNode.IsQueuedForDeletion())
+			{
+				return;
+			}
+			
 			skillData = NormalData.AddData(GetSkillData(), skillData);
 
 			int count = skillData.AttackCount;
@@ -43,6 +49,13 @@ namespace Attack
 
 					if (bulletNode is PixelBullet bullet)
 					{
+						// 添加对BulletNode的有效性检查
+						if (BulletNode == null || !GodotObject.IsInstanceValid(BulletNode) || BulletNode.IsQueuedForDeletion())
+						{
+							bullet.QueueFree();
+							return;
+						}
+						
 						//int count = skillData.AttackCount;
 						//GD.Print(count);
 
@@ -70,6 +83,13 @@ namespace Attack
 
 					if (bulletNode is PixelBullet bullet)
 					{
+						// 添加对BulletNode的有效性检查
+						if (BulletNode == null || !GodotObject.IsInstanceValid(BulletNode) || BulletNode.IsQueuedForDeletion())
+						{
+							bullet.QueueFree();
+							return;
+						}
+						
 						bullet.Initialize(skillData);
 						BulletNode.AddChild(bullet);
 

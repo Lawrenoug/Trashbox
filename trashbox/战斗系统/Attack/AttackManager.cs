@@ -58,7 +58,8 @@ namespace Attack
 				{
 					return;
 				}
-				if (BulletNode == null)
+				// 添加对BulletNode的有效性检查
+				if (BulletNode == null || !GodotObject.IsInstanceValid(BulletNode) || BulletNode.IsQueuedForDeletion())
 				{
 					return;
 				}
