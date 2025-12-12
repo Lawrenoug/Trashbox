@@ -14,7 +14,7 @@ namespace Enemy
 		public override void _Ready()
 		{
 			base._Ready();
-			state = EnemyState.Attacking;
+			//state = EnemyState.Attacking;
 		}
 
 		public override void _Process(double delta)

@@ -17,10 +17,12 @@ namespace Attack
 
 		public override void _Process(double delta)
 		{
-			if(room!=null)
+			// 加强对room对象的有效性检查
+			if(room != null && GodotObject.IsInstanceValid(room) && !room.IsQueuedForDeletion())
 			{
 				if(isInAttack)
 				{
+					// 添加对room对象有效性的检查
 					if(room.GetChildCount()==0&&flow==0)
 					{
 						attackDelay+=(float)delta;
@@ -80,18 +82,15 @@ namespace Attack
 		{
 			if (room != null)
 			{
-				foreach (Node child in room.GetChildren())
+				// 创建子节点列表的副本以避免在迭代时修改集合
+				var children = new Godot.Collections.Array<Node>(room.GetChildren());
+				foreach (Node child in children)
 				{
-					room.RemoveChild(child);
-					child.QueueFree();
-				}
-			}
-			if (room != null)
-			{
-				foreach (Node child in room.GetChildren())
-				{
-					room.RemoveChild(child);
-					child.QueueFree();
+					if (child != null && GodotObject.IsInstanceValid(child) && !child.IsQueuedForDeletion())
+					{
+						room.RemoveChild(child);
+						child.QueueFree();
+					}
 				}
 			}
 		}
@@ -131,31 +130,43 @@ namespace Attack
 			{
 				if(enemies[i] != null)
 				{
-					Node enemyInstance = enemies[i].Instantiate();
+					var enemyInstance = enemies[i].Instantiate() as EnemyBase;
 					room.AddChild(enemyInstance);
+					enemyInstance.GlobalPosition=EnemyTools.startPosition[i];
+					enemyInstance.MoveTo(EnemyTools.endPosition[i]);
+					enemyInstance.state=EnemyState.Moving;
 				}
 			}
 		}
 		private void EnterEliteRoom()
 		{
-			if(roomIndex==4)
+			if (roomIndex == 4)
 			{
-				PackedScene enemy=EnemyTools.GetEliteEnemy(5);
-				Node enemyInstance = enemy.Instantiate();
+				PackedScene enemy = EnemyTools.GetEliteEnemy(5);
+				var enemyInstance = enemy.Instantiate() as EnemyBase;
 				room.AddChild(enemyInstance);
+				enemyInstance.GlobalPosition = EnemyTools.startPosition[0];
+				enemyInstance.MoveTo(EnemyTools.endPosition[0]);
+				enemyInstance.state = EnemyState.Moving;
 			}
-			else if(roomIndex==5)
+			else if (roomIndex == 5)
 			{
-				PackedScene enemy=EnemyTools.GetEliteEnemy(6);
-				Node enemyInstance = enemy.Instantiate();
+				PackedScene enemy = EnemyTools.GetEliteEnemy(6);
+				var enemyInstance = enemy.Instantiate() as EnemyBase;
 				room.AddChild(enemyInstance);
+				enemyInstance.GlobalPosition = EnemyTools.startPosition[0];
+				enemyInstance.MoveTo(EnemyTools.endPosition[0]);
+				enemyInstance.state = EnemyState.Moving;
 			}
 		}
 		private void EnterBossRoom()
 		{
 			PackedScene enemy = EnemyTools.GetBossEnemy();
-			Node enemyInstance = enemy.Instantiate();
+			var enemyInstance = enemy.Instantiate() as EnemyBase;
 			room.AddChild(enemyInstance);
+			enemyInstance.GlobalPosition = EnemyTools.startPosition[0];
+				enemyInstance.MoveTo(EnemyTools.endPosition[0]);
+				enemyInstance.state = EnemyState.Moving;
 		}
 	}
 }

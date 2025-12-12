@@ -24,7 +24,7 @@ namespace Enemy
             base._Ready();
 			var node=GetTree().GetFirstNodeInGroup("player") as RigidBody2D;
 			targetPosition=node.GlobalPosition;
-			state = EnemyState.Attacking;
+			//state = EnemyState.Attacking;
         }
 		
 		public override void _Process(double delta)

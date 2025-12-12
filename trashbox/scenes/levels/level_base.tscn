@@ -50,3 +50,5 @@ offset_bottom = 49.0
 visible = false
 offset_top = 374.0
 offset_bottom = 374.0
+
+[node name="敌人子弹" type="Node2D" parent="." groups=["敌人子弹"]]
