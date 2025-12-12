@@ -19,6 +19,7 @@ config/icon="res://trashbox/战斗系统/icon.svg"
 [autoload]
 
 GlobalGameState="*res://trashbox/scripts/global_game_state.gd"
+RoomManager="*res://trashbox/战斗系统/Attack/RoomManager.cs"
 
 [display]
 

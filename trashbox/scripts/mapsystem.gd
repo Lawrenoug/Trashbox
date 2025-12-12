@@ -9,7 +9,7 @@ const ICON_EVENT = preload("res://trashbox/assets/sprites/folder.png") # 【新�
 # --- 2. 布局配置 ---
 const NODE_SIZE = Vector2(128,128) # 【关键】强制按钮大小，不要太大
 const X_SPACING = 250             # 横向间距
-const LAYER_COUNT = 10            # 关卡总数
+const LAYER_COUNT = 8          # 关卡总数
 
 @onready var map_canvas = $MapScroller/MapCanvas
 @onready var player_icon = $MapScroller/MapCanvas/PlayerIcon
@@ -162,6 +162,15 @@ func _on_node_clicked(index, type):
 	print("地图通知：请求进入第 %d 关, 类型 %d" % [index, type])
 	await tween.finished
 	level_selected.emit(index, type) # 【修改】发出信号带类型
+	var room_mgr = get_node("/root/RoomManager")
+	if room_mgr:
+		print("MapSystem: 通知后端进入房间 ", index)
+		# 调用 C# 的 EnterRoom(int _index)
+		room_mgr.EnterRoom(index)
+	
+	# --- 原有逻辑: 发信号给 Engine 切换场景 ---
+	level_selected.emit(index, type)
+	
 
 # --- 动画工具 ---
 func _start_breathing(node):

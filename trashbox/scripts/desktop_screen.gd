@@ -11,13 +11,15 @@ const AppGodotScene = preload("res://trashbox/scenes/main/engine.tscn")
 @onready var 回收站: Button = $DesktopIcons/回收站
 @onready var chatbro: Button = $DesktopIcons/Chatbro
 @onready var 引擎: Button = $DesktopIcons/引擎
-
 # --- 3. 获取弹窗通知节点 ---
 @onready var notification_popup = $NotificationPopup
 @onready var notification_anim = $NotificationPopup/AnimationPlayer
 @onready var notif_title = $NotificationPopup/HBoxContainer/VBoxContainer/Title
 @onready var notif_msg = $NotificationPopup/HBoxContainer/VBoxContainer/Message
-
+@onready var clock_label = $Taskbar/TaskbarItems/ClockLabel
+@onready var start_button = $Taskbar/TaskbarItems/StartButton
+@onready var start_menu = $StartMenu
+@onready var btn_shutdown = $StartMenu/VBoxContainer/BtnShutdown
 # --- 4. 全局聊天数据存储 ---
 var global_chat_data = {
 	"老板": "[color=#888888]系统: 已经是好友了，开始聊天吧。[/color]\n",
@@ -33,7 +35,20 @@ func _ready():
 	if 回收站: 回收站.pressed.connect(open_window.bind(AppRecycleScene))
 	if chatbro: chatbro.pressed.connect(open_window.bind(AppChatScene))
 	if 引擎: 引擎.pressed.connect(open_window.bind(AppGodotScene))
-
+	if start_menu:
+		start_menu.visible = false # 确保游戏刚开始是关着的
+	
+	# --- 3. 连接信号 ---
+	
+	# 点击左下角图标 -> 切换菜单开关
+	if start_button:
+		start_button.pressed.connect(_on_start_button_clicked)
+	else:
+		print("错误：找不到 StartButton，请检查路径 Taskbar/TaskbarItems/StartButton")
+		
+	# 点击“关闭系统” -> 退出游戏
+	if btn_shutdown:
+		btn_shutdown.pressed.connect(_on_shutdown_clicked)
 	# --- 【新增】检查全局标记，决定是否自动打开引擎 ---
 	if GlobalGameState.should_open_engine_automatically:
 		# 重置标记，防止下次正常登录时也打开
@@ -43,6 +58,19 @@ func _ready():
 		# open_window 是你在 desktop_screen.gd 里定义的函数
 		call_deferred("open_window", AppGodotScene)
 
+func _on_start_button_clicked():
+	if start_menu:
+		# 切换显示状态：如果是开的就关，关的就开
+		start_menu.visible = not start_menu.visible
+		
+		# 【重要】把菜单提到最上层，防止被打开的文件夹窗口挡住
+		if start_menu.visible:
+			start_menu.move_to_front()
+
+func _on_shutdown_clicked():
+	print("系统正在关机...")
+	# 退出游戏
+	get_tree().quit()
 # --- [修改后] 通用的打开窗口逻辑 ---
 func open_window(scene_to_open: PackedScene):
 	if scene_to_open == null:
@@ -124,3 +152,22 @@ func show_notification(title_text: String, msg_text: String):
 			await notification_anim.animation_finished
 		
 		notification_popup.visible = false
+
+func _process(delta):
+	_update_system_time()
+
+func _update_system_time():
+	if clock_label:
+		# 1. 获取系统时间字典 (包含年、月、日、时、分、秒)
+		var time = Time.get_datetime_dict_from_system()
+		
+		# 2. 格式化字符串
+		# %02d 的意思是：如果是1位数，前面自动补0 (例如 9:5 -> 09:05)
+		# 格式：小时:分钟
+		#var time_str = "%02d:%02d" % [time.hour, time.minute]
+		
+		# 如果你想显示日期，可以用下面这行：
+		var time_str = "%d/%02d\n%02d:%02d" % [time.month, time.day, time.hour, time.minute]
+		
+		# 3. 更新 UI
+		clock_label.text = time_str

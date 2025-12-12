@@ -100,7 +100,7 @@ namespace Attack
 							var skillGroupsUIManager = parent.GetChild<SkillGroupsUIManager>(0);
 							skillGroupsUIManager.RequestUpdate();
 
-						    // NodePath PlayManagerPath=new NodePath("*/Player");
+							// NodePath PlayManagerPath=new NodePath("*/Player");
 							// var player=GetNode(PlayManagerPath) as PlayerManager;
 
 							var player =GetTree().GetFirstNodeInGroup("player") as PlayerManager;
