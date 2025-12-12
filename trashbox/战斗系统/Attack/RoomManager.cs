@@ -17,6 +17,10 @@ namespace Attack
 
 		//private string UIpath="";
 		private Control contion,contionParent;
+		private RigidBody2D player;
+		private Node2D playerBulletContainer;
+
+		private Node2D playerBulletContainerParent,playerParent;
 		
 
 		public override void _Process(double delta)
@@ -55,12 +59,27 @@ namespace Attack
 			contionParent=contion.GetParent() as Control;
 			//UIpath=contion.GetParent().GetPath();
 			contion.Reparent(GetTree().Root,true);
+
+			player=GetTree().GetFirstNodeInGroup("player") as RigidBody2D;
+			playerParent=player.GetParent() as Node2D;
+			player.Reparent(GetTree().Root,true);
+
+			playerBulletContainer=GetTree().GetFirstNodeInGroup("player") as Node2D;
+			playerBulletContainerParent=playerBulletContainer.GetParent() as Node2D;
+			playerBulletContainer.Reparent(GetTree().Root,true);
+
+			
 		}
 		//进入房间
 		public void EnterRoom(int _index)
 		{
 
 			room=GetTree().GetFirstNodeInGroup("战斗房间") as Node2D;
+
+			var playerparent=GetTree().GetFirstNodeInGroup("战斗场景玩家父节点");
+			player.Reparent(playerparent,true);
+			playerBulletContainer.Reparent(playerparent,true);
+			
 			if(_index<MaxRoomCount)
 			{
 				//进入事件房
@@ -91,6 +110,9 @@ namespace Attack
 		//离开房间
 		public void ExitRoom()
 		{
+			player.Reparent(GetTree().Root,true);
+			playerBulletContainer.Reparent(GetTree().Root,true);
+
 			// 添加对room对象的有效性检查
 			if (room != null && GodotObject.IsInstanceValid(room) && !room.IsQueuedForDeletion())
 			{
@@ -108,6 +130,8 @@ namespace Attack
 		}
 		public void endAttack()
 		{
+			player.Reparent(playerParent,true);
+			playerBulletContainer.Reparent(playerBulletContainerParent,true);
 			contion.Reparent(contionParent,true);
 		}
 		//胜利随机得到技能
