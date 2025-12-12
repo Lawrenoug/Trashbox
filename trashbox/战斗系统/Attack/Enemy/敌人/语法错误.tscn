@@ -7,7 +7,11 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_x7h4u"]
 
 [node name="语法错误" type="RigidBody2D"]
+collision_layer = 0
+collision_mask = 4
 gravity_scale = 0.0
+contact_monitor = true
+max_contacts_reported = 1
 script = ExtResource("1_eogsd")
 bulletPrefab = ExtResource("2_x7h4u")
 

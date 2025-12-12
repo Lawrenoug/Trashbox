@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://diioyhmevc7oj"]
+[gd_scene load_steps=9 format=3 uid="uid://diioyhmevc7oj"]
 
 [ext_resource type="Script" uid="uid://jtmfbnrs8tf" path="res://trashbox/战斗系统/Attack/Enemy/Enemytest.cs" id="3_cymgf"]
 [ext_resource type="Texture2D" uid="uid://xaephtyrw2fv" path="res://trashbox/战斗系统/UI/kenney_tiny-dungeon/Tiles/tile_0109.png" id="3_g14j6"]
@@ -6,10 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dk1ae2t3e6fi7" path="res://trashbox/战斗系统/技能战斗列表.tscn" id="5_ykrsh"]
 [ext_resource type="PackedScene" uid="uid://hqnftrbqicsu" path="res://trashbox/战斗系统/Characters/Player/玩家节点.tscn" id="6_8nwl2"]
 [ext_resource type="PackedScene" uid="uid://bj20pol0nbg0o" path="res://trashbox/战斗系统/技能组背包.tscn" id="6_g14j6"]
-[ext_resource type="PackedScene" uid="uid://dtwqji6wtvhcl" path="res://trashbox/战斗系统/Attack/Enemy/敌人/待办事项.tscn" id="8_1488x"]
 [ext_resource type="PackedScene" uid="uid://b74la3c7r5ahs" path="res://trashbox/战斗系统/Attack/Enemy/敌人/语法错误.tscn" id="9_q5uap"]
-[ext_resource type="PackedScene" uid="uid://7n44ajad3nwf" path="res://trashbox/战斗系统/Attack/Enemy/敌人/材质丢失.tscn" id="10_fcn0p"]
-[ext_resource type="PackedScene" uid="uid://bjbyfll3hjoba" path="res://trashbox/战斗系统/Attack/Enemy/敌人/完美主义.tscn" id="11_h8wbm"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8uh7m"]
 radius = 68.0
@@ -63,14 +60,6 @@ texture = ExtResource("4_vbegm")
 
 [node name="玩家节点" parent="." instance=ExtResource("6_8nwl2")]
 
-[node name="待办事项" parent="." instance=ExtResource("8_1488x")]
-position = Vector2(1087, 752)
-
 [node name="语法错误" parent="." instance=ExtResource("9_q5uap")]
 position = Vector2(1310, 184)
-
-[node name="材质丢失" parent="." instance=ExtResource("10_fcn0p")]
-position = Vector2(1494, 840)
-
-[node name="完美主义" parent="." instance=ExtResource("11_h8wbm")]
-position = Vector2(1567, 363)
+contact_monitor = false
