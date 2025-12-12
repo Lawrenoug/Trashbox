@@ -1,17 +1,15 @@
-[gd_scene load_steps=6 format=3 uid="uid://cty56ew0kcqbu"]
+[gd_scene load_steps=4 format=3 uid="uid://cty56ew0kcqbu"]
 
 [ext_resource type="Texture2D" uid="uid://d3l0n6prpflv5" path="res://trashbox/assets/sprites/grid_bg.png" id="1_ge182"]
 [ext_resource type="Script" uid="uid://dijip1xmh300q" path="res://trashbox/scripts/level_base.gd" id="1_w6qvd"]
-[ext_resource type="PackedScene" uid="uid://dk1ae2t3e6fi7" path="res://trashbox/战斗系统/技能战斗列表.tscn" id="5_w6qvd"]
-[ext_resource type="PackedScene" uid="uid://bj20pol0nbg0o" path="res://trashbox/战斗系统/技能组背包.tscn" id="6_xl61d"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p3va8"]
 bg_color = Color(0.3469611, 0.72328484, 0.44457972, 1)
 
 [node name="LevelBase" type="Node2D" node_paths=PackedStringArray("battle_ui_node", "backpack_ui_node") groups=["战斗房间"]]
 script = ExtResource("1_w6qvd")
-battle_ui_node = NodePath("HUD/技能战斗列表")
-backpack_ui_node = NodePath("HUD/技能组背包")
+battle_ui_node = NodePath("")
+backpack_ui_node = NodePath("")
 
 [node name="Parallax2D" type="Parallax2D" parent="."]
 z_index = -100
@@ -40,15 +38,5 @@ offset_top = 21.0
 offset_right = 96.0
 offset_bottom = 48.0
 theme_override_styles/background = SubResource("StyleBoxFlat_p3va8")
-
-[node name="技能战斗列表" parent="HUD" instance=ExtResource("5_w6qvd")]
-visible = false
-offset_top = 49.0
-offset_bottom = 49.0
-
-[node name="技能组背包" parent="HUD" instance=ExtResource("6_xl61d")]
-visible = false
-offset_top = 374.0
-offset_bottom = 374.0
 
 [node name="敌人子弹" type="Node2D" parent="." groups=["敌人子弹"]]

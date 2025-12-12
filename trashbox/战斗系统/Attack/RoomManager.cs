@@ -15,6 +15,10 @@ namespace Attack
 		private float attackDelay=0;
 		private int flow=0;
 
+		//private string UIpath="";
+		private Control contion,contionParent;
+		
+
 		public override void _Process(double delta)
 		{
 			// 加强对room对象的有效性检查
@@ -45,6 +49,13 @@ namespace Attack
 			}
 		}
 
+		public void startAttack()
+		{
+			contion=GetTree().GetFirstNodeInGroup("移动列表节点") as Control;
+			contionParent=contion.GetParent() as Control;
+			//UIpath=contion.GetParent().GetPath();
+			contion.Reparent(GetTree().Root,true);
+		}
 		//进入房间
 		public void EnterRoom(int _index)
 		{
@@ -94,6 +105,10 @@ namespace Attack
 					}
 				}
 			}
+		}
+		public void endAttack()
+		{
+			contion.Reparent(contionParent,true);
 		}
 		//胜利随机得到技能
 		public PackedScene[] GetSkills(int _count)

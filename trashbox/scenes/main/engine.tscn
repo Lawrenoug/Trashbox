@@ -72,7 +72,7 @@ offset_bottom = 762.0
 size_flags_vertical = 3
 split_offset = 200
 
-[node name="LeftColumn" type="VSplitContainer" parent="BgColor/MainLayout/ContentSlot/SplitMain" index="0"]
+[node name="LeftColumn" type="VSplitContainer" parent="BgColor/MainLayout/ContentSlot/SplitMain" index="0" groups=["移动列表节点"]]
 layout_mode = 2
 
 [node name="SkillLogPanel" type="PanelContainer" parent="BgColor/MainLayout/ContentSlot/SplitMain/LeftColumn" index="0"]
