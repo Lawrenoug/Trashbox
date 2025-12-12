@@ -52,7 +52,7 @@ texture = ExtResource("4_xhswx")
 [node name="PasswordLabel" type="Label" parent="LoginBox"]
 layout_mode = 2
 size_flags_horizontal = 4
-text = "Mr.Luo"
+text = "Mr.Fan"
 
 [node name="MarginContainer" type="MarginContainer" parent="LoginBox"]
 layout_mode = 2
