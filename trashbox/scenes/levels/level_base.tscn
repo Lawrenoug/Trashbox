@@ -30,7 +30,7 @@ centered = false
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(960, 540)
 
-[node name="HUD" type="CanvasLayer" parent="." groups=["技能背包"]]
+[node name="HUD" type="CanvasLayer" parent="." groups=["战斗场景玩家父节点"]]
 
 [node name="HPBar" type="ProgressBar" parent="HUD"]
 offset_left = 17.0
