@@ -285,7 +285,7 @@ sources/1 = SubResource("TileSetAtlasSource_ge182")
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p3va8"]
 bg_color = Color(0.3469611, 0.72328484, 0.44457972, 1)
 
-[node name="LevelBase" type="Node2D" node_paths=PackedStringArray("battle_ui_node", "backpack_ui_node")]
+[node name="LevelBase" type="Node2D" node_paths=PackedStringArray("battle_ui_node", "backpack_ui_node") groups=["战斗房间"]]
 script = ExtResource("1_w6qvd")
 battle_ui_node = NodePath("HUD/技能战斗列表")
 backpack_ui_node = NodePath("HUD/技能组背包")

@@ -8,9 +8,14 @@ namespace Attack
 	{
 		public int MaxRoomCount=8;//最大房间数量
 		public int roomIndex=0;//房间索引
+		public Node2D room;
 
+		public void init()
+		{
+			room=GetTree().GetFirstNodeInGroup("战斗房间") as Node2D;
+		}
 
-		//进入房间
+        //进入房间
 		public void EnterRoom(int _index)
 		{
 			if(_index<MaxRoomCount)
@@ -22,15 +27,15 @@ namespace Attack
 				}
 				else if(_index==7)//进入boss
 				{
-					
+					EnterBossRoom();
 				}
 				else if(_index==4||_index==5)//精英怪
 				{
-					
+					EnterEliteRoom();
 				}
-				else if(_index==0||_index==1||_index==2)
+				else if(_index==0||_index==1||_index==2)//小怪
 				{
-					
+					EnterNormalRoom();
 				}
 			}
 		}
@@ -67,7 +72,17 @@ namespace Attack
 			}
 		}
 
-
-
+        private void EnterNormalRoom()
+		{
+			
+		}
+		private void EnterEliteRoom()
+		{
+			
+		}
+		private void EnterBossRoom()
+		{
+			
+		}
 	}
 }
