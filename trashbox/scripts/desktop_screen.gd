@@ -32,7 +32,7 @@ var is_boss_script_playing = false
 # --- 4. 全局聊天数据存储 (丰富版) ---
 # 注意：Key 的名字必须和 app_chat.gd 里绑定的一致
 var global_chat_data = {
-	"老板": "[color=#888888]--- 历史记录 ---[/color]\n[color=#e74c3c][b]老板:[/b][/color] 昨天发的日报太敷衍了，重写。\n[color=#4a90e2][b]我:[/b][/color] 好的收到。\n",
+	"老板": "[color=#888888]--- 历史记录 ---[/color]\n[color=#e74c3c][b]老板:[/b][/color] 昨天发的周报太敷衍了，重写。\n[color=#4a90e2][b]我:[/b][/color] 好的收到。\n",
 	
 	"华姐": """[color=#888888]--- 历史记录 ---[/color]
 [color=#2ecc71][b]华姐:[/b][/color] 听说隔壁组全被裁了，吓死我了。
@@ -124,7 +124,7 @@ func _play_intro_story():
 	
 	# --- 消息流程 ---
 	await get_tree().create_timer(1.0).timeout
-	incoming_message("老板", "那个垃圾清理系统做好了吗？")
+	incoming_message("老板", "那个....小范啊，公司的游戏的做好了吗？")
 	
 	await get_tree().create_timer(1.5).timeout
 	incoming_message("老板", "客户已经在催了，今天必须上线！")
