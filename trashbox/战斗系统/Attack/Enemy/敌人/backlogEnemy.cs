@@ -20,18 +20,18 @@ namespace Enemy
 		private int bulletsFiredInBurst = 0;
 		private bool isBursting = false;
 		public override void _Ready()
-        {
-            base._Ready();
+		{
+			base._Ready();
 			var node=GetTree().GetFirstNodeInGroup("player") as RigidBody2D;
 			targetPosition=node.GlobalPosition;
 			//state = EnemyState.Attacking;
-        }
+		}
 		
 		public override void _Process(double delta)
-        {
-            base._Process(delta);
+		{
+			base._Process(delta);
 			//Attack(delta);
-        }
+		}
 
 		public override void Attack(double delta)
 		{

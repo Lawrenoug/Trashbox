@@ -18,11 +18,14 @@ var chat_history = {}
 var desktop_ref = null
 var current_chat_target = ""
 
+# --- 【新增】防刷屏限制 ---
+const MAX_TEXT_LENGTH = 3000 # 字符上限
+var has_triggered_bug_egg = false # 是否触发过彩蛋
+
 func _ready():
 	super._ready()
 	add_to_group("ChatApps")
 	
-	# 绑定按钮
 	if btn_boss: btn_boss.pressed.connect(_switch_chat_to.bind("老板"))
 	if btn_colleague: btn_colleague.pressed.connect(_switch_chat_to.bind("华姐"))
 	if btn_group: btn_group.pressed.connect(_switch_chat_to.bind("公司全员群"))
@@ -38,120 +41,102 @@ func init_data(desktop_node):
 	_switch_chat_to("老板")
 
 func _switch_chat_to(target_name: String):
-	if current_chat_target == target_name: return # 防止重复刷新
+	# 防止点击当前正在聊的人导致刷新
+	if current_chat_target == target_name: return
 
 	current_chat_target = target_name
 	current_contact_label.text = target_name
 	chat_log.clear()
 	
 	if chat_history.has(target_name):
-		chat_log.text = chat_history[target_name]
+		var content = chat_history[target_name]
+		
+		# === 【新增】检测文本是否溢出 (Bug 彩蛋) ===
+		if content.length() > MAX_TEXT_LENGTH:
+			# 如果太长了，触发彩蛋
+			_trigger_lazy_bug_popup()
+			# 截断显示，防止卡顿
+			chat_log.text = content.substr(0, 1000) + "\n\n[color=red][SYSTEM ERROR: 内存溢出][/color]"
+		else:
+			chat_log.text = content
 	else:
 		chat_log.text = "[color=#888888]（暂无更多消息）[/color]"
 	
 	await get_tree().process_frame
 	chat_log.scroll_to_line(chat_log.get_line_count())
 
-# --- 发送消息逻辑 (修复了输入框不清空的问题) ---
+# --- 【新增】Bug 彩蛋逻辑 ---
+func _trigger_lazy_bug_popup():
+	# 避免重复弹窗烦死玩家，只弹一次或者少弹几次
+	if has_triggered_bug_egg: return
+	has_triggered_bug_egg = true
+	
+	var dialog = AcceptDialog.new()
+	dialog.title = "系统崩溃 (Fatal Error)"
+	dialog.dialog_text = "别点了！这个bug懒得修了！！！！\n(文本长度已达上限)"
+	
+	# 设置窗口大小
+	dialog.min_size = Vector2i(300, 150)
+	
+	add_child(dialog)
+	dialog.popup_centered()
+	
+	# 播放一个警告音效 (如果有 sfx_player)
+	if desktop_ref and desktop_ref.shake_sound and desktop_ref.sfx_player:
+		desktop_ref.sfx_player.stream = desktop_ref.shake_sound
+		desktop_ref.sfx_player.play()
+
+# --- 发送消息逻辑 ---
 func _on_send_pressed(_text_from_enter = ""):
 	var text = message_input.text
 	if text.strip_edges() == "": return 
 	if current_chat_target == "": return
 	
-	# === 【新增】拦截逻辑：如果老板正在训话，禁止发送 ===
+	# 1. 拦截逻辑：老板说话时禁止插嘴
 	if current_chat_target == "老板":
 		if desktop_ref and desktop_ref.get("is_boss_script_playing"):
-			# 清空输入框
 			message_input.clear()
-			# 在聊天框显示一条灰色的系统提示，告诉玩家为什么发不出去
-			var warning = "[color=#888888][i](系统拦截：对方正在输入中，无法插话...)[/i][/color]\n"
-			chat_log.append_text(warning)
-			return # 直接结束函数，不执行后面的发送和回复逻辑
-	# =================================================
+			chat_log.append_text("[color=#888888][i](系统拦截：对方正在输入中，无法插话...)[/i][/color]\n")
+			return 
 	
-	# 1. 先把输入框清空
 	message_input.clear()
-		
-	# 2. 显示玩家发送的消息
 	var new_line = "[color=#4a90e2][b]我:[/b][/color] " + text + "\n"
 	_append_message(current_chat_target, new_line)
-	
-	# 3. 触发自动回复
 	_trigger_auto_reply(current_chat_target)
 
-# --- 核心：根据人设自动回复 ---
+# --- 自动回复 ---
 func _trigger_auto_reply(target_name: String):
-	# 模拟打字延迟 (随机 1.0 到 2.5 秒)
 	var delay = randf_range(1.0, 2.5)
 	await get_tree().create_timer(delay).timeout
 	
 	var reply_text = ""
-	var sender_display_name = target_name # 默认显示名字
+	var sender_display_name = target_name 
 	var color = "#ffffff"
 	
-	# --- 定义回复内容池 ---
 	match target_name:
 		"老板":
 			color = "#e74c3c"
-			var responses = [
-				"收到就好，别废话，去做事。",
-				"这个不在我的关注范围内，我要结果。",
-				"我不管过程，今晚下班前我要看到东西。",
-				"你在教我做事？",
-				"知道了。"
-			]
-			reply_text = responses.pick_random()
-			
+			reply_text = ["收到就好，别废话，去做事。", "这个不在我的关注范围内。", "今晚下班前我要看到东西。", "你在教我做事？"].pick_random()
 		"HR-Linda":
 			color = "#9b59b6"
-			var responses = [
-				"亲，这是公司的规定哦~",
-				"如果对考勤有异议，请填写流转单，审批流程大概需要15个工作日。",
-				"亲，请注意你的言辞，这会被记录在综合评估里的。",
-				"这也是为了帮你更好地成长呀。"
-			]
-			reply_text = responses.pick_random()
-			
+			reply_text = ["亲，这是公司的规定哦~", "请填写流转单。", "请注意你的言辞。"].pick_random()
 		"妈妈":
 			color = "#e67e22"
-			var responses = [
-				"工作累不累呀？",
-				"记得按时吃饭，别老吃外卖。",
-				"没事，妈就是想听听你声音。",
-				"钱够不够花？妈给你转点？",
-				"早点睡，别把眼睛熬坏了。"
-			]
-			reply_text = responses.pick_random()
-			
+			reply_text = ["工作累不累呀？", "记得按时吃饭。", "妈给你转点钱？"].pick_random()
 		"公司全员群":
 			color = "#f1c40f"
-			sender_display_name = "行政-小王" # 群里一般是行政在说话
-			var responses = [
-				"@我 请勿在群内闲聊，专心工作。",
-				"@我 收到请回复，不要发无关内容。"
-			]
-			reply_text = responses.pick_random()
-			
+			sender_display_name = "行政-小王"
+			reply_text = ["@我 请勿在群内闲聊。", "[系统消息] 全员禁言中。"].pick_random()
 		"华姐":
-			# 华姐被裁了，所以发消息会报错，增加恐怖感
-			color = "#888888" # 灰色系统字
+			color = "#888888"
 			sender_display_name = "系统"
 			reply_text = "消息发送失败：该用户已注销或不存在。"
 	
-	# --- 生成回复 ---
 	if reply_text != "":
-		var formatted_reply = "[color=" + color + "][b]" + sender_display_name + ":[/b][/color] " + reply_text + "\n"
-		
-		# 接收消息 (这会自动触发 desktop_screen.gd 里的提示音和弹窗)
-		# 注意：因为 app_chat 也是 ChatApps 组的一员，所以 receive_message 会被调用，从而更新 UI
 		get_tree().call_group("ChatApps", "receive_message", sender_display_name, reply_text)
 
 # --- 接收消息 ---
 func receive_message(sender_name: String, message: String):
-	# 这里是为了处理 DesktopScreen 广播过来的消息
-	# 同时也处理上面 _trigger_auto_reply 发过来的消息
-	
-	# 简单的颜色映射，用于显示 (上面其实已经格式化过了，但为了保险起见)
 	var color = "#2ecc71"
 	if sender_name == "老板": color = "#e74c3c"
 	elif sender_name == "HR-Linda": color = "#9b59b6"
@@ -161,9 +146,6 @@ func receive_message(sender_name: String, message: String):
 	
 	var new_line = "[color=" + color + "][b]" + sender_name + ":[/b][/color] " + message + "\n"
 	
-	# 这里的 target 需要判断一下。
-	# 如果是“行政-小王”发来的，应该归类到“公司全员群”的历史记录里
-	# 如果是“系统”发来的（给华姐发的），应该归类到“华姐”里
 	var target_key = sender_name
 	if sender_name == "行政-小王": target_key = "公司全员群"
 	if sender_name == "系统": target_key = "华姐"
@@ -172,6 +154,13 @@ func receive_message(sender_name: String, message: String):
 
 func _append_message(target: String, formatted_text: String):
 	if not chat_history.has(target): chat_history[target] = ""
+	
+	# === 【防刷屏检查】 ===
+	# 如果已经溢出了，就不再往历史记录里加垃圾数据了
+	if chat_history[target].length() > MAX_TEXT_LENGTH:
+		return 
+	# ====================
+	
 	chat_history[target] += formatted_text
 	
 	if desktop_ref and desktop_ref.global_chat_data.has(target):
