@@ -118,6 +118,13 @@ namespace Enemy
         //生成小怪
 		public static PackedScene[] GetNormalEnemy(int _index)
 		{
+			// 添加索引范围检查，防止越界访问
+			if (_index < 0 || _index >= EnemySet.Count)
+			{
+				GD.PrintErr($"Invalid enemy set index: {_index}. Valid range is 0-{EnemySet.Count - 1}");
+				return new PackedScene[0]; // 返回空数组而不是抛出异常
+			}
+			
 			List<int> normalEnemy=EnemySet[_index];
 			PackedScene[] normalEnemyList=new PackedScene[normalEnemy.Count];
 			for(int i=0;i<normalEnemy.Count;i++)
