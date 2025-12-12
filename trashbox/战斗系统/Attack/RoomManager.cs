@@ -121,6 +121,7 @@ namespace Attack
 		{
 			player.Reparent(GetTree().Root,true);
 			playerBulletContainer.Reparent(GetTree().Root,true);
+			contion.Reparent(GetTree().Root,true);
 
 			// 添加对room对象的有效性检查
 			if (room != null && GodotObject.IsInstanceValid(room) && !room.IsQueuedForDeletion())
