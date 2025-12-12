@@ -2,6 +2,7 @@ using Godot;
 using System;
 using Attack;
 using Buff;
+using Godot.Collections;
 
 namespace Enemy
 {
@@ -21,8 +22,13 @@ namespace Enemy
 		public virtual float DamageMultiplier { get; set; } = 1;
 
 		public float timeSinceLastAttack = 0f;
+		
+		// 添加用于随机移动的计时器
+		public float timeSinceLastMove = 0f;
 
 		public Vector2 nextPosition=new Vector2();
+
+		public Vector2 moveRange=new Vector2(1920,1080);
 
 		//private bool isMoving = false;
 
@@ -58,6 +64,15 @@ namespace Enemy
 					break;
 				case EnemyState.Attacking:
 					Attack(delta);
+					// 每隔3秒执行一次随机移动
+					timeSinceLastMove += (float)delta;
+					if (timeSinceLastMove >= 2.0f)
+					{
+						RandomMove();
+						timeSinceLastMove = 0f;
+					}
+					// 在攻击状态下也执行移动逻辑
+					Move();
 					break;
 				case EnemyState.Dead:
 					Die();
@@ -85,7 +100,7 @@ namespace Enemy
 
 		public virtual void MoveTo(Vector2 _position)
 		{
-			state = EnemyState.Moving;
+			//state = EnemyState.Moving;
 			nextPosition = _position;
 		}
 
@@ -143,17 +158,13 @@ namespace Enemy
 			}
 		}
 
-		// 虚方法：开始特殊攻击（如弹幕攻击）
-		public virtual void StartSpecialAttack()
+        public virtual void RandomMove()
 		{
-			// 可在子类中实现具体的特殊攻击逻辑
+			var random_X = new Random().Next(980, 1900);
+			var random_Y = new Random().Next(20,1060);
+			MoveTo(new Vector2(random_X, random_Y));
 		}
-
-		// 虚方法：结束特殊攻击
-		public virtual void EndSpecialAttack()
-		{
-			// 可在子类中实现具体的结束攻击逻辑
-		}
+        
 
 		public virtual void TakeDamage(float damage)
 		{

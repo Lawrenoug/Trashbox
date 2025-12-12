@@ -9,7 +9,7 @@ namespace Enemy
 		public override float MaxHP { get; set; } = 500;
 		public override float CurrentHP { get; set; } = 500;
 		public override float ATK { get; set; } = 15;
-		public override float ATS { get; set; } = 1;
+		public override float ATS { get; set; } = 0.5f;
 		public override float MoveSpeed { get; set; } = 80;
 		public override string enemyName { get; set; } = "完美主义";
 
@@ -77,7 +77,8 @@ namespace Enemy
 					return;
 				}
 
-				BulletContainer.AddChild(prefab);
+				var node = GetTree().GetFirstNodeInGroup("敌人子弹") as Node2D;
+				node.AddChild(prefab);
 				//GD.Print($"{enemyName} 发射子弹，位置: {GlobalPosition}");
 				// 角度从-170度开始，每隔20度发射一颗
 				prefab.init(GetNode<Node2D>("发射点").GlobalPosition,0, ATK, size);

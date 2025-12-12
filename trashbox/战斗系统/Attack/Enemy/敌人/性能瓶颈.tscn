@@ -27,5 +27,5 @@ texture = ExtResource("2_sgs2g")
 [node name="BulletContainer" type="Node2D" parent="."]
 position = Vector2(-10, 0)
 
-[node name="发射点" type="Node2D" parent="."]
+[node name="发射点" type="Node2D" parent="." groups=["性能瓶颈发射点"]]
 position = Vector2(-100, 0)

@@ -64,8 +64,9 @@ namespace Enemy
 					GD.Print("错误: 无法实例化子弹预制体");
 					return;
 				}
-
-				BulletContainer.AddChild(prefab);
+				var node = GetTree().GetFirstNodeInGroup("敌人子弹") as Node2D;
+				node.AddChild(prefab);
+				//BulletContainer.AddChild(prefab);
 				//GD.Print($"{enemyName} 发射子弹，位置: {GlobalPosition}");
 				// 角度从-170度开始，每隔20度发射一颗
 				prefab.init(GetNode<Node2D>("发射点").GlobalPosition,0, ATK);

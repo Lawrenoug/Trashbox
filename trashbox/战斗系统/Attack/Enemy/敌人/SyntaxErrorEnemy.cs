@@ -8,7 +8,7 @@ namespace Enemy
 		public override float MaxHP { get; set; } = 100;
 		public override float CurrentHP { get; set; } = 100;
 		public override float ATK { get; set; } = 15;
-		public override float ATS { get; set; } = 5;
+		public override float ATS { get; set; } = 0.5f;
 		public override float MoveSpeed { get; set; } = 80;
 		public override string enemyName { get; set; } = "语法错误";
 		public override void _Ready()
@@ -60,7 +60,8 @@ namespace Enemy
 						return;
 					}
 
-					BulletContainer.AddChild(prefab);
+					var node = GetTree().GetFirstNodeInGroup("敌人子弹") as Node2D;
+					node.AddChild(prefab);
 					GD.Print($"{enemyName} 发射子弹，位置: {GlobalPosition}");
 					prefab.init(GetNode<Node2D>("发射点").GlobalPosition, -10 * i, ATK);
 				}

@@ -5,7 +5,7 @@ namespace Enemy
 {
 	public partial class SyntaxErrorBullet : EnemyBullet
 	{
-		public override float speed { get; set; } = 100f;
+		public override float speed { get; set; } = 250f;
 		public override float angle { get; set; } = 0f;
 
 		public override float ATK { get; set; } = 5f;

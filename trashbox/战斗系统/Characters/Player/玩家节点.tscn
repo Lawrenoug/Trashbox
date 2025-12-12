@@ -7,12 +7,13 @@
 
 [node name="玩家节点" type="Node2D"]
 
-[node name="Player" type="RigidBody2D" parent="." node_paths=PackedStringArray("startShootPosition", "UIControl") groups=["player"]]
+[node name="Player" type="RigidBody2D" parent="." node_paths=PackedStringArray("startShootPosition") groups=["player"]]
 position = Vector2(167, 315)
+collision_layer = 4
+collision_mask = 0
 gravity_scale = 0.0
 script = ExtResource("1_5rrvb")
 startShootPosition = NodePath("发射点")
-UIControl = NodePath("")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
 shape = SubResource("CircleShape2D_6uqi0")
@@ -27,3 +28,5 @@ texture = ExtResource("2_lwd8c")
 position = Vector2(100, 0)
 
 [node name="玩家子弹" type="Node2D" parent="." groups=["玩家子弹"]]
+
+[node name="敌人子弹" type="Node2D" parent="." groups=["敌人子弹"]]
