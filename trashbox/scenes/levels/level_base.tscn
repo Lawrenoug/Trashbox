@@ -30,7 +30,7 @@ centered = false
 [node name="Spawn1" type="Marker2D" parent="EnemySpawnPoints" groups=["战斗房间"]]
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(491, 286)
+position = Vector2(960, 540)
 
 [node name="HUD" type="CanvasLayer" parent="."]
 

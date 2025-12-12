@@ -14,21 +14,35 @@ const PlayerScene = preload("res://trashbox/scenes/main/GlobalPlayer.tscn")
 var current_player = null
 
 func _ready():
-	# 1. 清理旧玩家
-	if has_node("Player"): get_node("Player").queue_free()
+	# --- 1. 生成玩家逻辑 (必须有这段！) ---
+	# 如果场景里自带一个旧的 Player 节点，先清理掉
+	if has_node("Player"): 
+		get_node("Player").queue_free()
 	
-	# 2. 生成新玩家
-	current_player = PlayerScene.instantiate()
-	add_child(current_player)
+	# 实例化新玩家
+	if PlayerScene:
+		current_player = PlayerScene.instantiate()
+		add_child(current_player)
+		
+		# === 【核心修复】强制让玩家显示 ===
+		current_player.visible = true 
+		current_player.modulate.a = 1.0 # 防止透明度是0
+		# ================================
+		
+		# 强制把名字改成 Player
+		current_player.name = "Player" 
+	else:
+		print("严重错误：PlayerScene 未加载！")
+		return
+	# --- 2. 设置位置 ---
+	if start_pos: 
+		current_player.global_position = start_pos.global_position
+	else: 
+		# 如果没找到 StartPos 节点，给一个默认坐标防止它飞到 (0,0) 墙里去
+		current_player.global_position = Vector2(300, 300) 
 	
-	# 设置位置
-	if start_pos: current_player.global_position = start_pos.global_position
-	else: current_player.global_position = Vector2(300, 300)
-	
-	# --- 读档 ---
+	# --- 3. 读档和UI连接 (后续代码...) ---
 	_load_player_data()
-	
-	# 连接血条
 	_connect_player(current_player)
 	
 	# 3. 修复 C# 引用 (让玩家能攻击)
@@ -41,12 +55,14 @@ func _ready():
 
 	# --- 【UI 显示控制：战斗只显示战斗列表】---
 	if battle_ui_node:
-		battle_ui_node.visible = true
+		battle_ui_node.visible = false
 		
 	if backpack_ui_node:
 		backpack_ui_node.visible = false # 战斗时隐藏背包
 
 # --- 读档逻辑 ---
+# trashbox/scripts/level_base.gd
+
 func _load_player_data():
 	if not current_player: return
 	
@@ -54,30 +70,47 @@ func _load_player_data():
 	current_player.set("MaxBlood", GlobalGameState.player_max_hp)
 	current_player.set("CurrentBlood", GlobalGameState.player_current_hp)
 	
-	# 恢复战斗列表技能 (如果UI节点存在)
+	# --- 核心：恢复战斗技能 ---
+	# 只要 battle_ui_node 引用还在（哪怕 visible=false），这个逻辑就能跑
 	if battle_ui_node and GlobalGameState.saved_skill_paths.size() > 0:
-		var grid = battle_ui_node.get_node("GridContainer")
+		
+		# 1. 获取隐藏的 GridContainer
+		var grid = battle_ui_node.get_node("GridContainer") 
+		# 如果找不到，尝试用 find_child
+		if not grid: grid = battle_ui_node.find_child("GridContainer", true, false)
+			
 		if grid:
-			# 清空旧图标
+			# 2. 清空旧图标 (如果有的话)
 			for slot in grid.get_children():
 				for child in slot.get_children(): child.queue_free()
 			
-			# 填入新图标
+			# 3. 填入新技能 (在后台实例化)
 			var slots = grid.get_children()
 			var paths = GlobalGameState.saved_skill_paths
+			
 			for i in range(paths.size()):
 				if i >= slots.size(): break
 				var path = paths[i]
 				if path != "":
 					var skill_scene = load(path)
 					if skill_scene:
-						slots[i].add_child(skill_scene.instantiate())
+						var skill_instance = skill_scene.instantiate()
+						slots[i].add_child(skill_instance)
 			
-			# 通知 C# 更新
+			# 4. 【关键】通知 C# 脚本读取这些技能
+			# grid 节点上必须挂载了 SkillGroupsUIManager.cs
+			if grid.has_method("UpdateSkillList"):
+				grid.UpdateSkillList() # 让 C# 更新内部列表
+			
 			if grid.has_method("GetSkillList"):
-				var list = grid.GetSkillList()
-				current_player.attackManager.InsertSkill(list)
-				print("LevelBase: 已恢复技能 -> ", list.size())
+				var csharp_skill_list = grid.GetSkillList() # 获取 C# List<Skill>
+				
+				# 5. 注入给玩家的 AttackManager
+				if current_player.get("attackManager"):
+					current_player.attackManager.InsertSkill(csharp_skill_list)
+					print("LevelBase: 成功将 %d 个技能注入给玩家 C#" % csharp_skill_list.size())
+				else:
+					print("LevelBase: 玩家缺少 AttackManager，无法注入技能")
 
 # --- 存档逻辑 ---
 func _save_player_data():

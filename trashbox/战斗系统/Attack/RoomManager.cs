@@ -15,7 +15,7 @@ namespace Attack
 			room=GetTree().GetFirstNodeInGroup("战斗房间") as Node2D;
 		}
 
-        //进入房间
+		//进入房间
 		public void EnterRoom(int _index)
 		{
 			if(_index<MaxRoomCount)
@@ -72,7 +72,7 @@ namespace Attack
 			}
 		}
 
-        private void EnterNormalRoom()
+		private void EnterNormalRoom()
 		{
 			
 		}
