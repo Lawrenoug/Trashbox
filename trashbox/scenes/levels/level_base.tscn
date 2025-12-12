@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://cty56ew0kcqbu"]
+[gd_scene load_steps=7 format=3 uid="uid://cty56ew0kcqbu"]
 
 [ext_resource type="Texture2D" uid="uid://d3l0n6prpflv5" path="res://trashbox/assets/sprites/grid_bg.png" id="1_ge182"]
 [ext_resource type="Script" uid="uid://dijip1xmh300q" path="res://trashbox/scripts/level_base.gd" id="1_w6qvd"]
+[ext_resource type="PackedScene" uid="uid://bjbyfll3hjoba" path="res://trashbox/战斗系统/Attack/Enemy/敌人/完美主义.tscn" id="3_w6qvd"]
 [ext_resource type="PackedScene" uid="uid://dk1ae2t3e6fi7" path="res://trashbox/战斗系统/技能战斗列表.tscn" id="5_w6qvd"]
 [ext_resource type="PackedScene" uid="uid://bj20pol0nbg0o" path="res://trashbox/战斗系统/技能组背包.tscn" id="6_xl61d"]
 
@@ -29,6 +30,21 @@ centered = false
 
 [node name="Spawn1" type="Marker2D" parent="EnemySpawnPoints" groups=["战斗房间"]]
 
+[node name="完美主义" parent="EnemySpawnPoints/Spawn1" instance=ExtResource("3_w6qvd")]
+position = Vector2(1200, 540)
+
+[node name="完美主义2" parent="EnemySpawnPoints/Spawn1" instance=ExtResource("3_w6qvd")]
+position = Vector2(1400, 320)
+
+[node name="完美主义3" parent="EnemySpawnPoints/Spawn1" instance=ExtResource("3_w6qvd")]
+position = Vector2(1400, 760)
+
+[node name="完美主义4" parent="EnemySpawnPoints/Spawn1" instance=ExtResource("3_w6qvd")]
+position = Vector2(1600, 100)
+
+[node name="完美主义5" parent="EnemySpawnPoints/Spawn1" instance=ExtResource("3_w6qvd")]
+position = Vector2(1600, 980)
+
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(491, 286)
 
@@ -42,9 +58,11 @@ offset_bottom = 48.0
 theme_override_styles/background = SubResource("StyleBoxFlat_p3va8")
 
 [node name="技能战斗列表" parent="HUD" instance=ExtResource("5_w6qvd")]
+visible = false
 offset_top = 49.0
 offset_bottom = 49.0
 
 [node name="技能组背包" parent="HUD" instance=ExtResource("6_xl61d")]
+visible = false
 offset_top = 374.0
 offset_bottom = 374.0

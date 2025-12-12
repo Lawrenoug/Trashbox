@@ -61,6 +61,7 @@ namespace Enemy
 				GlobalPosition.Y < -BUFFER || GlobalPosition.Y > screen_size.Y + BUFFER)
 			{
 				// 超出边界，销毁子弹
+				GD.Print("敌方子弹超出屏幕（含边界缓冲区），自动销毁");
 				QueueFree();
 			}
 		}

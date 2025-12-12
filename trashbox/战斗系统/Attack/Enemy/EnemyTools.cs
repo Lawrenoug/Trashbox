@@ -15,6 +15,29 @@ namespace Enemy
 	}
 	public static class EnemyTools
 	{
+		public static List<Vector2> startPosition=new List<Vector2>()
+		{
+			new Vector2(2000,540),
+			new Vector2(2000,320),
+			new Vector2(2000,760),
+			new Vector2(2000,100),
+			new Vector2(2000,980)
+		};
+		public static List<Vector2> endPosition=new List<Vector2>()
+		{
+			new Vector2(1200,540),
+			new Vector2(1400,320),
+			new Vector2(1400,760),
+			new Vector2(1600,100),
+			new Vector2(1600,980)
+		};
+
+		public static List<Vector2> EliteenemyPosition=new List<Vector2>()
+		{
+			new Vector2(2000,550),
+			new Vector2(1400,550)
+		};
+
 		public static List<List<int>> EnemySet=new List<List<int>>()
 		{
 			new List<int>()
