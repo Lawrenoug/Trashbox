@@ -56,17 +56,24 @@ namespace Attack
 		public void startAttack()
 		{
 			contion=GetTree().GetFirstNodeInGroup("移动列表节点") as Control;
+			GD.Print(contion.GetPath());
 			contionParent=contion.GetParent() as Control;
 			//UIpath=contion.GetParent().GetPath();
 			contion.Reparent(GetTree().Root,true);
+			GD.Print("contion修改后"+contion.GetPath());
 
 			player=GetTree().GetFirstNodeInGroup("player") as RigidBody2D;
+			GD.Print(player.GetPath());
 			playerParent=player.GetParent() as Node2D;
 			player.Reparent(GetTree().Root,true);
+			GD.Print("player修改后1"+player.GetPath());
+
 
 			playerBulletContainer=GetTree().GetFirstNodeInGroup("player") as Node2D;
+			GD.Print(playerBulletContainer.GetPath());
 			playerBulletContainerParent=playerBulletContainer.GetParent() as Node2D;
 			playerBulletContainer.Reparent(GetTree().Root,true);
+			GD.Print("playerBulletContainer修改后1"+playerBulletContainer.GetPath());
 
 			
 		}
@@ -78,7 +85,9 @@ namespace Attack
 
 			var playerparent=GetTree().GetFirstNodeInGroup("战斗场景玩家父节点");
 			player.Reparent(playerparent,true);
+			GD.Print("player修改后2"+player.GetPath());
 			playerBulletContainer.Reparent(playerparent,true);
+			GD.Print("playerBulletContainer修改后3"+playerBulletContainer.GetPath());
 			
 			if(_index<MaxRoomCount)
 			{
