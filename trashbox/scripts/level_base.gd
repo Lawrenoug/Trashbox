@@ -163,51 +163,55 @@ func _save_player_data():
 
 # --- 离开逻辑 ---
 func _on_skip_level_pressed():
-	print("--- [DEBUG] 按钮被点击 ---")
+	print("--- [流程] 1. 玩家请求离开关卡 ---")
 	
-	# 1. 暂时屏蔽 C# 逻辑，先测跳转功能
-	# 如果这里报错，说明是队友的 C# 代码卡住了 GDScript
-	# var room_mgr = get_node_or_null("/root/RoomManager")
-	# var layer_index = GlobalGameState.current_level_progress + 1 
-	# if room_mgr:
-	# 	var rewards = room_mgr.GetSkills(layer_index)
-	# 	if rewards:
-	# 		room_mgr.SendSkillToBackpack(rewards)
-	# 	room_mgr.ExitRoom()
-	print("--- [DEBUG] 已跳过 C# 交互 (排查用) ---")
+	# === 第一步：立刻停火 ===
+	# 防止在清理过程中还有新子弹生成，导致报错
+	if current_player:
+		var real_player = current_player.get_node_or_null("Player")
+		if real_player and real_player.get("attackManager"):
+			real_player.attackManager.set("enableAttack", false)
 	
-	# 2. 存档 (这是纯 GDScript，应该没事)
+	# === 第二步：优先调用 C# ExitRoom ===
+	# 必须在场景销毁前调用，否则 C# 会报 ObjectDisposedException
+	var room_mgr = get_node_or_null("/root/RoomManager")
+	if room_mgr:
+		print("--- [流程] 2. 通知 C# 清理引用 ---")
+		room_mgr.ExitRoom()
+	
+	# === 第三步：【关键】强制等待 ===
+	# 等待 2 帧。
+	# 第1帧：让 C# 的逻辑跑完。
+	# 第2帧：让 Godot 的 QueueFree 生效，确保节点真的从内存中断开了。
+	await get_tree().process_frame
+	await get_tree().process_frame
+	
+	print("--- [流程] 3. C# 清理完毕，开始存档和切换 ---")
+	
+	# === 第四步：存档 (GDScript 逻辑) ===
 	_save_player_data()
-	print("--- [DEBUG] 存档完成 ---")
 	
-	# 3. 销毁玩家
+	# === 第五步：清理玩家节点 ===
 	if current_player:
 		current_player.queue_free()
 	
-	# 4. 更新进度
-	print("--- [DEBUG] 当前进度: ", GlobalGameState.current_level_progress)
+	# === 第六步：计算进度并跳转 ===
 	GlobalGameState.current_level_progress += 1
-	print("--- [DEBUG] 更新后进度: ", GlobalGameState.current_level_progress)
 	
-	# 5. 通关判断 (假设总共8关，打完第8关索引变成7)
-	# 也就是: 0,1,2,3,4,5,6 (前7关) -> 7 (第8关通关)
+	# 通关判断 (假设总共8关: 0~7)
 	if GlobalGameState.current_level_progress >= 7: 
-		print("--- [DEBUG] 判定：通关！尝试跳转结局 ---")
+		print("--- [流程] 判定：通关 ---")
 		var end_scene_path = "res://trashbox/scenes/main/GameEnd.tscn"
-		
-		# 检查文件是否存在
 		if ResourceLoader.exists(end_scene_path):
-			var err = get_tree().change_scene_to_file(end_scene_path)
-			if err != OK:
-				print("--- [ERROR] 跳转失败，错误码: ", err)
+			get_tree().change_scene_to_file(end_scene_path)
 		else:
-			print("--- [ERROR] 找不到结局文件！请检查路径: ", end_scene_path)
-			
+			print("错误：找不到结局文件")
 	else:
-		print("--- [DEBUG] 判定：未通关，返回桌面 ---")
+		print("--- [流程] 判定：返回桌面 ---")
 		GlobalGameState.should_open_engine_automatically = true
+		# 最后一步才是切换场景，这时候 C# 早就完事了，不会报错
 		get_tree().change_scene_to_file(GlobalGameState.desktop_scene_path)
-		
+
 # --- 辅助 UI ---
 func _create_debug_skip_button():
 	var layer = CanvasLayer.new()

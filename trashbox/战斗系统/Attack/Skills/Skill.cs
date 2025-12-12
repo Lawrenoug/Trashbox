@@ -35,6 +35,7 @@ namespace Attack
             skillDataForNext.RNG =RNG;
             skillDataForNext.AttackCount =  AttackCount;
             skillDataForNext.enableTarcking = enableTarcking;
+            skillDataForNext.BuffTypes=new List<string>();
             return skillDataForNext;
         }
 
@@ -46,6 +47,10 @@ namespace Attack
             skillDataForNext.RNG = skillData.RNG + RNG;
             skillDataForNext.AttackCount = skillData.AttackCount + AttackCount;
             skillDataForNext.enableTarcking = skillData.enableTarcking || enableTarcking;
+            foreach(string buff in skillData.BuffTypes)
+            {
+                skillDataForNext.BuffTypes.Add(buff);
+            }
             return skillDataForNext;
         }
 
@@ -78,6 +83,14 @@ namespace Attack
             newData.RNG = skillData_1.RNG * (1 + skillData_2.RNG);
             newData.AttackCount = skillData_1.AttackCount + skillData_2.AttackCount;
             newData.enableTarcking = skillData_1.enableTarcking || skillData_2.enableTarcking;
+            foreach(string buff in skillData_1.BuffTypes)
+            {
+                newData.BuffTypes.Add(buff);
+            }
+            foreach(string buff in skillData_2.BuffTypes)
+            {
+                newData.BuffTypes.Add(buff);
+            }
             return newData;
         }
     }

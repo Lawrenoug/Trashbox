@@ -1,7 +1,9 @@
-[gd_scene load_steps=15 format=3 uid="uid://pwwp08nxemy2"]
+[gd_scene load_steps=17 format=3 uid="uid://pwwp08nxemy2"]
 
 [ext_resource type="Script" uid="uid://cplhjjnf0p3j6" path="res://trashbox/scripts/desktop_screen.gd" id="1_1m4g2"]
 [ext_resource type="Texture2D" uid="uid://b2ag8neelt1je" path="res://trashbox/assets/sprites/菜单.png" id="1_xm50m"]
+[ext_resource type="AudioStream" uid="uid://d3ic5eyxu3ra" path="res://trashbox/assets/audio/提醒音效.wav" id="2_fjr7a"]
+[ext_resource type="AudioStream" uid="uid://ilbhdq43impa" path="res://trashbox/assets/audio/wechat.wav" id="2_on2mt"]
 [ext_resource type="Texture2D" uid="uid://64tiskwuwr1m" path="res://trashbox/assets/sprites/电脑桌面.png" id="2_tagyk"]
 [ext_resource type="Theme" uid="uid://1gy6tx3ub7fh" path="res://trashbox/assets/pixel_ui_theme.tres" id="3_tagyk"]
 [ext_resource type="Texture2D" uid="uid://ftn1g5nctp7y" path="res://trashbox/assets/sprites/文件夹.png" id="5_wa37d"]
@@ -62,6 +64,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_1m4g2")
+notification_sound = ExtResource("2_on2mt")
+shake_sound = ExtResource("2_fjr7a")
 
 [node name="Wallpaper" type="TextureRect" parent="."]
 layout_mode = 1
