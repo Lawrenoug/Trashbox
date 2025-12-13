@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using Enemy;
+using CharacterManager;
 
 namespace Attack
 {
@@ -17,10 +18,11 @@ namespace Attack
 
 		//private string UIpath="";
 		private Control contion,contionParent;
-		private RigidBody2D player;
+		private PlayerManager player;
 		private Node2D playerBulletContainer;
 
 		private Node2D playerBulletContainerParent,playerParent;
+		private string playerBulletContainerParentPath,playerParentPath,contionParentPath;
 		
 
 		public override void _Process(double delta)
@@ -63,7 +65,7 @@ namespace Attack
 			//GD.Print("contion修改后"+contion.GetPath());
 			contion.Visible=false;
 
-			player=GetTree().GetFirstNodeInGroup("player") as RigidBody2D;
+			player=GetTree().GetFirstNodeInGroup("player") as PlayerManager;
 			//GD.Print(player.GetPath());
 			playerParent=player.GetParent() as Node2D;
 			player.Reparent(GetTree().Root,true);
@@ -76,6 +78,10 @@ namespace Attack
 			playerBulletContainer.Reparent(GetTree().Root,true);
 			//GD.Print("playerBulletContainer修改后1"+playerBulletContainer.GetPath());
 
+			GD.Print("playerParent:"+playerParent.GetPath()+" playerBulletContainerParent:"+playerBulletContainerParent.GetPath());
+			playerParentPath=playerParent.GetPath();
+			playerBulletContainerParentPath=playerBulletContainerParent.GetPath();
+			contionParentPath=contionParent.GetPath();
 			
 		}
 		//进入房间
@@ -120,7 +126,7 @@ namespace Attack
 		//离开房间
 		public void ExitRoom()
 		{
-
+			//GD.Print("playerParent:"+playerParent.GetPath()+" playerBulletContainerParent:"+playerBulletContainerParent.GetPath());
 			player.Reparent(GetTree().Root,true);
 			playerBulletContainer.Reparent(GetTree().Root,true);
 			contion.Reparent(GetTree().Root,true);
@@ -142,14 +148,95 @@ namespace Attack
 		}
 		public void endAttack()
 		{
-			contion=GetTree().GetFirstNodeInGroup("移动列表节点") as Control;
-			playerBulletContainer=GetTree().GetFirstNodeInGroup("玩家子弹") as Node2D;
-			player=GetTree().GetFirstNodeInGroup("player") as RigidBody2D;
+			// contion=GetTree().GetFirstNodeInGroup("移动列表节点") as Control;
+			// playerBulletContainer=GetTree().GetFirstNodeInGroup("玩家子弹") as Node2D;
+			// player=GetTree().GetFirstNodeInGroup("player") as RigidBody2D;
 
-			player.Reparent(playerParent,true);
-			playerBulletContainer.Reparent(playerBulletContainerParent,true);
-			contion.Reparent(contionParent,true);
-			contion.Visible=true;
+			//GD.Print("contion:"+contion.GetPath()+" player:"+player.GetPath()+" playerBulletContainer:"+playerBulletContainer.GetPath());
+			//GD.Print("playerParent:"+playerParent.GetPath()+" playerBulletContainerParent:"+playerBulletContainerParent.GetPath());
+
+			//contion=GetTree().GetFirstNodeInGroup("移动列表节点") as Control;
+			Godot.Collections.Array<Node> contionNodes = GetTree().GetNodesInGroup("移动列表节点");
+			if(contionNodes.Count==2)
+			{
+				contionNodes[1].QueueFree();
+			}
+			Godot.Collections.Array<Node> playerNodes = GetTree().GetNodesInGroup("player");
+			if(playerNodes.Count==2)
+			{
+				playerNodes[1].QueueFree();
+			}
+			Godot.Collections.Array<Node> playerBulletContainerNodes = GetTree().GetNodesInGroup("玩家子弹");
+			if(playerBulletContainerNodes.Count==2)
+			{
+				playerBulletContainerNodes[1].QueueFree();
+			}
+
+			player=playerNodes[0] as PlayerManager;
+			contion=contionNodes[0] as Control;
+			playerBulletContainer=playerBulletContainerNodes[0] as Node2D;
+
+			// 添加对节点路径的有效性检查
+			if (!string.IsNullOrEmpty(playerParentPath) && !string.IsNullOrEmpty(playerBulletContainerParentPath) && !string.IsNullOrEmpty(contionParentPath))
+			{
+				GD.Print("尝试获取父节点: playerParentPath=", playerParentPath, " playerBulletContainerParentPath=", playerBulletContainerParentPath, " contionParentPath=", contionParentPath);
+				
+				playerParent=GetTree().GetFirstNodeInGroup("玩家节点") as Node2D;
+				playerBulletContainerParent=GetTree().GetFirstNodeInGroup("玩家节点") as Node2D;
+				
+				contionParent=GetNodeOrNull<Control>(contionParentPath);
+				
+				// 添加对获取到的父节点的有效性检查
+				GD.Print("节点获取结果: player=", player != null, " playerParent=", playerParent != null, " playerBulletContainer=", playerBulletContainer != null, " playerBulletContainerParent=", playerBulletContainerParent != null, " contion=", contion != null, " contionParent=", contionParent != null);
+				
+				if (player != null && GodotObject.IsInstanceValid(player) && !player.IsQueuedForDeletion() &&
+					playerParent != null && GodotObject.IsInstanceValid(playerParent) && !playerParent.IsQueuedForDeletion())
+				{
+					GD.Print("Reparent player to playerParent");
+					player.Reparent(playerParent,true);
+				}
+				else
+				{
+					GD.Print("player or playerParent is invalid: player=", player != null, " playerParent=", playerParent != null);
+				}
+				
+				if (playerBulletContainer != null && GodotObject.IsInstanceValid(playerBulletContainer) && !playerBulletContainer.IsQueuedForDeletion() &&
+					playerBulletContainerParent != null && GodotObject.IsInstanceValid(playerBulletContainerParent) && !playerBulletContainerParent.IsQueuedForDeletion())
+				{
+					GD.Print("Reparent playerBulletContainer to playerBulletContainerParent");
+					playerBulletContainer.Reparent(playerBulletContainerParent,true);
+				}
+				else
+				{
+					GD.Print("playerBulletContainer or playerBulletContainerParent is invalid: playerBulletContainer=", playerBulletContainer != null, " playerBulletContainerParent=", playerBulletContainerParent != null);
+				}
+				
+				if (contion != null && GodotObject.IsInstanceValid(contion) && !contion.IsQueuedForDeletion() &&
+					contionParent != null && GodotObject.IsInstanceValid(contionParent) && !contionParent.IsQueuedForDeletion())
+				{
+					// 先将contion从当前父节点中移除（如果有的话）
+					if (contion.GetParent() != null)
+					{
+						GD.Print("从当前父节点移除contion");
+						contion.GetParent().RemoveChild(contion);
+					}
+					
+					// 将contion添加为contionParent的第一个子节点
+					GD.Print("添加contion到contionParent的第一个位置");
+					contionParent.AddChild(contion);
+					contionParent.MoveChild(contion, 0);
+					
+					contion.Visible=true;
+				}
+				else
+				{
+					GD.Print("contion or contionParent is invalid: contion=", contion != null, " contionParent=", contionParent != null);
+				}
+			}
+			else
+			{
+				GD.PrintErr("无法获取有效的父节点路径，跳过reparent操作: playerParentPath=", playerParentPath, " playerBulletContainerParentPath=", playerBulletContainerParentPath, " contionParentPath=", contionParentPath);
+			}
 		}
 		//胜利随机得到技能
 		public PackedScene[] GetSkills(int _count)

@@ -6,7 +6,7 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_6uqi0"]
 radius = 13.038404
 
-[node name="玩家节点" type="Node2D"]
+[node name="玩家节点" type="Node2D" groups=["玩家节点"]]
 
 [node name="Player" type="RigidBody2D" parent="." node_paths=PackedStringArray("startShootPosition") groups=["player"]]
 position = Vector2(167, 315)

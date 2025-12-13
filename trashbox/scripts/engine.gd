@@ -64,8 +64,11 @@ func _process(delta):
 
 # --- 加载练功房 ---
 func _load_preview_stage():
+	# 清理现有的预览实例
 	for child in preview_viewport.get_children():
 		child.queue_free()
+		
+	# 创建新的预览实例
 	if PreviewStageScene:
 		current_preview_instance = PreviewStageScene.instantiate()
 		preview_viewport.add_child(current_preview_instance)
@@ -241,6 +244,12 @@ func scan_and_update_sequence():
 
 # 【新增】调用RoomManager的endAttack函数
 func _call_end_attack_if_needed():
+	# 确保预览场景已加载
+	_load_preview_stage()
+	
+	# 等一帧确保节点树更新完成
+	await get_tree().process_frame
+	
 	var room_mgr = get_node_or_null("/root/RoomManager")
 	if room_mgr and room_mgr.has_method("endAttack"):
 		room_mgr.endAttack()
