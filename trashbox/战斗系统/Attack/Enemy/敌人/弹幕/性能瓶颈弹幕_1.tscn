@@ -6,8 +6,7 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_dsec7"]
 
 [node name="性能瓶颈弹幕_1" type="RigidBody2D"]
-collision_layer = 4
-collision_mask = 4
+collision_layer = 8
 gravity_scale = 0.0
 script = ExtResource("1_pva25")
 

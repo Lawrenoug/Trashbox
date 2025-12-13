@@ -5,10 +5,11 @@
 [ext_resource type="Texture2D" uid="uid://cl30pjb1vpe0g" path="res://trashbox/assets/sprites/语法错误.png" id="3_4nkcw"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_x7h4u"]
+radius = 10.333333
 
 [node name="语法错误" type="RigidBody2D"]
 collision_layer = 4
-collision_mask = 4
+collision_mask = 3
 gravity_scale = 0.0
 contact_monitor = true
 max_contacts_reported = 1
@@ -21,7 +22,7 @@ shape = SubResource("CircleShape2D_x7h4u")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
-scale = Vector2(9, 9)
+scale = Vector2(3, 3)
 texture = ExtResource("3_4nkcw")
 
 [node name="BulletContainer" type="Node2D" parent="."]

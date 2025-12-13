@@ -6,8 +6,7 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_fyao2"]
 
 [node name="最终截止日期弹幕_2_子弹幕" type="RigidBody2D"]
-collision_layer = 4
-collision_mask = 4
+collision_layer = 8
 gravity_scale = 0.0
 script = ExtResource("1_mkvgr")
 
