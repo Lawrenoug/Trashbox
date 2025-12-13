@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://co2ussswtoqtm"]
+[gd_scene load_steps=8 format=3 uid="uid://co2ussswtoqtm"]
 
 [ext_resource type="Texture2D" uid="uid://drj0v0ccyn1sy" path="res://trashbox/战斗系统/UI/kenney_tiny-dungeon/Tiles/tile_0111.png" id="1_rfqjw"]
 [ext_resource type="Script" uid="uid://c0ibi3m4ygnhw" path="res://trashbox/战斗系统/Attack/Enemy/敌人/TheFinalDeadlineEnemy.cs" id="1_x8srw"]
@@ -6,19 +6,17 @@
 [ext_resource type="PackedScene" uid="uid://cpgbrx8k4wgyi" path="res://trashbox/战斗系统/Attack/Enemy/敌人/弹幕/最终截止日期弹幕_1.tscn" id="2_m43bq"]
 [ext_resource type="PackedScene" uid="uid://dns026pgvcknd" path="res://trashbox/战斗系统/Attack/Enemy/敌人/弹幕/最终截止日期弹幕_3.tscn" id="3_3g4ta"]
 [ext_resource type="PackedScene" uid="uid://bl1ugiut5stjt" path="res://trashbox/战斗系统/Attack/Enemy/敌人/弹幕/最终截止日期弹幕_4.tscn" id="4_kiws6"]
-[ext_resource type="PackedScene" uid="uid://cxbcra8ixnpp1" path="res://trashbox/战斗系统/Attack/Enemy/敌人/弹幕/待办事项弹幕.tscn" id="5_kiws6"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_x8srw"]
 
 [node name="最终截止日期" type="RigidBody2D"]
 collision_layer = 4
-collision_mask = 0
+collision_mask = 4
 gravity_scale = 0.0
 script = ExtResource("1_x8srw")
 bulletPrefab_2 = ExtResource("2_6d6be")
 bulletPrefab_3 = ExtResource("3_3g4ta")
 bulletPrefab_4 = ExtResource("4_kiws6")
-bulletPrefab_5 = ExtResource("5_kiws6")
 bulletPrefab = ExtResource("2_m43bq")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

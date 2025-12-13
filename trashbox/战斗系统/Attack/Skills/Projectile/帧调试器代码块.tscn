@@ -1,10 +1,10 @@
 [gd_scene load_steps=3 format=3 uid="uid://bdv8144ln17nr"]
 
-[ext_resource type="Texture2D" uid="uid://cjhowdkc8jx4o" path="res://trashbox/战斗系统/UI/kenney_tiny-dungeon/Tiles/tile_0130.png" id="1_qg858"]
+[ext_resource type="Texture2D" uid="uid://b1f6c8cdh1qp3" path="res://trashbox/assets/sprites/帧调试器代码块.png" id="1_k67xi"]
 [ext_resource type="Script" uid="uid://c32fvc50rorlu" path="res://trashbox/战斗系统/Attack/Skills/Projectile/FrameDebugger.cs" id="2_k67xi"]
 
 [node name="帧调试器代码块" type="Sprite2D"]
 texture_filter = 1
 position = Vector2(16, 16)
-texture = ExtResource("1_qg858")
+texture = ExtResource("1_k67xi")
 script = ExtResource("2_k67xi")

@@ -8,7 +8,7 @@
 
 [node name="屎山代码" type="RigidBody2D"]
 collision_layer = 4
-collision_mask = 0
+collision_mask = 4
 gravity_scale = 0.0
 script = ExtResource("1_30a0h")
 bulletPrefab = ExtResource("2_hcn3d")

@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://brmlidkc2i1mv"]
 
-[ext_resource type="Texture2D" uid="uid://cklcxqnqjv2ms" path="res://trashbox/战斗系统/UI/kenney_tiny-dungeon/Tiles/tile_0107.png" id="1_2hbub"]
+[ext_resource type="Texture2D" uid="uid://du4vkoguhb8on" path="res://trashbox/assets/sprites/指针代码块.png" id="1_2hbub"]
 [ext_resource type="Script" uid="uid://dvkg4d6rm87mt" path="res://trashbox/战斗系统/Attack/Skills/Projectile/Pointer.cs" id="2_8qe2h"]
 
 [node name="指针代码块" type="Sprite2D"]

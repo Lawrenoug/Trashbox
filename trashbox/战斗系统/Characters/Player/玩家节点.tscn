@@ -1,16 +1,17 @@
 [gd_scene load_steps=4 format=3 uid="uid://hqnftrbqicsu"]
 
 [ext_resource type="Script" uid="uid://08knfvnynesi" path="res://trashbox/战斗系统/Characters/Player/PlayerManager.cs" id="1_5rrvb"]
-[ext_resource type="Texture2D" uid="uid://de5or7du4lccg" path="res://trashbox/战斗系统/UI/kenney_tiny-dungeon/Tiles/tile_0110.png" id="2_lwd8c"]
+[ext_resource type="Texture2D" uid="uid://cuf2keyas31i8" path="res://trashbox/assets/sprites/PLAYER.png" id="2_5rrvb"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6uqi0"]
+radius = 13.038404
 
 [node name="玩家节点" type="Node2D"]
 
 [node name="Player" type="RigidBody2D" parent="." node_paths=PackedStringArray("startShootPosition") groups=["player"]]
 position = Vector2(167, 315)
 collision_layer = 4
-collision_mask = 0
+collision_mask = 4
 gravity_scale = 0.0
 contact_monitor = true
 max_contacts_reported = 1
@@ -18,13 +19,14 @@ script = ExtResource("1_5rrvb")
 startShootPosition = NodePath("发射点")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+position = Vector2(1, 0)
 shape = SubResource("CircleShape2D_6uqi0")
 
 [node name="Sprite2D" type="Sprite2D" parent="Player"]
 texture_filter = 1
-rotation = -1.5707964
-scale = Vector2(6, 6)
-texture = ExtResource("2_lwd8c")
+position = Vector2(0.99999833, -3.33786e-06)
+scale = Vector2(1.3055356, 1.4470451)
+texture = ExtResource("2_5rrvb")
 
 [node name="发射点" type="Node2D" parent="Player"]
 position = Vector2(100, 0)

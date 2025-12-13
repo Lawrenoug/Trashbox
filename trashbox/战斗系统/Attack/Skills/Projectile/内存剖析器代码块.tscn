@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://c3mcrc6vgcsfb"]
 
-[ext_resource type="Texture2D" uid="uid://dai22tx2kjkiw" path="res://trashbox/战斗系统/UI/kenney_tiny-dungeon/Tiles/tile_0131.png" id="1_up35w"]
+[ext_resource type="Texture2D" uid="uid://cyaw4kpqq77it" path="res://trashbox/assets/sprites/内存剖析器代码块.png" id="1_up35w"]
 [ext_resource type="Script" uid="uid://13jluu2r7oap" path="res://trashbox/战斗系统/Attack/Skills/Projectile/MemoryProfiler.cs" id="2_n32mj"]
 
 [node name="内存剖析器代码块" type="Sprite2D"]

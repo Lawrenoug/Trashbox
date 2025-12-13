@@ -1,13 +1,13 @@
 [gd_scene load_steps=5 format=3 uid="uid://b74la3c7r5ahs"]
 
 [ext_resource type="Script" uid="uid://1e3se3oaclnu" path="res://trashbox/战斗系统/Attack/Enemy/敌人/SyntaxErrorEnemy.cs" id="1_eogsd"]
-[ext_resource type="Texture2D" uid="uid://djx3hggng7h26" path="res://trashbox/战斗系统/UI/kenney_tiny-dungeon/Tiles/tile_0084.png" id="2_4nkcw"]
 [ext_resource type="PackedScene" uid="uid://c1oyhdi4j8ar6" path="res://trashbox/战斗系统/Attack/Enemy/敌人/弹幕/语法错误弹幕.tscn" id="2_x7h4u"]
+[ext_resource type="Texture2D" uid="uid://cl30pjb1vpe0g" path="res://trashbox/assets/sprites/语法错误.png" id="3_4nkcw"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_x7h4u"]
 
 [node name="语法错误" type="RigidBody2D"]
-collision_layer = 0
+collision_layer = 4
 collision_mask = 4
 gravity_scale = 0.0
 contact_monitor = true
@@ -22,7 +22,7 @@ shape = SubResource("CircleShape2D_x7h4u")
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
 scale = Vector2(9, 9)
-texture = ExtResource("2_4nkcw")
+texture = ExtResource("3_4nkcw")
 
 [node name="BulletContainer" type="Node2D" parent="."]
 position = Vector2(-10, 0)

@@ -6,6 +6,8 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_sbu7i"]
 
 [node name="待办事项弹幕" type="RigidBody2D"]
+collision_layer = 4
+collision_mask = 4
 script = ExtResource("1_q4gjn")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
