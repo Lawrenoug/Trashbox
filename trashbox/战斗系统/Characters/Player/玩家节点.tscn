@@ -3,15 +3,14 @@
 [ext_resource type="Script" uid="uid://08knfvnynesi" path="res://trashbox/战斗系统/Characters/Player/PlayerManager.cs" id="1_5rrvb"]
 [ext_resource type="Texture2D" uid="uid://cuf2keyas31i8" path="res://trashbox/assets/sprites/PLAYER.png" id="2_5rrvb"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_6uqi0"]
-radius = 13.038404
+[sub_resource type="CircleShape2D" id="CircleShape2D_5rrvb"]
+radius = 48.08
 
 [node name="玩家节点" type="Node2D" groups=["玩家节点"]]
 
 [node name="Player" type="RigidBody2D" parent="." node_paths=PackedStringArray("startShootPosition") groups=["player"]]
 position = Vector2(167, 315)
-collision_layer = 4
-collision_mask = 4
+collision_mask = 8
 gravity_scale = 0.0
 contact_monitor = true
 max_contacts_reported = 1
@@ -20,7 +19,7 @@ startShootPosition = NodePath("发射点")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
 position = Vector2(1, 0)
-shape = SubResource("CircleShape2D_6uqi0")
+shape = SubResource("CircleShape2D_5rrvb")
 
 [node name="Sprite2D" type="Sprite2D" parent="Player"]
 texture_filter = 1

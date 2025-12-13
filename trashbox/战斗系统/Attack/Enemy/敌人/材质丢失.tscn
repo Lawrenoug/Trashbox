@@ -6,9 +6,9 @@
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_spsrc"]
 
-[node name="材质丢失" type="RigidBody2D"]
+[node name="材质丢失" type="RigidBody2D" groups=["enemy"]]
 collision_layer = 4
-collision_mask = 4
+collision_mask = 2
 gravity_scale = 0.0
 script = ExtResource("1_spsrc")
 bulletPrefab = ExtResource("2_ck8j7")

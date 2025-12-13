@@ -13,6 +13,7 @@ namespace Enemy
 		// 屏幕边界
 		private Vector2 screen_size;
 
+
 		public virtual void init(Vector2 _position,float _angle,float _ATK)
 		{
 			GlobalPosition = _position;
@@ -27,6 +28,11 @@ namespace Enemy
             base._Ready();
 			// 获取屏幕尺寸
 			screen_size = GetViewportRect().Size;
+
+			if (!IsConnected("body_entered", new Callable(this, nameof(OnBodyEntered))))
+			{
+				Connect("body_entered", new Callable(this, nameof(OnBodyEntered)));
+			}
             //Visible = false; // 确保子弹可见
         }
 
@@ -61,7 +67,7 @@ namespace Enemy
 				GlobalPosition.Y < -BUFFER || GlobalPosition.Y > screen_size.Y + BUFFER)
 			{
 				// 超出边界，销毁子弹
-				GD.Print("敌方子弹超出屏幕（含边界缓冲区），自动销毁");
+				//GD.Print("敌方子弹超出屏幕（含边界缓冲区），自动销毁");
 				QueueFree();
 			}
 		}
@@ -73,6 +79,8 @@ namespace Enemy
 				GD.Print("弹幕碰撞到玩家，自动销毁");
 				PlayerManager player = body as PlayerManager;
 				player.TakeDamage(ATK);
+				
+				
 				QueueFree();
 			}
 		}
