@@ -2,15 +2,16 @@
 
 [ext_resource type="Script" uid="uid://dceenvxrpr1v6" path="res://trashbox/战斗系统/Attack/Enemy/敌人/LoreConflictEnemy.cs" id="1_gm3q8"]
 [ext_resource type="PackedScene" uid="uid://bljdqjd0y5una" path="res://trashbox/战斗系统/Attack/Enemy/敌人/弹幕/设定冲突弹幕_2.tscn" id="2_dp6gp"]
-[ext_resource type="Texture2D" uid="uid://drj0v0ccyn1sy" path="res://trashbox/战斗系统/UI/kenney_tiny-dungeon/Tiles/tile_0111.png" id="2_nm1e7"]
 [ext_resource type="PackedScene" uid="uid://o1g2yn4pe36c" path="res://trashbox/战斗系统/Attack/Enemy/敌人/弹幕/设定冲突弹幕_1.tscn" id="3_kh04f"]
 [ext_resource type="PackedScene" uid="uid://1wa6abn7mt28" path="res://trashbox/战斗系统/Attack/Enemy/敌人/弹幕/设定冲突弹幕_3.tscn" id="3_pgekd"]
+[ext_resource type="Texture2D" uid="uid://dmcq0o746l68y" path="res://trashbox/assets/sprites/设定冲突.png" id="5_kh04f"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_dp6gp"]
+radius = 10.338708
 
 [node name="设定冲突" type="RigidBody2D" groups=["enemy"]]
 collision_layer = 4
-collision_mask = 2
+collision_mask = 3
 gravity_scale = 0.0
 script = ExtResource("1_gm3q8")
 bulletPrefab_2 = ExtResource("2_dp6gp")
@@ -18,13 +19,14 @@ bulletPrefab_3 = ExtResource("3_pgekd")
 bulletPrefab = ExtResource("3_kh04f")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(7, 1)
 scale = Vector2(9, 9)
 shape = SubResource("CircleShape2D_dp6gp")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
-scale = Vector2(9, 9)
-texture = ExtResource("2_nm1e7")
+scale = Vector2(3, 3)
+texture = ExtResource("5_kh04f")
 
 [node name="BulletContainer" type="Node2D" parent="."]
 position = Vector2(-10, 0)

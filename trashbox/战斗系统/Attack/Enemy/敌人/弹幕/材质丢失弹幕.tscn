@@ -7,8 +7,6 @@
 
 [node name="材质丢失弹幕" type="RigidBody2D"]
 collision_layer = 8
-contact_monitor = true
-max_contacts_reported = 1
 script = ExtResource("1_ock61")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

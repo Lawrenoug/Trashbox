@@ -1,23 +1,22 @@
 [gd_scene load_steps=5 format=3 uid="uid://dtwqji6wtvhcl"]
 
-[ext_resource type="Texture2D" uid="uid://de5or7du4lccg" path="res://trashbox/战斗系统/UI/kenney_tiny-dungeon/Tiles/tile_0110.png" id="1_eg0kr"]
 [ext_resource type="Script" uid="uid://515fucrno5ly" path="res://trashbox/战斗系统/Attack/Enemy/敌人/backlogEnemy.cs" id="1_n7pad"]
 [ext_resource type="PackedScene" uid="uid://cxbcra8ixnpp1" path="res://trashbox/战斗系统/Attack/Enemy/敌人/弹幕/待办事项弹幕.tscn" id="2_n7pad"]
+[ext_resource type="Texture2D" uid="uid://dwx3c38768okh" path="res://trashbox/assets/sprites/待办事项.png" id="3_gj5qv"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_kuxi0"]
 
 [node name="待办事项" type="RigidBody2D" groups=["enemy"]]
 collision_layer = 4
-collision_mask = 2
+collision_mask = 3
 gravity_scale = 0.0
 script = ExtResource("1_n7pad")
 bulletPrefab = ExtResource("2_n7pad")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
-rotation = 1.5707964
-scale = Vector2(9, 9)
-texture = ExtResource("1_eg0kr")
+scale = Vector2(3, 3)
+texture = ExtResource("3_gj5qv")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 scale = Vector2(9, 9)

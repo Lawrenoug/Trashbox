@@ -7,8 +7,6 @@
 
 [node name="待办事项弹幕" type="RigidBody2D"]
 collision_layer = 8
-contact_monitor = true
-max_contacts_reported = 1
 script = ExtResource("1_q4gjn")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
