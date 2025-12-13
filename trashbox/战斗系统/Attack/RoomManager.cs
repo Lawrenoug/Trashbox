@@ -14,7 +14,7 @@ namespace Attack
 
 		public bool isInAttack=false;
 		private float attackDelay=0;
-		private int flow=0;
+		private int flow=1;
 
 		//private string UIpath="";
 		private Control contion,contionParent;
@@ -32,26 +32,100 @@ namespace Attack
 			{
 				if(isInAttack)
 				{
-					// 添加对room对象有效性的检查
-					if(room.GetChildCount()==0&&flow==0)
+					if(room.GetChildCount()==0)
 					{
-						attackDelay+=(float)delta;
-						if (attackDelay > 2)
+						GD.Print("空");
+						if(flow==0&&(roomIndex==0||roomIndex==1||roomIndex==2))
 						{
-							attackDelay = 0;
-							if (roomIndex == 4 || roomIndex == 5)
+							GD.Print("结束普通房间战斗");
+							isInAttack=false;
+							AutoSkipLevel();
+						}
+						// 添加对room对象有效性的检查
+						else if(flow==0&&(roomIndex==4||roomIndex==5||roomIndex==7))
+						{
+							attackDelay+=(float)delta;
+							if (attackDelay > 2)
 							{
-								EnterEliteRoom();
-								flow = 1;
+								attackDelay = 0;
+								if (roomIndex == 4 || roomIndex == 5)
+								{
+									EnterEliteRoom();
+									flow = 1;
+								}
+								if (roomIndex == 7)
+								{
+									EnterBossRoom();
+									flow = 1;
+								}
 							}
-							if (roomIndex == 7)
-							{
-								EnterBossRoom();
-								flow = 1;
-							}
+						}
+						else if(flow==1&&(roomIndex==4||roomIndex==5||roomIndex==7))
+						{
+							GD.Print("结束精英/Boss房间战斗");
+							isInAttack=false;
+							AutoSkipLevel();
 						}
 					}
 				}
+			}
+			else
+			{
+				//GD.Print("111");
+			}
+		}
+		
+		// 自动触发关卡跳过效果
+		private void AutoSkipLevel()
+		{
+			GD.Print("自动触发关卡跳过效果");
+			
+			// 设置全局游戏状态
+			var globalGameState = Engine.GetSingleton("GlobalGameState") as GodotObject;
+			if (globalGameState != null)
+			{
+				// 通过Godot对象直接设置属性
+				globalGameState.Set("current_level_progress", globalGameState.Get("target_level_index"));
+				
+				// 设置返回标志
+				globalGameState.Set("has_returned_from_level", true);
+			}
+			
+			// 调用endAttack清理战斗状态
+			endAttack();
+			
+			// 触发场景切换
+			CallDeferred("_change_scene");
+		}
+		
+		// 场景切换延迟执行，避免在处理过程中切换场景
+		private void _change_scene()
+		{
+			// 获取全局状态实例
+			var globalGameState = Engine.GetSingleton("GlobalGameState") as GodotObject;
+			
+			// 通关判断 (假设总共8关: 0~7)
+			int currentLevelProgress = (int)globalGameState.Get("current_level_progress");
+			if (currentLevelProgress >= 7) 
+			{
+				GD.Print("--- [流程] 判定：通关 ---");
+				string endScenePath = "res://trashbox/scenes/main/GameEnd.tscn";
+				if (ResourceLoader.Exists(endScenePath))
+				{
+					GetTree().ChangeSceneToFile(endScenePath);
+				}
+				else
+				{
+					GD.Print("错误：找不到结局文件");
+				}
+			}
+			else
+			{
+				GD.Print("--- [流程] 判定：返回桌面 ---");
+				globalGameState.Set("should_open_engine_automatically", true);
+				// 切换到桌面场景
+				string desktopScenePath = (string)globalGameState.Get("desktop_scene_path");
+				GetTree().ChangeSceneToFile(desktopScenePath);
 			}
 		}
 
@@ -88,7 +162,7 @@ namespace Attack
 		public void EnterRoom(int _index)
 		{
 
-			room=GetTree().GetFirstNodeInGroup("战斗房间") as Node2D;
+			room=GetTree().GetFirstNodeInGroup("战斗房间怪物节点") as Node2D;
 
 			var playerparent=GetTree().GetFirstNodeInGroup("战斗场景玩家父节点");
 			player.Reparent(playerparent,true);
@@ -251,7 +325,7 @@ namespace Attack
 		//传输技能到背包
 		public void SendSkillToBackpack(PackedScene[] _skills)
 		{
-			var node=GetTree().GetFirstNodeInGroup("技能背包").FindChild("技能组背包");
+			var node=GetTree().GetFirstNodeInGroup("技能背包").GetChildren()[0];
 			int skillIndex = 0;
 			foreach(var child in node.GetChildren())
 			{
