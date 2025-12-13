@@ -8,6 +8,8 @@
 [node name="最终截止日期弹幕_2_子弹幕" type="RigidBody2D"]
 collision_layer = 8
 gravity_scale = 0.0
+contact_monitor = true
+max_contacts_reported = 1
 script = ExtResource("1_mkvgr")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

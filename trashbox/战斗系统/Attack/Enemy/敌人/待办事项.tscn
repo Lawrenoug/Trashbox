@@ -6,7 +6,7 @@
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_kuxi0"]
 
-[node name="待办事项" type="RigidBody2D"]
+[node name="待办事项" type="RigidBody2D" groups=["enemy"]]
 collision_layer = 4
 collision_mask = 3
 gravity_scale = 0.0

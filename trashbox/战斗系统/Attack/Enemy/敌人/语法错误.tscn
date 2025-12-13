@@ -7,7 +7,7 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_x7h4u"]
 radius = 10.333333
 
-[node name="语法错误" type="RigidBody2D"]
+[node name="语法错误" type="RigidBody2D" groups=["enemy"]]
 collision_layer = 4
 collision_mask = 3
 gravity_scale = 0.0

@@ -127,7 +127,7 @@ namespace CharacterManager
 		{
 			CurrentBlood -= damage;
 			if (CurrentBlood < 0) CurrentBlood = 0;
-
+			GD.Print($"受到 {damage} 点伤害，当前生命值：{CurrentBlood}/{MaxBlood}");
 			// 发送信号给 GDScript (更新血条)
 			EmitSignal(SignalName.HealthChanged, CurrentBlood, MaxBlood);
 			

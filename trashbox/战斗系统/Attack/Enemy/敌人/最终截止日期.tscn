@@ -10,7 +10,7 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_x8srw"]
 radius = 11.113334
 
-[node name="最终截止日期" type="RigidBody2D"]
+[node name="最终截止日期" type="RigidBody2D" groups=["enemy"]]
 collision_layer = 4
 collision_mask = 3
 gravity_scale = 0.0
