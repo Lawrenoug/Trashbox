@@ -39,7 +39,9 @@ namespace Attack
 						{
 							GD.Print("结束普通房间战斗");
 							isInAttack=false;
-							AutoSkipLevel();
+							
+							// 直接调用LevelBase的_on_skip_level_pressed方法
+							CallLevelBaseSkipMethod();
 						}
 						// 添加对room对象有效性的检查
 						else if(flow==0&&(roomIndex==4||roomIndex==5||roomIndex==7))
@@ -64,7 +66,9 @@ namespace Attack
 						{
 							GD.Print("结束精英/Boss房间战斗");
 							isInAttack=false;
-							AutoSkipLevel();
+							
+							// 直接调用LevelBase的_on_skip_level_pressed方法
+							CallLevelBaseSkipMethod();
 						}
 					}
 				}
@@ -80,55 +84,61 @@ namespace Attack
 		{
 			GD.Print("自动触发关卡跳过效果");
 			
-			// 设置全局游戏状态
-			var globalGameState = Engine.GetSingleton("GlobalGameState") as GodotObject;
-			if (globalGameState != null)
-			{
-				// 通过Godot对象直接设置属性
-				globalGameState.Set("current_level_progress", globalGameState.Get("target_level_index"));
-				
-				// 设置返回标志
-				globalGameState.Set("has_returned_from_level", true);
-			}
 			
 			// 调用endAttack清理战斗状态
 			endAttack();
 			
-			// 触发场景切换
-			CallDeferred("_change_scene");
+			
 		}
 		
-		// 场景切换延迟执行，避免在处理过程中切换场景
-		private void _change_scene()
+		// 调用LevelBase中的_on_skip_level_pressed方法
+		private void CallLevelBaseSkipMethod()
 		{
-			// 获取全局状态实例
-			var globalGameState = Engine.GetSingleton("GlobalGameState") as GodotObject;
+			GD.Print("直接调用LevelBase的_on_skip_level_pressed方法");
 			
-			// 通关判断 (假设总共8关: 0~7)
-			int currentLevelProgress = (int)globalGameState.Get("current_level_progress");
-			if (currentLevelProgress >= 7) 
+			// 获取当前场景树的根节点
+			var root = GetTree().Root;
+			
+			// 查找LevelBase场景节点（通常是当前场景）
+			Node levelBase = GetTree().GetFirstNodeInGroup("战斗房间");
+			
+			
+			// 如果找到了LevelBase节点，则调用其_on_skip_level_pressed方法
+			if (levelBase != null && levelBase.HasMethod("_on_skip_level_pressed"))
 			{
-				GD.Print("--- [流程] 判定：通关 ---");
-				string endScenePath = "res://trashbox/scenes/main/GameEnd.tscn";
-				if (ResourceLoader.Exists(endScenePath))
-				{
-					GetTree().ChangeSceneToFile(endScenePath);
-				}
-				else
-				{
-					GD.Print("错误：找不到结局文件");
-				}
+				levelBase.Call("_on_skip_level_pressed");
 			}
 			else
 			{
-				GD.Print("--- [流程] 判定：返回桌面 ---");
-				globalGameState.Set("should_open_engine_automatically", true);
-				// 切换到桌面场景
-				string desktopScenePath = (string)globalGameState.Get("desktop_scene_path");
-				GetTree().ChangeSceneToFile(desktopScenePath);
+				GD.PrintErr("找不到LevelBase节点或_on_skip_level_pressed方法");
 			}
 		}
-
+		
+		// 调用LevelBase中的_on_skip_level_pressed方法
+		private void CallSkipLevel()
+		{
+			GD.Print("调用LevelBase的_on_skip_level_pressed方法");
+			
+			// 获取当前场景树的根节点
+			var root = GetTree().Root;
+			
+			// 查找LevelBase场景节点（通常是当前场景）
+			Node levelBase = GetTree().GetFirstNodeInGroup("战斗房间") as Node;
+			
+			
+			// 如果找到了LevelBase节点，则调用其_on_skip_level_pressed方法
+			if (levelBase != null && levelBase.HasMethod("_on_skip_level_pressed"))
+			{
+				levelBase.Call("_on_skip_level_pressed");
+			}
+			else
+			{
+				// 如果找不到LevelBase节点，则使用原来的自动跳关逻辑
+				GD.Print("找不到LevelBase节点，使用备用自动跳关逻辑");
+				AutoSkipLevel();
+			}
+		}
+		
 		public void startAttack()
 		{
 			contion=GetTree().GetFirstNodeInGroup("移动列表节点") as Control;
@@ -179,13 +189,13 @@ namespace Attack
 				}
 				else if(_index==7)//进入boss
 				{
-					EnterNormalRoom();
+					EnterBossRoom();
 					isInAttack=true;
 					flow=0;
 				}
 				else if(_index==4||_index==5)//精英怪
 				{
-					EnterNormalRoom();
+					EnterEliteRoom();
 					isInAttack=true;
 					flow=0;
 				}
@@ -359,6 +369,9 @@ namespace Attack
 		}
 		private void EnterEliteRoom()
 		{
+			GD.Print("进入精英怪");
+			// 注意：这个方法只是生成精英敌人，不会直接触发场景跳转
+			// 场景跳转是在_Process方法中检测到房间清空且flow==1时触发的
 			if (roomIndex == 4)
 			{
 				PackedScene enemy = EnemyTools.GetEliteEnemy(5);
